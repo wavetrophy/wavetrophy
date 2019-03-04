@@ -1,0 +1,3 @@
+api_auth_login_check:
+    methods: [POST]
+    path: fos_user_security_check

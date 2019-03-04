@@ -1,0 +1,16 @@
+html, body {
+    height: 100%;
+}
+
+.login .form-group > label {
+    flex: 100% 0 0 !important;
+    text-align: left;
+}
+
+.vertical-center {
+    min-height: 80%; /* Fallback for browsers do NOT support vh unit */
+    min-height: 80vh; /* These two lines are counted as one :-)       */
+
+    display: flex;
+    align-items: center;
+}

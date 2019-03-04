@@ -1,0 +1,109 @@
+easy_admin:
+  site_name: 'WAVE Trophy App'
+  design:
+    form_theme:
+      - '@EasyAdmin/form/bootstrap_4.html.twig'
+      # the following Twig template can be located anywhere in the application.
+      # it can also be added to the twig.form_themes option to use it in the
+      # entire application, not only the backend
+      - 'admin/form.html.twig'
+    brand_color: '#8BA654'
+
+    menu:
+      - label: 'User'
+        children:
+          - { label: 'Users', entity: 'User' }
+          - { label: ' - Emails', entity: 'UserEmail' }
+          - { label: ' - Phonenumbers', entity: 'UserPhonenumber' }
+      - label: 'Wave'
+        children:
+          - { label: 'Wave', entity: 'Wave' }
+          - { label: 'Location', entity: 'Location' }
+          - { label: ' - Event', entity: 'Event' }
+          - { label: 'Team', entity: 'Team' }
+          - { label: ' - Team Participation', entity: 'TeamParticipation' }
+          - { label: 'Hotel', entity: 'Hotel' }
+          - { label: 'Lodging', entity: 'Lodging' }
+
+  entities:
+
+    Wave:
+      class: App\Entity\Wave
+      form:
+        fields:
+          - 'name'
+          - 'country'
+          - 'start'
+          - 'end'
+
+    Location:
+      class: App\Entity\Location
+      form:
+        fields:
+          - 'name'
+          - 'wave'
+          - { property: location, type_options: { block_name: 'selection' } }
+
+    Event:
+      class: App\Entity\Event
+      form:
+        fields:
+          - 'name'
+          - 'description'
+          - 'start'
+          - 'end'
+          - 'location'
+
+    Answer:
+      class: App\Entity\Answer
+
+    Group:
+      class: App\Entity\Group
+
+    Hotel:
+      class: App\Entity\Hotel
+
+    Lodging:
+      class: App\Entity\Lodging
+
+    Question:
+      class: App\Entity\Question
+
+    Team:
+      class: App\Entity\Team
+
+    TeamParticipation:
+      class: App\Entity\TeamParticipation
+      form:
+        fields:
+          - 'arrival'
+          - 'departure'
+          - 'location'
+          - { property: 'team', type: 'entity', type_options: { class: 'App\Entity\Team', multiple: true } }
+
+    User:
+      class: App\Entity\User
+      form:
+        fields:
+          - 'email'
+          - 'firstName'
+          - 'lastName'
+          - 'team'
+#      list:
+#        dql_filter: 'entity.deletedAt is NULL'
+
+    UserEmail:
+      class: App\Entity\UserEmail
+      form:
+        fields:
+          - 'email'
+          - 'isPublic'
+          - 'user'
+
+    UserPhonenumber:
+      class: App\Entity\UserPhonenumber
+      form:
+        fields:
+          - 'phonenumber'
+          - 'isPublic'
+          - 'user'

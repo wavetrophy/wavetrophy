@@ -1,0 +1,44 @@
+{% block _location_selection_widget %}
+    <div id="map" style="width: 100%; height: 30rem;"></div>
+    <input type="hidden" name="location[location]" id="location" value="{{ easyadmin.item.getLocation() }}" required>
+    <script>
+        var map;
+        var marker;
+
+        function initMap() {
+            var latLon = $('#location').val().split(',');
+            var lat = parseFloat(latLon[0]) || 47.039624;
+            var lng = parseFloat(latLon[1]) || 8.3188383;
+            var initLatLng = {lat: lat, lng: lng};
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: initLatLng,
+                zoom: 12
+            });
+
+            placeMarker(initLatLng, 12);
+
+            map.addListener("click", function (event) {
+                var latLng = event.latLng;
+                // display the lat/lng in your form's lat/lng fields
+                placeMarker(latLng);
+                document.getElementById("location").value = latLng.lat() + ',' + latLng.lng();
+            });
+
+            function placeMarker(location, zoom) {
+                zoom = zoom || 16;
+                if (marker) {
+                    marker.setMap(null);
+                }
+                marker = new google.maps.Marker({
+                    position: location,
+                    map: map
+                });
+                map.setZoom(zoom);
+                map.setCenter(marker.getPosition());
+            }
+        }
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7ybIOBRNNWX43TsNSUj20WzH4q4lFhVM&callback=initMap"
+            async defer></script>
+{% endblock %}
