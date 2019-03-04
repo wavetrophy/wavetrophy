@@ -43,15 +43,16 @@ return new class extends DefaultDeployer
     {
         // see https://github.com/EasyCorp/easy-deploy-bundle/issues/35
         // see https://github.com/EasyCorp/easy-deploy-bundle/blob/14edd418d82d2c616d79ecf2830c6140b0dc3971/src/Deployer/DefaultDeployer.php
-        // $this->runRemote('cp {{ deploy_dir }}/repo/.env {{ project_dir }} 2>/dev/null');
         $this->runRemote('cp {{ deploy_dir }}/.env.local {{ project_dir }} 2>/dev/null');
     }
 
     // run some local or remote commands after the deployment is finished
     public function beforeFinishingDeploy()
     {
+        $this->runRemote('cp {{ deploy_dir }}/repo/.env {{ project_dir }} 2>/dev/null');
+        $this->runRemote('cp {{ deploy_dir }}/repo/.env.dist {{ project_dir }} 2>/dev/null');
         $this->log('Migrating database');
-        $this->runRemote('{{ console_bin }} doctrine:migrations:migrate');
+//        $this->runRemote('{{ console_bin }} doctrine:migrations:migrate');
         $this->runLocal('say "The deployment has finished."');
     }
 };
