@@ -1,14 +1,11 @@
 <?php
 
 use EasyCorp\Bundle\EasyDeployBundle\Deployer\DefaultDeployer;
-use Symfony\Component\Dotenv\Dotenv;
 
 return new class extends DefaultDeployer
 {
     public function configure()
     {
-        $dotenv = new Dotenv();
-        $dotenv->overload(__DIR__ . '/../../.env.prod');
         $host = getenv('DEPLOY_HOST');
         $port = getenv('DEPLOY_PORT');
         $user = getenv('DEPLOY_USER');
@@ -16,7 +13,6 @@ return new class extends DefaultDeployer
         $git = getenv('DEPLOY_GIT_URL');
         $branch = getenv('DEPLOY_GIT_BRANCH');
         $composer = getenv('DEPLOY_COMPOSER_BIN');
-
         return $this->getConfigBuilder()
             // SSH connection string to connect to the remote server (format: user@host-or-IP:port-number)
             ->server("{$user}@{$host}:{$port}")
@@ -52,7 +48,7 @@ return new class extends DefaultDeployer
         $this->runRemote('cp {{ deploy_dir }}/repo/.env {{ project_dir }} 2>/dev/null');
         $this->runRemote('cp {{ deploy_dir }}/repo/.env.dist {{ project_dir }} 2>/dev/null');
         $this->log('Migrating database');
-//        $this->runRemote('{{ console_bin }} doctrine:migrations:migrate');
+        $this->runRemote('{{ console_bin }} doctrine:migrations:migrate');
         $this->runLocal('say "The deployment has finished."');
     }
 };

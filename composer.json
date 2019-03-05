@@ -1,4 +1,6 @@
 {
+    "name": "wavetrophy/wavetrophy",
+    "description": "",
     "type": "project",
     "license": "proprietary",
     "require": {
