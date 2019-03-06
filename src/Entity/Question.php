@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Entity\Traits\MetaFieldTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -63,6 +64,29 @@ class Question
      */
     private $answers;
 
+    /**
+     * Question constructor.
+     *
+     * @param string|null $question
+     * @param Group|null $group
+     * @param User|null $user
+     */
+    public function __construct(
+        ?string $question,
+        ?Group $group,
+        ?User $user
+    ) {
+        $this->question = $question;
+        $this->group = $group;
+        $this->user = $user;
+        $this->answers = new ArrayCollection();
+    }
+
+    public function __toString(): ?string
+    {
+        return $this->question;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -73,7 +97,7 @@ class Question
         return $this->question;
     }
 
-    public function setQuestion(string $question): self
+    public function setQuestion(?string $question): self
     {
         $this->question = $question;
 
@@ -104,7 +128,7 @@ class Question
         return $this;
     }
 
-    public function getAnswers(): Collection
+    public function getAnswers(): ?Collection
     {
         return $this->answers;
     }

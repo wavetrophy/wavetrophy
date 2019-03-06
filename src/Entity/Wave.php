@@ -6,10 +6,12 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Entity\Traits\MetaFieldTrait;
 use DateTime;
+use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Wave
@@ -53,7 +55,8 @@ class Wave
     /**
      * @var DateTime
      *
-     * @ORM\Column(name="start", type="datetime", nullable=false, options={"comment"="The start for the participants, not support"})
+     * @ORM\Column(name="start", type="datetime", nullable=false, options={"comment"="The start for the participants,
+     *     not support"})
      * @Groups({"editable", "readonly"})
      */
     private $start;
@@ -84,7 +87,32 @@ class Wave
      */
     private $locations;
 
-    public function __toString(): string
+    /**
+     * Wave constructor.
+     *
+     * @param string|null $name
+     * @param string|null $country
+     * @param DateTime|null $start
+     * @param DateTime|null $end
+     */
+    public function __construct(
+        ?string $name,
+        ?string $country,
+        ?\DateTimeInterface $start,
+        ?DateTimeInterface $end
+    ) {
+        $this->name = $name;
+        $this->country = $country;
+        $this->start = $start;
+        $this->end = $end;
+        $this->groups = new ArrayCollection();
+        $this->locations = new ArrayCollection();
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString(): ?string
     {
         return $this->getName();
     }
@@ -99,7 +127,7 @@ class Wave
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(?string $name): self
     {
         $this->name = $name;
 
@@ -111,69 +139,69 @@ class Wave
         return $this->country;
     }
 
-    public function setCountry(string $country): self
+    public function setCountry(?string $country): self
     {
         $this->country = $country;
 
         return $this;
     }
 
-    public function getStart(): ?\DateTimeInterface
+    public function getStart(): ?DateTimeInterface
     {
         return $this->start;
     }
 
-    public function setStart(\DateTimeInterface $start): self
+    public function setStart(?DateTimeInterface $start): self
     {
         $this->start = $start;
 
         return $this;
     }
 
-    public function getEnd(): ?\DateTimeInterface
+    public function getEnd(): ?DateTimeInterface
     {
         return $this->end;
     }
 
-    public function setEnd(\DateTimeInterface $end): self
+    public function setEnd(?DateTimeInterface $end): self
     {
         $this->end = $end;
 
         return $this;
     }
 
-    public function getGroups(): Collection
+    public function getGroups(): ?Collection
     {
         return $this->groups;
     }
 
-    public function addGroup(Group $group): self
+    public function addGroup(?Group $group): self
     {
         $this->groups->add($group);
 
         return $this;
     }
 
-    public function removeGroup(Group $group): self
+    public function removeGroup(?Group $group): self
     {
         $this->groups->removeElement($group);
 
         return $this;
     }
 
-    public function getLocations(): Collection
+    public function getLocations(): ?Collection
     {
         return $this->locations;
     }
 
-    public function addLocation(Location $group): self
+    public function addLocation(?Location $group): self
     {
         $this->locations->add($group);
 
         return $this;
     }
 
-    public function removeLocation(Location $group): self
+    public function removeLocation(?Location $group): self
     {
         $this->locations->removeElement($group);
 

@@ -3,7 +3,9 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use mysql_xdevapi\Collection;
 
 /**
  * Lodging
@@ -26,7 +28,8 @@ class Lodging
     /**
      * @var string|null
      *
-     * @ORM\Column(name="comment", type="string", length=1000, nullable=true, options={"comment"="Some personal information for the user"})
+     * @ORM\Column(name="comment", type="string", length=1000, nullable=true,
+     *      options={"comment"="Some personal information for the user"})
      */
     private $comment;
 
@@ -41,11 +44,31 @@ class Lodging
     private $hotel;
 
     /**
-     * @var User
+     * @var Collection The users who are lodging in a hotel
      *
      * @ORM\ManyToMany(targetEntity="User")
      */
-    private $user;
+    private $users;
+
+    /**
+     * Lodging constructor.
+     *
+     * @param string|null $comment
+     * @param Hotel|null $hotel
+     */
+    public function __construct(
+        ?string $comment,
+        ?Hotel $hotel
+    ) {
+        $this->comment = $comment;
+        $this->hotel = $hotel;
+        $this->users = new ArrayCollection();
+    }
+
+    public function __toString(): ?string
+    {
+        return $this->hotel->getName() . " " .  $this->comment;
+    }
 
     public function getId(): ?int
     {
@@ -76,17 +99,22 @@ class Lodging
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getUsers(): ?Collection
     {
-        return $this->user;
+        return $this->users;
     }
 
-    public function setUser(?User $user): self
+    public function addUser(?User $users): self
     {
-        $this->user = $user;
+        $this->users->add($users);
 
         return $this;
     }
 
+    public function removeUser(?User $user): self
+    {
+        $this->users->removeElement($user);
 
+        return $this;
+    }
 }

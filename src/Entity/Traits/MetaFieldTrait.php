@@ -3,6 +3,7 @@
 namespace App\Entity\Traits;
 
 use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use DomainException;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -82,9 +83,23 @@ trait MetaFieldTrait
      */
     protected $deletedAt;
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function setCreatedAt(?DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?DateTimeInterface
     {
         return $this->createdAt;
+    }
+
+    public function setCreatedBy(?string $username): self
+    {
+        $this->createdBy = $username;
+
+        return $this;
     }
 
     public function getCreatedBy(): ?string
@@ -92,9 +107,24 @@ trait MetaFieldTrait
         return $this->createdBy;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+
+    public function setUpdatedAt(?DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?DateTimeInterface
     {
         return $this->updatedAt;
+    }
+
+    public function setUpdatedBy(?string $username): self
+    {
+        $this->updatedBy = $username;
+
+        return $this;
     }
 
     public function getUpdatedBy(): ?string
@@ -102,18 +132,30 @@ trait MetaFieldTrait
         return $this->updatedBy;
     }
 
-    public function getDeletedAt(): ?\DateTime
+    public function setDeletedAt(?DateTimeInterface $deletedAt): self
+    {
+        $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    public function getDeletedAt(): ?DateTimeInterface
     {
         return $this->deletedAt;
     }
 
     public function isDeleted(): bool
     {
-        return $this->deletedAt instanceof \DateTimeInterface;
+        return $this->deletedAt instanceof DateTimeInterface;
     }
 
     public function recover()
     {
         $this->deletedAt = null;
+    }
+
+    public function delete()
+    {
+        $this->setDeletedAt(new DateTime());
     }
 }

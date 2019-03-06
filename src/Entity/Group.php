@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Entity\Traits\MetaFieldTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -62,6 +63,27 @@ class Group
      */
     private $questions;
 
+    /**
+     * Group constructor.
+     *
+     * @param string|null $name
+     * @param Wave|null $wave
+     */
+    public function __construct(
+        ?string $name,
+        ?Wave $wave
+    ) {
+        $this->name = $name;
+        $this->wave = $wave;
+        $this->teams = new ArrayCollection();
+        $this->questions = new ArrayCollection();
+    }
+
+    public function __toString(): ?string
+    {
+        return $this->getName();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -72,7 +94,7 @@ class Group
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(?string $name): self
     {
         $this->name = $name;
 
@@ -91,7 +113,7 @@ class Group
         return $this;
     }
 
-    public function getTeams(): Collection
+    public function getTeams(): ?Collection
     {
         return $this->teams;
     }
@@ -110,7 +132,7 @@ class Group
         return $this;
     }
 
-    public function getQuestions(): Collection
+    public function getQuestions(): ?Collection
     {
         return $this->questions;
     }

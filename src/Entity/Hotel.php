@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\Traits\MetaFieldTrait;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -41,7 +42,7 @@ class Hotel
      *
      * @ORM\Column(name="breakfast_included", type="boolean", nullable=false, options={"default"="1"})
      */
-    private $breakfastIncluded = '1';
+    private $breakfastIncluded = true;
 
     /**
      * @var \DateTime|null
@@ -65,6 +66,34 @@ class Hotel
      */
     private $location;
 
+    /**
+     * Hotel constructor.
+     *
+     * @param string|null $name
+     * @param bool|null $breakfastIncluded
+     * @param DateTimeInterface|null $lastCheckIn
+     * @param string|null $comment
+     * @param Location|null $location
+     */
+    public function __construct(
+        ?string $name,
+        ?bool $breakfastIncluded,
+        ?DateTimeInterface $lastCheckIn,
+        ?string $comment,
+        ?Location $location
+    ) {
+        $this->name = $name;
+        $this->breakfastIncluded = $breakfastIncluded;
+        $this->lastCheckIn = $lastCheckIn;
+        $this->comment = $comment;
+        $this->location = $location;
+    }
+
+    public function __toString(): ?string
+    {
+        return $this->name;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,7 +104,7 @@ class Hotel
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(?string $name): self
     {
         $this->name = $name;
 
@@ -87,19 +116,19 @@ class Hotel
         return $this->breakfastIncluded;
     }
 
-    public function setBreakfastIncluded(bool $breakfastIncluded): self
+    public function setBreakfastIncluded(?bool $breakfastIncluded): self
     {
         $this->breakfastIncluded = $breakfastIncluded;
 
         return $this;
     }
 
-    public function getLastCheckIn(): ?\DateTimeInterface
+    public function getLastCheckIn(): ?DateTimeInterface
     {
         return $this->lastCheckIn;
     }
 
-    public function setLastCheckIn(?\DateTimeInterface $lastCheckIn): self
+    public function setLastCheckIn(?DateTimeInterface $lastCheckIn): self
     {
         $this->lastCheckIn = $lastCheckIn;
 

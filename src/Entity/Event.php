@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\Traits\MetaFieldTrait;
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -44,14 +46,14 @@ class Event
     private $description;
 
     /**
-     * @var string
+     * @var DateTime
      *
      * @ORM\Column(name="start", type="datetime", length=80, nullable=false)
      */
     private $start;
 
     /**
-     * @var string
+     * @var DateTime
      *
      * @ORM\Column(name="end", type="datetime", length=80, nullable=false)
      */
@@ -65,6 +67,34 @@ class Event
      */
     private $location;
 
+    /**
+     * Event constructor.
+     *
+     * @param string|null $name
+     * @param string|null $description
+     * @param DateTimeInterface|null $start
+     * @param DateTimeInterface|null $end
+     * @param Location|null $location
+     */
+    public function __construct(
+        ?string $name,
+        ?string $description,
+        ?DateTimeInterface $start,
+        ?DateTimeInterface $end,
+        ?Location $location
+    ) {
+        $this->name = $name;
+        $this->description = $description;
+        $this->start = $start;
+        $this->end = $end;
+        $this->location = $location;
+    }
+
+    public function __toString(): ?string
+    {
+        return $this->name;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,7 +105,7 @@ class Event
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(?string $name): self
     {
         $this->name = $name;
 
@@ -87,29 +117,31 @@ class Event
         return $this->description;
     }
 
-    public function setDescription(string $description): void
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
+
+        return $this;
     }
 
-    public function getStart(): ?string
+    public function getStart(): ?DateTimeInterface
     {
         return $this->start;
     }
 
-    public function setStart(string $start): self
+    public function setStart(?DateTimeInterface $start): self
     {
         $this->start = $start;
 
         return $this;
     }
 
-    public function getEnd(): ?string
+    public function getEnd(): ?DateTimeInterface
     {
         return $this->end;
     }
 
-    public function setEnd(string $end): self
+    public function setEnd(?DateTimeInterface $end): self
     {
         $this->end = $end;
 

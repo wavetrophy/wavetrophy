@@ -4,6 +4,9 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\Traits\MetaFieldTrait;
+use DateTime;
+use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -35,7 +38,7 @@ class TeamParticipation
     private $id;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="arrival", type="datetime", nullable=false)
      */
@@ -63,17 +66,43 @@ class TeamParticipation
      */
     private $teams;
 
+    /**
+     * TeamParticipation constructor.
+     *
+     * @param DateTimeInterface|null $arrival
+     * @param DateTimeInterface|null $departure
+     * @param Location|null $location
+     */
+    public function __construct(
+        ?DateTimeInterface $arrival,
+        ?DateTimeInterface $departure,
+        ?Location $location
+    ) {
+        $this->arrival = $arrival;
+        $this->departure = $departure;
+        $this->location = $location;
+        $this->teams = new ArrayCollection();
+    }
+
+    public function __toString(): ?string
+    {
+        $name = $this->location->getName();
+        $arrival = $this->arrival->format('d. M. H:i');
+        $departure = $this->departure->format('d. M. H:i');
+        return "{$name}: {$arrival} - {$departure}";
+    }
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getArrival(): ?\DateTimeInterface
+    public function getArrival(): ?DateTimeInterface
     {
         return $this->arrival;
     }
 
-    public function setArrival(\DateTimeInterface $arrival): self
+    public function setArrival(?DateTimeInterface $arrival): self
     {
         $this->arrival = $arrival;
 
@@ -85,7 +114,7 @@ class TeamParticipation
         return $this->departure;
     }
 
-    public function setDeparture(string $departure): self
+    public function setDeparture(?string $departure): self
     {
         $this->departure = $departure;
 
@@ -104,7 +133,7 @@ class TeamParticipation
         return $this;
     }
 
-    public function getTeams(): Collection
+    public function getTeams(): ?Collection
     {
         return $this->teams;
     }

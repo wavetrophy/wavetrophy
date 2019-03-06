@@ -52,7 +52,7 @@ class UserPhonenumber
      *
      * @ORM\Column(name="is_public", type="boolean", nullable=false)
      */
-    private $isPublic;
+    private $isPublic = false;
 
     /**
      * @var User
@@ -64,6 +64,31 @@ class UserPhonenumber
      */
     private $user;
 
+    /**
+     * UserPhonenumber constructor.
+     *
+     * @param string|null $phonenumber
+     * @param string|null $countryCode
+     * @param bool|null $isPublic
+     * @param User|null $user
+     */
+    public function __construct(
+        ?string $phonenumber,
+        ?string $countryCode,
+        ?bool $isPublic,
+        ?User $user
+    ) {
+        $this->phonenumber = $phonenumber;
+        $this->countryCode = $countryCode;
+        $this->isPublic = $isPublic;
+        $this->user = $user;
+    }
+
+    public function __toString(): ?string
+    {
+        return $this->countryCode . " " . $this->phonenumber;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,7 +99,7 @@ class UserPhonenumber
         return $this->phonenumber;
     }
 
-    public function setPhonenumber(string $phonenumber): self
+    public function setPhonenumber(?string $phonenumber): self
     {
         $this->phonenumber = $phonenumber;
 
@@ -86,7 +111,7 @@ class UserPhonenumber
         return $this->countryCode;
     }
 
-    public function setCountryCode(string $countryCode): self
+    public function setCountryCode(?string $countryCode): self
     {
         $this->countryCode = $countryCode;
 
@@ -98,7 +123,7 @@ class UserPhonenumber
         return $this->isPublic;
     }
 
-    public function setIsPublic(bool $isPublic): self
+    public function setIsPublic(?bool $isPublic): self
     {
         $this->isPublic = $isPublic;
 

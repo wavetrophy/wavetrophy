@@ -41,7 +41,7 @@ class UserEmail
      *
      * @ORM\Column(name="is_public", type="boolean", nullable=false, options={"default"="1"})
      */
-    private $isPublic = '0';
+    private $isPublic = false;
 
     /**
      * @var User
@@ -50,6 +50,28 @@ class UserEmail
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;
+
+    /**
+     * UserPhonenumber constructor.
+     *
+     * @param string|null $email
+     * @param bool|null $isPublic
+     * @param User|null $user
+     */
+    public function __construct(
+        ?string $email,
+        ?bool $isPublic,
+        ?User $user
+    ) {
+        $this->email = $email;
+        $this->isPublic = $isPublic;
+        $this->user = $user;
+    }
+
+    public function __toString(): ?string
+    {
+        return $this->email;
+    }
 
     public function getId(): ?int
     {
@@ -61,7 +83,7 @@ class UserEmail
         return $this->email;
     }
 
-    public function setEmail(string $email): self
+    public function setEmail(?string $email): self
     {
         $this->email = $email;
 
@@ -73,7 +95,7 @@ class UserEmail
         return $this->isPublic;
     }
 
-    public function setIsPublic(bool $isPublic): self
+    public function setIsPublic(?bool $isPublic): self
     {
         $this->isPublic = $isPublic;
 
@@ -90,10 +112,5 @@ class UserEmail
         $this->user = $user;
 
         return $this;
-    }
-
-    public function __toString()
-    {
-        return $this->email;
     }
 }

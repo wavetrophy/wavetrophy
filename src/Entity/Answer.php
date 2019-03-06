@@ -54,6 +54,28 @@ class Answer
      */
     private $question;
 
+    /**
+     * Answer constructor.
+     *
+     * @param string|null $answer
+     * @param bool|null $approved
+     * @param Question|null $question
+     */
+    public function __construct(
+        ?string $answer,
+        ?bool $approved,
+        ?Question $question
+    ) {
+        $this->answer = $answer;
+        $this->approved = $approved;
+        $this->question = $question;
+    }
+
+    public function __toString(): ?string
+    {
+        return $this->answer;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -64,7 +86,7 @@ class Answer
         return $this->answer;
     }
 
-    public function setAnswer(string $answer): self
+    public function setAnswer(?string $answer): self
     {
         $this->answer = $answer;
 
@@ -76,7 +98,7 @@ class Answer
         return $this->approved;
     }
 
-    public function setApproved(bool $approved): self
+    public function setApproved(?bool $approved): self
     {
         $this->approved = $approved;
 

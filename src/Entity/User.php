@@ -115,14 +115,32 @@ class User extends BaseUser implements UserInterface
 
     /**
      * User constructor.
+     *
+     * @param string|null $email
+     * @param string|null $firstName
+     * @param string|null $lastName
+     * @param Team|null $team
      */
-    public function __construct()
-    {
+    public function __construct(
+        ?string $email,
+        ?string $firstName,
+        ?string $lastName,
+        ?Team $team
+    ) {
         parent::__construct();
+        $this->setEmail($email);
+        $this->setFirstName($firstName);
+        $this->setLastName($lastName);
+        $this->setTeam($team);
         $this->setEnabled(true);
         $this->setPlainPassword(uniqid());
         $this->emails = new ArrayCollection();
         $this->phonenumbers = new ArrayCollection();
+    }
+
+    public function __toString(): ?string
+    {
+        return $this->email;
     }
 
     public function getId(): ?int
@@ -154,14 +172,16 @@ class User extends BaseUser implements UserInterface
         return $this;
     }
 
-    public function getHasReceivedWelcomeEmail(): bool
+    public function getHasReceivedWelcomeEmail(): ?bool
     {
         return $this->hasReceivedWelcomeEmail;
     }
 
-    public function setHasReceivedWelcomeEmail(?string $hasReceivedWelcomeEmail): void
+    public function setHasReceivedWelcomeEmail(?bool $hasReceivedWelcomeEmail): self
     {
         $this->hasReceivedWelcomeEmail = $hasReceivedWelcomeEmail;
+
+        return $this;
     }
 
     public function getTeam(): ?Team
@@ -181,10 +201,7 @@ class User extends BaseUser implements UserInterface
         parent::setEmail($email);
         parent::setUsername($email);
 
-        $userEmail = new UserEmail();
-        $userEmail->setEmail($email);
-        $userEmail->setIsPublic(false);
-        $userEmail->setUser($this);
+        $userEmail = new UserEmail($email, false, $this);
 
         $exist = $this->emails->exists(function ($key, UserEmail $email) use ($userEmail) {
             return $email->getEmail() === $userEmail->getEmail();
@@ -196,17 +213,17 @@ class User extends BaseUser implements UserInterface
         return $this;
     }
 
-    public function getEmail()
+    public function getEmail(): ?UserEmail
     {
         return $this->getEmails()->first();
     }
 
-    public function getEmails(): Collection
+    public function getEmails(): ?Collection
     {
         return $this->emails;
     }
 
-    public function addEmail(UserEmail $email): self
+    public function addEmail(?UserEmail $email): self
     {
         $this->emails->add($email);
 
@@ -217,26 +234,26 @@ class User extends BaseUser implements UserInterface
         return $this;
     }
 
-    public function removeEmail(UserEmail $email): self
+    public function removeEmail(?UserEmail $email): self
     {
         $this->emails->removeElement($email);
 
         return $this;
     }
 
-    public function getPhonenumbers(): Collection
+    public function getPhonenumbers(): ?Collection
     {
         return $this->phonenumbers;
     }
 
-    public function addPhonenumber(UserPhonenumber $phonenumber): self
+    public function addPhonenumber(?UserPhonenumber $phonenumber): self
     {
         $this->phonenumbers->add($phonenumber);
 
         return $this;
     }
 
-    public function removePhonenumber(UserPhonenumber $phonenumber): self
+    public function removePhonenumber(?UserPhonenumber $phonenumber): self
     {
         $this->phonenumbers->removeElement($phonenumber);
 
@@ -286,6 +303,6 @@ class User extends BaseUser implements UserInterface
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
-         $this->plainPassword = null;
+        $this->plainPassword = null;
     }
 }

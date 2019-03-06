@@ -70,13 +70,33 @@ class Location
 
     /**
      * @var Collection
-     * 
+     *
      * @ORM\OneToMany(targetEntity="TeamParticipation", mappedBy="location")
      * @ApiSubresource()
      */
     private $teamParticipations;
 
-    public function __toString()
+    /**
+     * Location constructor.
+     *
+     * @param string|null $name
+     * @param string|null $lat
+     * @param string|null $lon
+     * @param Wave|null $wave
+     */
+    public function __construct(
+        ?string $name,
+        ?string $lat,
+        ?string $lon,
+        ?Wave $wave
+    ) {
+        $this->name = $name;
+        $this->lat = $lat;
+        $this->lon = $lon;
+        $this->wave = $wave;
+    }
+
+    public function __toString(): ?string
     {
         return $this->getName() . " (" . $this->getWave()->getName() . ")";
     }
@@ -91,21 +111,23 @@ class Location
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(?string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
 
-    public function setLocation(string $location)
+    public function setLocation(?string $location): self
     {
         $str = explode(',', $location);
         $this->setLat($str[0]);
         $this->setLon($str[1]);
+
+        return $this;
     }
 
-    public function getLocation()
+    public function getLocation(): ?string
     {
         return $this->getLat() . "," . $this->getLon();
     }
@@ -115,7 +137,7 @@ class Location
         return $this->lat;
     }
 
-    public function setLat(string $lat): self
+    public function setLat(?string $lat): self
     {
         $this->lat = $lat;
 
@@ -127,7 +149,7 @@ class Location
         return $this->lon;
     }
 
-    public function setLon(string $lon): self
+    public function setLon(?string $lon): self
     {
         $this->lon = $lon;
 
@@ -139,7 +161,14 @@ class Location
         return $this->wave;
     }
 
-    public function getEvents(): Collection
+    public function setWave(?Wave $wave): self
+    {
+        $this->wave = $wave;
+
+        return $this;
+    }
+
+    public function getEvents(): ?Collection
     {
         return $this->events;
     }
@@ -158,7 +187,7 @@ class Location
         return $this;
     }
 
-    public function getTeamParticipations(): Collection
+    public function getTeamParticipations(): ?Collection
     {
         return $this->teamParticipations;
     }
