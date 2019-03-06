@@ -20,6 +20,7 @@ easy_admin:
           - { label: 'Wave', entity: 'Wave' }
           - { label: 'Location', entity: 'Location' }
           - { label: ' - Event', entity: 'Event' }
+          - { label: 'Group', entity: 'Group' }
           - { label: 'Team', entity: 'Team' }
           - { label: ' - Team Participation', entity: 'TeamParticipation' }
           - { label: 'Hotel', entity: 'Hotel' }
@@ -29,6 +30,14 @@ easy_admin:
 
     Wave:
       class: App\Entity\Wave
+      list:
+        dql_filter: 'entity.deletedAt is NULL'
+        fields:
+          - 'id'
+          - 'name'
+          - 'country'
+          - 'start'
+          - 'end'
       form:
         fields:
           - 'name'
@@ -38,6 +47,12 @@ easy_admin:
 
     Location:
       class: App\Entity\Location
+      list:
+        dql_filter: 'entity.deletedAt is NULL'
+        fields:
+          - 'id'
+          - 'name'
+          - 'wave'
       form:
         fields:
           - 'name'
@@ -46,6 +61,15 @@ easy_admin:
 
     Event:
       class: App\Entity\Event
+      list:
+        dql_filter: 'entity.deletedAt is NULL'
+        fields:
+          - 'id'
+          - 'name'
+          - 'description'
+          - 'start'
+          - 'end'
+          - 'location'
       form:
         fields:
           - 'name'
@@ -54,26 +78,80 @@ easy_admin:
           - 'end'
           - 'location'
 
-    Answer:
-      class: App\Entity\Answer
-
     Group:
       class: App\Entity\Group
+      list:
+        dql_filter: 'entity.deletedAt is NULL'
+        fields:
+          - 'id'
+          - 'name'
+          - 'wave'
+      form:
+        fields:
+          - 'name'
+          - 'wave'
 
     Hotel:
       class: App\Entity\Hotel
+      list:
+        dql_filter: 'entity.deletedAt is NULL'
+        fields:
+          - 'id'
+          - 'name'
+          - 'breakfastIncluded'
+          - 'lastCheckIn'
+          - 'comment'
+          - 'location'
+      form:
+        fields:
+          - 'name'
+          - 'breakfastIncluded'
+          - 'lastCheckIn'
+          - 'comment'
+          - 'location'
 
     Lodging:
       class: App\Entity\Lodging
-
-    Question:
-      class: App\Entity\Question
+      list:
+        dql_filter: 'entity.deletedAt is NULL'
+        fields:
+          - 'id'
+          - 'comment'
+          - 'hotel'
+          - 'user'
+      form:
+        fields:
+          - 'comment'
+          - 'hotel'
+          - 'user'
 
     Team:
       class: App\Entity\Team
+      list:
+        dql_filter: 'entity.deletedAt is NULL'
+        fields:
+          - 'id'
+          - 'name'
+          - 'startNumber'
+          - 'group'
+          - 'users'
+      form:
+        fields:
+          - 'name'
+          - 'startNumber'
+          - 'group'
+          - 'users'
 
     TeamParticipation:
       class: App\Entity\TeamParticipation
+      list:
+        dql_filter: 'entity.deletedAt is NULL'
+        fields:
+          - 'id'
+          - 'arrival'
+          - 'departure'
+          - 'location'
+          - 'team'
       form:
         fields:
           - 'arrival'
@@ -83,17 +161,30 @@ easy_admin:
 
     User:
       class: App\Entity\User
+      list:
+        dql_filter: 'entity.deletedAt is NULL'
+        fields:
+          - 'id'
+          - 'email'
+          - 'firstName'
+          - 'lastName'
+          - 'team'
       form:
         fields:
           - 'email'
           - 'firstName'
           - 'lastName'
           - 'team'
-#      list:
-#        dql_filter: 'entity.deletedAt is NULL'
 
     UserEmail:
       class: App\Entity\UserEmail
+      list:
+        dql_filter: 'entity.deletedAt is NULL'
+        fields:
+          - 'id'
+          - 'email'
+          - 'isPublic'
+          - 'user'
       form:
         fields:
           - 'email'
@@ -102,6 +193,14 @@ easy_admin:
 
     UserPhonenumber:
       class: App\Entity\UserPhonenumber
+
+      list:
+        dql_filter: 'entity.deletedAt is NULL'
+        fields:
+          - 'id'
+          - 'phonenumber'
+          - 'isPublic'
+          - 'user'
       form:
         fields:
           - 'phonenumber'
