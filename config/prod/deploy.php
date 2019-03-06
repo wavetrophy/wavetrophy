@@ -24,7 +24,7 @@ return new class extends DefaultDeployer
             ->repositoryBranch($branch)
             // the composer binary
             ->remoteComposerBinaryPath($composer)
-            ->composerInstallFlags('--prefer-dist --no-interaction --no-dev')
+            ->composerInstallFlags('--prefer-dist --no-interaction --no-dev --optimize-autoloader')
             // update the composer binary
             ->updateRemoteComposerBinary(true);
     }
