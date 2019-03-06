@@ -53,6 +53,6 @@ return new class extends DefaultDeployer
 
         $this->log('Migrating database');
         $this->runRemote('{{ console_bin }} doctrine:migrations:migrate');
-        $this->runLocal('say "The deployment has finished."');
+        $this->log("The deployment has finished.");
     }
 };
