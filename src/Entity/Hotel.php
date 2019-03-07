@@ -76,11 +76,11 @@ class Hotel
      * @param Location|null $location
      */
     public function __construct(
-        ?string $name,
-        ?bool $breakfastIncluded,
-        ?DateTimeInterface $lastCheckIn,
-        ?string $comment,
-        ?Location $location
+        ?string $name = null,
+        ?bool $breakfastIncluded = null,
+        ?DateTimeInterface $lastCheckIn = null,
+        ?string $comment = null,
+        ?Location $location = null
     ) {
         $this->name = $name;
         $this->breakfastIncluded = $breakfastIncluded;
@@ -138,6 +138,13 @@ class Hotel
     public function getComment(): ?string
     {
         return $this->comment;
+    }
+
+    public function setComment(?string $comment): self
+    {
+        $this->comment = $comment;
+
+        return $this;
     }
 
     public function getLocation(): ?Location

@@ -4,8 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use mysql_xdevapi\Collection;
 
 /**
  * Lodging
@@ -57,8 +57,8 @@ class Lodging
      * @param Hotel|null $hotel
      */
     public function __construct(
-        ?string $comment,
-        ?Hotel $hotel
+        ?string $comment = null,
+        ?Hotel $hotel = null
     ) {
         $this->comment = $comment;
         $this->hotel = $hotel;

@@ -59,9 +59,9 @@ class UserEmail
      * @param User|null $user
      */
     public function __construct(
-        ?string $email,
-        ?bool $isPublic,
-        ?User $user
+        ?string $email = null,
+        ?bool $isPublic = null,
+        ?User $user = null
     ) {
         $this->email = $email;
         $this->isPublic = $isPublic;

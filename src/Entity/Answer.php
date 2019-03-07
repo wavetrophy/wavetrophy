@@ -62,9 +62,9 @@ class Answer
      * @param Question|null $question
      */
     public function __construct(
-        ?string $answer,
-        ?bool $approved,
-        ?Question $question
+        ?string $answer = null,
+        ?bool $approved = null,
+        ?Question $question = null
     ) {
         $this->answer = $answer;
         $this->approved = $approved;

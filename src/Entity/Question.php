@@ -72,9 +72,9 @@ class Question
      * @param User|null $user
      */
     public function __construct(
-        ?string $question,
-        ?Group $group,
-        ?User $user
+        ?string $question = null,
+        ?Group $group = null,
+        ?User $user = null
     ) {
         $this->question = $question;
         $this->group = $group;

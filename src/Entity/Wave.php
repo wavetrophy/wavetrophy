@@ -92,14 +92,14 @@ class Wave
      *
      * @param string|null $name
      * @param string|null $country
-     * @param DateTime|null $start
-     * @param DateTime|null $end
+     * @param DateTimeInterface|null $start
+     * @param DateTimeInterface|null $end
      */
     public function __construct(
-        ?string $name,
-        ?string $country,
-        ?\DateTimeInterface $start,
-        ?DateTimeInterface $end
+        ?string $name = null,
+        ?string $country = null,
+        ?\DateTimeInterface $start = null,
+        ?DateTimeInterface $end = null
     ) {
         $this->name = $name;
         $this->country = $country;

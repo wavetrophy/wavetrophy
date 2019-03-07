@@ -73,10 +73,10 @@ class UserPhonenumber
      * @param User|null $user
      */
     public function __construct(
-        ?string $phonenumber,
-        ?string $countryCode,
-        ?bool $isPublic,
-        ?User $user
+        ?string $phonenumber = null,
+        ?string $countryCode = null,
+        ?bool $isPublic = null,
+        ?User $user = null
     ) {
         $this->phonenumber = $phonenumber;
         $this->countryCode = $countryCode;

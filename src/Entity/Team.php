@@ -72,9 +72,9 @@ class Team
      * @param Group|null $group
      */
     public function __construct(
-        ?string $name,
-        ?int $startNumber,
-        ?Group $group
+        ?string $name = null,
+        ?int $startNumber = null,
+        ?Group $group = null
     ) {
         $this->name = $name;
         $this->startNumber = $startNumber;
@@ -84,7 +84,7 @@ class Team
 
     public function __toString(): ?string
     {
-        return "{$this->group} ({$this->startNumber})";
+        return "{$this->name} ({$this->startNumber})";
     }
 
     public function getId(): ?int

@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\Traits\MetaFieldTrait;
-use DateTime;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -38,16 +37,16 @@ class TeamParticipation
     private $id;
 
     /**
-     * @var DateTime
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="arrival", type="datetime", nullable=false)
      */
     private $arrival;
 
     /**
-     * @var string
+     * @var DateTimeInterface
      *
-     * @ORM\Column(name="departure", type="string", length=80, nullable=false)
+     * @ORM\Column(name="departure", type="datetime", length=80, nullable=false)
      */
     private $departure;
 
@@ -62,7 +61,8 @@ class TeamParticipation
     /**
      * @var Collection
      *
-     * @ORM\ManyToMany(targetEntity="Team")
+     * @ORM\ManyToMany(targetEntity="Team", cascade={"persist"})
+     * @ORM\JoinTable(name="team_has_participations")
      */
     private $teams;
 
@@ -74,9 +74,9 @@ class TeamParticipation
      * @param Location|null $location
      */
     public function __construct(
-        ?DateTimeInterface $arrival,
-        ?DateTimeInterface $departure,
-        ?Location $location
+        ?DateTimeInterface $arrival = null,
+        ?DateTimeInterface $departure = null,
+        ?Location $location = null
     ) {
         $this->arrival = $arrival;
         $this->departure = $departure;
@@ -109,12 +109,12 @@ class TeamParticipation
         return $this;
     }
 
-    public function getDeparture(): ?string
+    public function getDeparture(): ?DateTimeInterface
     {
         return $this->departure;
     }
 
-    public function setDeparture(?string $departure): self
+    public function setDeparture(?DateTimeInterface $departure): self
     {
         $this->departure = $departure;
 

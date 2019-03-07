@@ -70,8 +70,8 @@ class Group
      * @param Wave|null $wave
      */
     public function __construct(
-        ?string $name,
-        ?Wave $wave
+        ?string $name = null,
+        ?Wave $wave = null
     ) {
         $this->name = $name;
         $this->wave = $wave;
@@ -81,7 +81,7 @@ class Group
 
     public function __toString(): ?string
     {
-        return $this->getName();
+        return $this->getName() . " " . $this->wave->getName();
     }
 
     public function getId(): ?int

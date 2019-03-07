@@ -98,7 +98,7 @@ class User extends BaseUser implements UserInterface
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="UserEmail", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="UserEmail", mappedBy="user", cascade={"persist"})
      * @ApiSubresource()
      * @Groups({"editable", "readable"})
      */
@@ -107,7 +107,7 @@ class User extends BaseUser implements UserInterface
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="UserPhonenumber", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="UserPhonenumber", mappedBy="user", cascade={"persist"})
      * @ApiSubresource()
      * @Groups({"editable", "readable"})
      */
@@ -122,25 +122,35 @@ class User extends BaseUser implements UserInterface
      * @param Team|null $team
      */
     public function __construct(
-        ?string $email,
-        ?string $firstName,
-        ?string $lastName,
-        ?Team $team
+        ?string $email = null,
+        ?string $firstName = null,
+        ?string $lastName = null,
+        ?Team $team = null
     ) {
         parent::__construct();
-        $this->setEmail($email);
-        $this->setFirstName($firstName);
-        $this->setLastName($lastName);
-        $this->setTeam($team);
+
         $this->setEnabled(true);
         $this->setPlainPassword(uniqid());
         $this->emails = new ArrayCollection();
         $this->phonenumbers = new ArrayCollection();
+
+        if (!empty($email)) {
+            $this->setEmail($email);
+        }
+        if (!empty($firstName)) {
+            $this->setFirstName($firstName);
+        }
+        if (!empty($lastName)) {
+            $this->setLastName($lastName);
+        }
+        if (!empty($team)) {
+            $this->setTeam($team);
+        }
     }
 
     public function __toString(): ?string
     {
-        return $this->email;
+        return "{$this->firstName} {$this->lastName}";
     }
 
     public function getId(): ?int
@@ -215,7 +225,7 @@ class User extends BaseUser implements UserInterface
 
     public function getEmail(): ?UserEmail
     {
-        return $this->getEmails()->first();
+        return $this->getEmails()->first() ?: null;
     }
 
     public function getEmails(): ?Collection

@@ -113,17 +113,16 @@ easy_admin:
     Lodging:
       class: App\Entity\Lodging
       list:
-        dql_filter: 'entity.deletedAt is NULL'
         fields:
           - 'id'
-          - 'comment'
           - 'hotel'
-          - 'user'
+          - 'comment'
+          - 'users'
       form:
         fields:
           - 'comment'
           - 'hotel'
-          - 'user'
+          - 'users'
 
     Team:
       class: App\Entity\Team
@@ -151,13 +150,12 @@ easy_admin:
           - 'arrival'
           - 'departure'
           - 'location'
-          - 'team'
       form:
         fields:
           - 'arrival'
           - 'departure'
           - 'location'
-          - { property: 'team', type: 'entity', type_options: { class: 'App\Entity\Team', multiple: true } }
+          - { property: 'teams', type: 'entity', type_options: { class: 'App\Entity\Team', multiple: true } }
 
     User:
       class: App\Entity\User
@@ -198,11 +196,13 @@ easy_admin:
         dql_filter: 'entity.deletedAt is NULL'
         fields:
           - 'id'
+          - 'countryCode'
           - 'phonenumber'
           - 'isPublic'
           - 'user'
       form:
         fields:
+          - 'countryCode'
           - 'phonenumber'
           - 'isPublic'
           - 'user'

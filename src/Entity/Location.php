@@ -85,10 +85,10 @@ class Location
      * @param Wave|null $wave
      */
     public function __construct(
-        ?string $name,
-        ?string $lat,
-        ?string $lon,
-        ?Wave $wave
+        ?string $name = null,
+        ?string $lat = null,
+        ?string $lon = null,
+        ?Wave $wave = null
     ) {
         $this->name = $name;
         $this->lat = $lat;

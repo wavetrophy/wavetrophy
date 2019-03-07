@@ -77,11 +77,11 @@ class Event
      * @param Location|null $location
      */
     public function __construct(
-        ?string $name,
-        ?string $description,
-        ?DateTimeInterface $start,
-        ?DateTimeInterface $end,
-        ?Location $location
+        ?string $name = null,
+        ?string $description = null,
+        ?DateTimeInterface $start = null,
+        ?DateTimeInterface $end = null,
+        ?Location $location = null
     ) {
         $this->name = $name;
         $this->description = $description;
