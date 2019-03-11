@@ -12,6 +12,7 @@
         "doctrine/doctrine-migrations-bundle": "^2.0",
         "easycorp/easyadmin-bundle": "^2.1",
         "friendsofsymfony/user-bundle": "^2.1",
+        "gesdinet/jwt-refresh-token-bundle": "^0.5.4",
         "lexik/jwt-authentication-bundle": "^2.6",
         "php-http/httplug-pack": "^1.1",
         "sensio/framework-extra-bundle": "^5.2",

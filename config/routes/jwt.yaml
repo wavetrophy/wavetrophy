@@ -1,3 +1,10 @@
 api_auth_login_check:
     methods: [POST]
     path: fos_user_security_check
+
+gesdinet_jwt_refresh_token:
+    path:       /auth/refresh
+    controller: gesdinet.jwtrefreshtoken::refresh
+
+api_login_check:
+    path: /auth/login
