@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -46,6 +47,7 @@ class Lodging
     /**
      * @var Collection The users who are lodging in a hotel
      *
+     * @ApiSubresource()
      * @ORM\ManyToMany(targetEntity="User")
      */
     private $users;

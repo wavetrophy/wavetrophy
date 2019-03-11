@@ -26,7 +26,7 @@ return new class extends DefaultDeployer
             ->remoteComposerBinaryPath($composer)
             ->composerInstallFlags('--prefer-dist --no-interaction --no-dev --optimize-autoloader')
             // update the composer binary
-            ->updateRemoteComposerBinary(true);
+            ->updateRemoteComposerBinary(false);
     }
 
     // run some local or remote commands before the deployment is started
