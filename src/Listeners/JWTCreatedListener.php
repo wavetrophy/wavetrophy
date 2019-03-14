@@ -51,9 +51,14 @@ class JWTCreatedListener
         $payload['ip'] = $request->getClientIp();
         $payload['user_id'] = $user->getId();
         $payload['current_wave'] = $this->wave->getCurrentWave();
+        $payload['team_id'] = null;
+        $payload['group_id'] = null;
 
         $team = $user->getTeam();
-        $payload['team_id'] = $team ? $team->getId() : null;
+        if (!empty($team)) {
+            $payload['team_id'] = $team->getId();
+            $payload['group_id'] = $team->getGroup()->getId();
+        }
 
         $event->setData($payload);
 
