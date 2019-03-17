@@ -31,11 +31,12 @@ class UserRepository extends ServiceEntityRepository
      */
     public function findAllUsersThatDidNotReceivedWelcomeEmail(): array
     {
-        return $this->createQueryBuilder('u')
-            ->select('*')
-            ->where('u.received_welcome_email = 0')
-            ->getQuery()
-            ->getResult();
+        $query = $this->createQueryBuilder('u');
+        $query->where('u.hasReceivedWelcomeEmail = 0');
+        $query = $query->getQuery();
+        $result = $query->getResult();
+
+        return $result;
     }
 
     /**
@@ -68,32 +69,16 @@ class UserRepository extends ServiceEntityRepository
         return $user !== null;
     }
 
-    // /**
-    //  * @return User[] Returns an array of User objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * Set has received welcome email flag.
+     *
+     * @param User $user
+     * @param bool|null $received
+     */
+    public function setHasRececeivedWelcomeEmail(User $user, ?bool $received = true): void
     {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $user->setHasReceivedWelcomeEmail($received);
+        $this->_em->persist($user);
+        $this->_em->flush();
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?User
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

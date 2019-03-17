@@ -25,7 +25,7 @@ class MailerController extends AbstractController
     }
 
     /**
-     * @Route("/mailer/welcome-users")
+     * @Route("/mailer/welcome-users", methods={"POST"})
      *
      * @return Response
      */
@@ -38,7 +38,7 @@ class MailerController extends AbstractController
             $data['users'][] = [
                 'first_name' => $user->getFirstName(),
                 'last_name' => $user->getLastName(),
-                'email' => $user->getEmail(),
+                'email' => $user->getEmail()->getEmail(),
             ];
         }
         $data['success'] = true;

@@ -1,0 +1,51 @@
+{% extends '@EasyAdmin/Default/layout.html.twig' %}
+
+{% block content_title %}{{ 'Dashboard'|trans }}{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <section class="content-header">
+            <div class="d-flex flex-row justify-content-between align-content-center w-100">
+                <div class="content-header-title">
+                    <h1 class="title">Welcome</h1>
+                </div>
+            </div>
+        </section>
+
+        <section id="main" class="content-body container">
+            <div class="row">
+                <p>{{ 'Here are some custom actions' }}</p>
+            </div>
+            <div class="row" style="margin-bottom: 2rem;">
+                <div class="col-6"></div>
+                <div class="col-6">
+                    <button class="btn btn-primary" type="submit" data-send-welcome-emails>Send welcome mails</button>
+                </div>
+            </div>
+        </section>
+        <section class="content-footer">
+            {{ 'Nice to see you'|trans }}
+        </section>
+    </div>
+    <script type="application/javascript">
+        $(function () {
+            $('[data-send-welcome-emails]').on('click', function (event) {
+                var result = confirm('{{ 'Are you sure to send welcome emails now?' }}');
+                if (result) {
+                    $.ajax({
+                        method: "POST",
+                        url: '/mailer/welcome-users',
+                        xhrFields: {
+                            withCredentials: true,
+                        }
+                    }).done(function (response) {
+                        console.log(response);
+                        if (response.success) {
+                            alert('{{ 'Welcome Emails sent'|trans }}')
+                        }
+                    })
+                }
+            })
+        })
+    </script>
+{% endblock %}

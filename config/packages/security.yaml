@@ -58,5 +58,6 @@ security:
     - { path: ^/auth$, role: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/api/docs, role: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/api$, roles: [ IS_AUTHENTICATED_FULLY ] }
-    - { path: ^/admin$, role: ROLE_ADMIN }
+    - { path: ^/admin, role: ROLE_ADMIN }
+    - { path: ^/mailer$, role: ROLE_ADMIN }
     - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY }

@@ -37,6 +37,7 @@ class UserService
         foreach ($users as $user) {
             $password = $this->generatePassword();
             $this->userRepository->setPassword($user, $password);
+            $this->userRepository->setHasRececeivedWelcomeEmail($user, true);
             $data = [
                 'username' => $user->getUsername(),
                 'first_name' => $user->getFirstName(),
