@@ -3,6 +3,9 @@ api_platform:
     version: 1.0.0
     path_segment_name_generator: api_platform.path_segment_name_generator.dash
 
+    exception_to_status:
+        App\Exception\ResourceNotFoundException: 400
+
     mapping:
         paths: ['%kernel.project_dir%/src/Entity']
 

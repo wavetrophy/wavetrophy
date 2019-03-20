@@ -54,10 +54,11 @@ security:
       anonymous:    true
 
   access_control:
-    - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-    - { path: ^/auth$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/login, role: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/auth, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/api/docs, role: IS_AUTHENTICATED_ANONYMOUSLY }
-    - { path: ^/api$, roles: [ IS_AUTHENTICATED_FULLY ] }
+    - { path: ^/api, roles: [ IS_AUTHENTICATED_FULLY ] }
     - { path: ^/admin, role: ROLE_ADMIN }
-    - { path: ^/mailer$, role: ROLE_ADMIN }
-    - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/mailer, roles: ROLE_ADMIN }
+    - { path: ^/, role: IS_AUTHENTICATED_FULLY }
+    - { path: ^/$, role: IS_AUTHENTICATED_ANONYMOUSLY }

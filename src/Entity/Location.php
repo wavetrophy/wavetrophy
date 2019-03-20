@@ -64,7 +64,7 @@ class Location
      * @var Collection
      *
      * @ORM\OneToMany(targetEntity="Event", mappedBy="location")
-     * @ApiSubresource()
+     * @ApiSubresource(maxDepth=1)
      */
     private $events;
 
