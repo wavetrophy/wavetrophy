@@ -96,6 +96,15 @@ class User extends BaseUser implements UserInterface
     private $hasReceivedSetupAppEmail = false;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="must_reset_password", type="boolean", length=1, nullable=false,
+     *     options={"comment"="Indicates if the user already received his setup app email"})
+     * @Groups({"readable"})
+     */
+    private $mustResetPassword = false;
+
+    /**
      * @var Team
      *
      * @ORM\ManyToOne(targetEntity="Team", inversedBy="users")
@@ -217,6 +226,22 @@ class User extends BaseUser implements UserInterface
     public function setHasReceivedSetupAppEmail(bool $hasReceivedSetupAppEmail): void
     {
         $this->hasReceivedSetupAppEmail = $hasReceivedSetupAppEmail;
+    }
+
+    public function setPlainPassword($password)
+    {
+        parent::setPlainPassword($password);
+        $this->setMustResetPassword(true);
+    }
+
+    public function getMustResetPassword(): bool
+    {
+        return $this->mustResetPassword;
+    }
+
+    public function setMustResetPassword(bool $mustResetPassword): void
+    {
+        $this->mustResetPassword = $mustResetPassword;
     }
 
     public function getTeam(): ?Team
