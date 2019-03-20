@@ -35,25 +35,54 @@ class UserService
     {
         $users = $this->userRepository->findAllUsersThatDidNotReceivedWelcomeEmail();
         foreach ($users as $user) {
-            $password = $this->generatePassword();
-            $this->userRepository->setPassword($user, $password);
             $this->userRepository->setHasRececeivedWelcomeEmail($user, true);
+            $email = $user->getEmail();
+            $token = $this->userRepository->generateTokenForUserEmail($email);
+
             $data = [
-                'username' => $user->getUsername(),
                 'first_name' => $user->getFirstName(),
-                'last_name' => $user->getLastName(),
-                'password' => $password,
+                'token' => $token,
             ];
             $this->mailer->sendMail(
-                'Willkommen zur WAVE Trophy',
+                '[WAVETROPHY] Willkommen',
                 'noreply@wavetrophy.com',
-                $user->getEmail(),
+                $email->getEmail(),
                 'emails/registration.html.twig',
                 'emails/registration.txt.twig',
                 $data
             );
         }
         return $users;
+    }
+
+    /**
+     * @param string $token
+     *
+     * @return bool
+     */
+    public function confirmEmail(string $token)
+    {
+        $user = $this->userRepository->confirmEmail($token);
+
+        $password = $this->generatePassword();
+        $this->userRepository->setPassword($user, $password);
+
+        $data = [
+            'first_name' => $user->getFirstName(),
+            'username' => $user->getUsername(),
+            'password' => $password,
+        ];
+
+        $this->mailer->sendMail(
+            '[WAVETROPHY] Vorbereitung',
+            'noreply@wavetrophy.com',
+            $user->getEmail()->__toString(),
+            'emails/app-setup.html.twig',
+            'emails/app-setup.txt.twig',
+            $data
+        );
+
+        return true;
     }
 
     /**

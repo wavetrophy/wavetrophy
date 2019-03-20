@@ -87,6 +87,15 @@ class User extends BaseUser implements UserInterface
     private $hasReceivedWelcomeEmail = false;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="has_received_setup_app_email", type="boolean", length=1, nullable=false,
+     *     options={"comment"="Indicates if the user already received his setup app email"})
+     * @Groups({"readable"})
+     */
+    private $hasReceivedSetupAppEmail = false;
+
+    /**
      * @var Team
      *
      * @ORM\ManyToOne(targetEntity="Team", inversedBy="users")
@@ -194,6 +203,22 @@ class User extends BaseUser implements UserInterface
         return $this;
     }
 
+    /**
+     * @return bool
+     */
+    public function hasReceivedSetupAppEmail(): bool
+    {
+        return $this->hasReceivedSetupAppEmail;
+    }
+
+    /**
+     * @param bool $hasReceivedSetupAppEmail
+     */
+    public function setHasReceivedSetupAppEmail(bool $hasReceivedSetupAppEmail): void
+    {
+        $this->hasReceivedSetupAppEmail = $hasReceivedSetupAppEmail;
+    }
+
     public function getTeam(): ?Team
     {
         return $this->team;
@@ -211,7 +236,7 @@ class User extends BaseUser implements UserInterface
         parent::setEmail($email);
         parent::setUsername($email);
 
-        $userEmail = new UserEmail($email, false, $this);
+        $userEmail = new UserEmail($email, false, false, null, $this);
 
         $exist = $this->emails->exists(function ($key, UserEmail $email) use ($userEmail) {
             return $email->getEmail() === $userEmail->getEmail();
