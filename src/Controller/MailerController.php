@@ -83,7 +83,7 @@ class MailerController extends AbstractController
     }
 
     /**
-     * @Route("/signup/confirm/thanks", methods={"GET"}, name="mailer_confirm_email_thank_you")
+     * @Route("/signup/thanks", methods={"GET"}, name="mailer_confirm_email_thank_you")
      *
      * @return Response
      */
