@@ -212,26 +212,21 @@ class User extends BaseUser implements UserInterface
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function hasReceivedSetupAppEmail(): bool
     {
         return $this->hasReceivedSetupAppEmail;
     }
 
-    /**
-     * @param bool $hasReceivedSetupAppEmail
-     */
     public function setHasReceivedSetupAppEmail(bool $hasReceivedSetupAppEmail): void
     {
         $this->hasReceivedSetupAppEmail = $hasReceivedSetupAppEmail;
     }
 
-    public function setPlainPassword($password)
+    public function setPlainPassword($password): self
     {
-        parent::setPlainPassword($password);
         $this->setMustResetPassword(true);
+
+        return parent::setPlainPassword($password);
     }
 
     public function getMustResetPassword(): bool
