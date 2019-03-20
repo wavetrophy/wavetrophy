@@ -27,7 +27,7 @@ class AppFixtures extends Fixture
         $user->addRole('ROLE_ADMIN');
 
         $userEmail = new UserEmail();
-        $userEmail->setEmail("bjoern@pfoster.ch");
+        $userEmail->setEmail("bjoern");
         $userEmail->setIsPublic(true);
         $userEmail->setUser($user);
 
@@ -118,17 +118,17 @@ class AppFixtures extends Fixture
 
         $group1 = new Group('Gruppe 1', $wave);
         $team1 = new Team('Renault', 1, $group1);
-        $lorenz = new User('lorenz@wave.com', 'Lorenz', 'Camenisch', $team1);
-        $remo = new User('remo@wave.com', 'Remo', 'Camenisch', $team1);
+        $lorenz = new User('bjoern@pfoster.ch', 'Lorenz', 'Camenisch', $team1);
+        $remo = new User('remo@example.com', 'Remo', 'Camenisch', $team1);
 
         $team2 = new Team('Pilatus', 2, $group1);
-        $andy = new User('andy@wave.com', 'Andy', 'Alig', $team2);
-        $edy = new User('edy@wave.com', 'Edy', 'Künzli', $team2);
+        $andy = new User('andy@example.com', 'Andy', 'Alig', $team2);
+        $edy = new User('edy@example.com', 'Edy', 'Künzli', $team2);
 
         $group2 = new Group('Gruppe 2', $wave);
         $team3 = new Team('Jura Energie', 3, $group2);
-        $jean = new User('jean@wave.com', 'Jean', 'Oppliger', $team3);
-        $esther = new User('esther@wave.com', 'Esther', 'Oppliger', $team3);
+        $jean = new User('jean@example.com', 'Jean', 'Oppliger', $team3);
+        $esther = new User('esther@example.com', 'Esther', 'Oppliger', $team3);
 
         $manager->persist($group1);
         $manager->persist($group2);

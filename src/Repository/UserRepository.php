@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\User;
+use App\Entity\UserEmail;
+use App\Exception\ResourceNotFoundException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -70,6 +72,46 @@ class UserRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param UserEmail $userEmail
+     *
+     * @return string
+     */
+    public function generateTokenForUserEmail(UserEmail $userEmail): string
+    {
+        $token = uniqid($userEmail->getId());
+        $userEmail->setConfirmationToken($token);
+        $this->_em->persist($userEmail);
+        $this->_em->flush();
+        return $token;
+    }
+
+    /**
+     * @param string $token
+     *
+     * @return User
+     * @throws ResourceNotFoundException
+     */
+    public function confirmEmail(string $token): User
+    {
+        /** @var UserEmail[]|null $email */
+        $email = $this->_em->getRepository(UserEmail::class)->findBy(['confirmationToken' => $token]);
+        if (!$email) {
+            throw new ResourceNotFoundException('Confirmation token not found');
+        }
+        $email = array_shift($email);
+
+        $email->setConfirmationToken(null);
+        $email->setConfirmed(true);
+
+        $user = $email->getUser();
+
+        $this->_em->persist($email);
+        $this->_em->flush();
+
+        return $user;
+    }
+
+    /**
      * Set has received welcome email flag.
      *
      * @param User $user
@@ -78,6 +120,17 @@ class UserRepository extends ServiceEntityRepository
     public function setHasRececeivedWelcomeEmail(User $user, ?bool $received = true): void
     {
         $user->setHasReceivedWelcomeEmail($received);
+        $this->_em->persist($user);
+        $this->_em->flush();
+    }
+
+    /**
+     * @param User $user
+     * @param bool|null $received
+     */
+    public function setHasReceivedSetupAppEmail(User $user, ?bool $received = true): void
+    {
+        $user->setHasReceivedSetupAppEmail($received);
         $this->_em->persist($user);
         $this->_em->flush();
     }

@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('/bundles/easyadmin/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('/css/app.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('/js/bootstrap.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    <div class="row vertical-center">
+        <div class="col-sm-4 offset-sm-4 align-content-center">
+            <h1>{{ 'Please confirm your email'|trans }}</h1>
+            <p>{{ 'By confirming this email, you give the App the information, that you are who the App thinks you are. If you received this mail on an email address that is not the one you signed up with, please contact the support'|trans }}</p>
+            {% if error is defined and error is same as(true) %}
+                <div class="alert alert-danger" role="alert">
+                    {% set support_link = "<a href=\"%s\">%s</a>"|raw|format('mailto:support@wavetrophy.com?subject=Error%20' ~ error_id, 'Support'|trans) %}
+                    {{ 'Something went wrong. Please contact the %s'|trans|format(support_link)|raw }}
+                </div>
+            {% endif %}
+            <form method="post">
+                <button type="submit" class="btn btn-primary btn-block">{{ 'Confirm'|trans }}</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

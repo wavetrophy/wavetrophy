@@ -44,6 +44,20 @@ class UserEmail
     private $isPublic = false;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="confirmed", type="boolean", nullable=false, options={"default"="1"})
+     */
+    private $confirmed = false;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="confirmation_token", type="string", length=255, nullable=true)
+     */
+    private $confirmationToken;
+
+    /**
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="User", inversedBy="emails")
@@ -56,15 +70,21 @@ class UserEmail
      *
      * @param string|null $email
      * @param bool|null $isPublic
+     * @param bool|null $confirmed
+     * @param string|null $confirmationToken
      * @param User|null $user
      */
     public function __construct(
         ?string $email = null,
         ?bool $isPublic = null,
+        ?bool $confirmed = false,
+        ?string $confirmationToken = null,
         ?User $user = null
     ) {
         $this->email = $email;
         $this->isPublic = $isPublic;
+        $this->confirmed = $confirmed;
+        $this->confirmationToken = $confirmationToken;
         $this->user = $user;
     }
 
@@ -102,6 +122,16 @@ class UserEmail
         return $this;
     }
 
+    public function isConfirmed(): bool
+    {
+        return $this->confirmed;
+    }
+
+    public function setConfirmed(bool $confirmed): void
+    {
+        $this->confirmed = $confirmed;
+    }
+
     public function getUser(): ?User
     {
         return $this->user;
@@ -112,5 +142,15 @@ class UserEmail
         $this->user = $user;
 
         return $this;
+    }
+
+    public function getConfirmationToken(): string
+    {
+        return $this->confirmationToken;
+    }
+
+    public function setConfirmationToken(?string $confirmationToken): void
+    {
+        $this->confirmationToken = $confirmationToken;
     }
 }

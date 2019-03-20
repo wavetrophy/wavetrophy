@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('/bundles/easyadmin/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('/css/app.css') }}">
+{% endblock %}
+{% block javascripts %}
+
+{% endblock %}
+
+{% block body %}
+    <div class="row vertical-center">
+        <div class="col-sm-6 offset-sm-3 align-content-center">
+            <h1>{{ 'Thank you for confirming your Email'|trans }}</h1>
+            <h4>{{ 'Please look in your email inbox for the mobile application setup instructions' }}</h4>
+        </div>
+    </div>
+{% endblock %}
