@@ -6,6 +6,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Entity\Traits\MetaFieldTrait;
 use App\Validators\Constraint\UniqueEmail;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -222,9 +223,9 @@ class User extends BaseUser implements UserInterface
         $this->hasReceivedSetupAppEmail = $hasReceivedSetupAppEmail;
     }
 
-    public function setPlainPassword($password): self
+    public function setPlainPassword($password, $mustResetPassword = true): self
     {
-        $this->setMustResetPassword(true);
+        $this->setMustResetPassword($mustResetPassword);
 
         return parent::setPlainPassword($password);
     }
@@ -236,6 +237,8 @@ class User extends BaseUser implements UserInterface
 
     public function setMustResetPassword(bool $mustResetPassword): void
     {
+        $this->setPasswordRequestedAt(new DateTime());
+
         $this->mustResetPassword = $mustResetPassword;
     }
 
