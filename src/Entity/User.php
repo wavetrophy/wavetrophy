@@ -6,6 +6,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Entity\Traits\MetaFieldTrait;
 use App\Validators\Constraint\UniqueEmail;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -94,6 +95,15 @@ class User extends BaseUser implements UserInterface
      * @Groups({"readable"})
      */
     private $hasReceivedSetupAppEmail = false;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="must_reset_password", type="boolean", length=1, nullable=false,
+     *     options={"comment"="Indicates if the user already received his setup app email"})
+     * @Groups({"readable"})
+     */
+    private $mustResetPassword = false;
 
     /**
      * @var Team
@@ -203,20 +213,33 @@ class User extends BaseUser implements UserInterface
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function hasReceivedSetupAppEmail(): bool
     {
         return $this->hasReceivedSetupAppEmail;
     }
 
-    /**
-     * @param bool $hasReceivedSetupAppEmail
-     */
     public function setHasReceivedSetupAppEmail(bool $hasReceivedSetupAppEmail): void
     {
         $this->hasReceivedSetupAppEmail = $hasReceivedSetupAppEmail;
+    }
+
+    public function setPlainPassword($password, $mustResetPassword = true): self
+    {
+        $this->setMustResetPassword($mustResetPassword);
+
+        return parent::setPlainPassword($password);
+    }
+
+    public function getMustResetPassword(): bool
+    {
+        return $this->mustResetPassword;
+    }
+
+    public function setMustResetPassword(bool $mustResetPassword): void
+    {
+        $this->setPasswordRequestedAt(new DateTime());
+
+        $this->mustResetPassword = $mustResetPassword;
     }
 
     public function getTeam(): ?Team
