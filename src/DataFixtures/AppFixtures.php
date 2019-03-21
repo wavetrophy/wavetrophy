@@ -120,15 +120,20 @@ class AppFixtures extends Fixture
         $team1 = new Team('Renault', 1, $group1);
         $lorenz = new User('bjoern@pfoster.ch', 'Lorenz', 'Camenisch', $team1);
         $remo = new User('remo@example.com', 'Remo', 'Camenisch', $team1);
+        $remo->setHasReceivedWelcomeEmail(true);
 
         $team2 = new Team('Pilatus', 2, $group1);
         $andy = new User('andy@example.com', 'Andy', 'Alig', $team2);
+        $andy->setHasReceivedWelcomeEmail(true);
         $edy = new User('edy@example.com', 'Edy', 'Künzli', $team2);
+        $edy->setHasReceivedWelcomeEmail(true);
 
         $group2 = new Group('Gruppe 2', $wave);
         $team3 = new Team('Jura Energie', 3, $group2);
         $jean = new User('jean@example.com', 'Jean', 'Oppliger', $team3);
+        $jean->setHasReceivedWelcomeEmail(true);
         $esther = new User('esther@example.com', 'Esther', 'Oppliger', $team3);
+        $esther->setHasReceivedWelcomeEmail(true);
 
         $manager->persist($group1);
         $manager->persist($group2);
