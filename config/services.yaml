@@ -17,8 +17,8 @@ services:
 #        arguments: [ '@request_stack', App\Repository\WaveRepository ]
     tags:
       - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
-  app.listeners.media_pre_flush_listener:
-    class:  App\Listeners\MediaPreFlushListener
+  app.listeners.media_on_flush_listener:
+    class:  App\Listeners\OnFlushListener
     arguments:
       - "%vich_uploader.mappings%"
     tags:
