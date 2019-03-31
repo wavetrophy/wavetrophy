@@ -2,6 +2,7 @@
 
 namespace App\Validators\Constraint;
 
+use App\Entity\User;
 use App\Repository\UserRepository;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -31,6 +32,11 @@ class UniqueEmailValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
+        /** @var User $user */
+        $user = $this->context->getObject();
+        if ($value === (string)$user->getEmail()) {
+            return;
+        }
         /** @var UniqueEmail $constraint */
         $isAlreadyRegistered = $this->userRepository->isEmailAlreadyRegistered($value);
         if($isAlreadyRegistered) {
