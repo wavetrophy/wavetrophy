@@ -189,6 +189,7 @@ easy_admin:
           - 'email'
           - 'isPublic'
           - 'user'
+        actions: ['-delete']
       form:
         fields:
           - 'email'
