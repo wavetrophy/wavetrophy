@@ -5,7 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Entity\Traits\MetaFieldTrait;
-use App\Validators\Constraint\UniqueEmail;
+use App\Validators\Constraint\AtLeastOne;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -14,7 +14,6 @@ use FOS\UserBundle\Model\User as BaseUser;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * User
@@ -23,7 +22,13 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  * @ApiResource(
  *     normalizationContext={"groups"={"readable"}},
- *     denormalizationContext={"groups"={"editable"}}
+ *     denormalizationContext={"groups"={"editable"}},
+ *     itemOperations={
+ *         "PUT"={
+ *              "method"="PUT",
+ *              "denormalizationContext"={"groups"={"update"}}
+ *         }
+ *     }
  * )
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  *
@@ -41,14 +46,6 @@ class User extends BaseUser implements UserInterface
      * @Groups({"readable"})
      */
     protected $id;
-
-    /**
-     * @Groups({"editable", "readable"})
-     * @Assert\NotBlank()
-     * @Assert\Email()
-     * @UniqueEmail()
-     */
-    protected $email;
 
     /**
      * @Groups({"readable"})
@@ -77,6 +74,15 @@ class User extends BaseUser implements UserInterface
      * @Groups({"editable", "readable"})
      */
     private $lastName;
+
+    /**
+     * @var Media
+     *
+     * @ORM\OneToOne(targetEntity="Media")
+     * @ORM\JoinColumn(name="media_id", referencedColumnName="id")
+     * @Groups({"editable", "readable"})
+     */
+    private $profilePicture;
 
     /**
      * @var bool
@@ -117,8 +123,9 @@ class User extends BaseUser implements UserInterface
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="UserEmail", mappedBy="user", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="UserEmail", mappedBy="user", cascade={"persist"}, orphanRemoval=true)
      * @ApiSubresource()
+     * @AtLeastOne()
      * @Groups({"editable", "readable"})
      */
     private $emails;
@@ -201,6 +208,16 @@ class User extends BaseUser implements UserInterface
         return $this;
     }
 
+    public function getProfilePicture(): ?Media
+    {
+        return $this->profilePicture;
+    }
+
+    public function setProfilePicture(?Media $profilePicture): void
+    {
+        $this->profilePicture = $profilePicture;
+    }
+
     public function getHasReceivedWelcomeEmail(): ?bool
     {
         return $this->hasReceivedWelcomeEmail;
@@ -271,17 +288,12 @@ class User extends BaseUser implements UserInterface
         return $this;
     }
 
-    public function getEmail(): ?UserEmail
-    {
-        return $this->getEmails()->first() ?: null;
-    }
-
     public function getEmails(): ?Collection
     {
         return $this->emails;
     }
 
-    public function addEmail(?UserEmail $email): self
+    public function addEmails(?UserEmail $email): self
     {
         $this->emails->add($email);
 
@@ -292,9 +304,13 @@ class User extends BaseUser implements UserInterface
         return $this;
     }
 
-    public function removeEmail(?UserEmail $email): self
+    public function removeEmails(?UserEmail $email): self
     {
         $this->emails->removeElement($email);
+
+        if ($this->email === $email->getEmail()) {
+            $this->setEmail($this->emails->first());
+        }
 
         return $this;
     }
@@ -326,41 +342,5 @@ class User extends BaseUser implements UserInterface
     public function getUsername(): string
     {
         return (string)$this->email;
-    }
-
-    /**
-     * @see UserInterface
-     */
-    public function getRoles(): array
-    {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
-    }
-
-    public function setRoles(array $roles): self
-    {
-        $this->roles = $roles;
-
-        return $this;
-    }
-
-    /**
-     * @see UserInterface
-     */
-    public function getSalt()
-    {
-        // not needed when using the "bcrypt" algorithm in security.yaml
-    }
-
-    /**
-     * @see UserInterface
-     */
-    public function eraseCredentials()
-    {
-        // If you store any temporary, sensitive data on the user, clear it here
-        $this->plainPassword = null;
     }
 }

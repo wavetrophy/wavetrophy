@@ -75,6 +75,13 @@ class Media
         }
     }
 
+    /**
+     * @return string|null
+     */
+    public function __toString()
+    {
+        return $this->getUrl();
+    }
 
     public function getId(): int
     {
