@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Entity\UserEmail;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 
 /**
@@ -35,6 +36,8 @@ class OnFlushListener
     }
 
     /**
+     * Listener
+     *
      * @param OnFlushEventArgs $args
      */
     public function onFlush(OnFlushEventArgs $args)
@@ -53,22 +56,35 @@ class OnFlushListener
         }
     }
 
-    public function iterate(array $entities, EntityManager $em, $method)
+    /**
+     * Iterate through a collection
+     *
+     * @param array $entities
+     * @param EntityManager $em
+     * @param $method
+     */
+    private function iterate(array $entities, EntityManager $em, $method)
     {
         foreach ($entities as $entity) {
             if ($entity instanceof Media) {
                 $this->handleMedia($entity, $em);
             }
             if ($entity instanceof User) {
-                $this->handleUser($entity);
+                $this->handleUser($entity, $em);
             }
             if ($entity instanceof UserEmail) {
                 $user = $entity->getUser();
-                $this->handleUser($user);
+                $this->handleUser($user, $em);
             }
         }
     }
 
+    /**
+     * Handle a Media entity.
+     *
+     * @param Media $entity
+     * @param EntityManager $em
+     */
     private function handleMedia(Media $entity, EntityManager $em): void
     {
         $fileName = $entity->getFile()->getRealPath();
@@ -76,13 +92,33 @@ class OnFlushListener
         $path = dirname($url);
         $entity->setPath($path);
         $entity->setUrl($url);
-        $em->persist($entity);
+        $this->persist($entity, $em);
     }
 
-    private function handleUser(User $user)
+    /**
+     * Handle User entity
+     *
+     * @param User $user
+     * @param EntityManager $em
+     */
+    private function handleUser(User $user, EntityManager $em)
     {
         $emails = $user->getEmails();
         $email = $emails->first();
         $user->setEmail($email->getEmail());
+        $this->persist($user, $em);
+    }
+
+    /**
+     * Handle user entity.
+     *
+     * @param $entity
+     * @param EntityManager $em
+     */
+    private function persist($entity, EntityManager $em)
+    {
+        $em->persist($entity);
+        $meta = $em->getClassMetadata(get_class($entity));
+        $em->getUnitOfWork()->computeChangeSet($meta, $entity);
     }
 }

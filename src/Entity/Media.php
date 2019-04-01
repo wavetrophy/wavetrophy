@@ -80,7 +80,7 @@ class Media
      */
     public function __toString()
     {
-        return $this->getUrl();
+        return $this->getUrl() ?: '';
     }
 
     public function getId(): int
