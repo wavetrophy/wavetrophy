@@ -78,7 +78,7 @@ class User extends BaseUser implements UserInterface
     /**
      * @var Media
      *
-     * @ORM\OneToOne(targetEntity="Media")
+     * @ORM\OneToOne(targetEntity="Media", cascade={"remove"})
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id")
      * @Groups({"editable", "readable"})
      */
