@@ -21,13 +21,19 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Table(name="user", indexes={@ORM\Index(name="fk_user_team1_idx", columns={"team_id"})})
  * @ORM\Entity
  * @ApiResource(
- *     normalizationContext={"groups"={"readable"}},
- *     denormalizationContext={"groups"={"editable"}},
+ *     normalizationContext={"groups"={"user.readable"}},
+ *     denormalizationContext={"groups"={"user.editable"}},
+ *     collectionOperations={
+ *         "get"={"method"="GET"},
+ *         "post"={"method"="POST"},
+ *     },
  *     itemOperations={
+ *         "get"={"method"="GET"},
+ *         "delete"={"method"="DELETE"},
  *         "PUT"={
  *              "method"="PUT",
  *              "denormalizationContext"={"groups"={"update"}}
- *         }
+ *         },
  *     }
  * )
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -43,19 +49,19 @@ class User extends BaseUser implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @ORM\Column(type="integer")
-     * @Groups({"readable"})
+     * @Groups({"user.readable"})
      */
     protected $id;
 
     /**
-     * @Groups({"readable"})
+     * @Groups({"user.readable"})
      */
     protected $username;
 
     /**
      * @var bool
      *
-     * @Groups({"editable", "readable"})
+     * @Groups({"user.editable", "user.readable"})
      */
     protected $enabled = true;
 
@@ -63,7 +69,7 @@ class User extends BaseUser implements UserInterface
      * @var string
      *
      * @ORM\Column(name="first_name", type="string", length=80, nullable=false)
-     * @Groups({"editable", "readable"})
+     * @Groups({"user.editable", "user.readable"})
      */
     private $firstName;
 
@@ -71,7 +77,7 @@ class User extends BaseUser implements UserInterface
      * @var string
      *
      * @ORM\Column(name="last_name", type="string", length=80, nullable=false)
-     * @Groups({"editable", "readable"})
+     * @Groups({"user.editable", "user.readable"})
      */
     private $lastName;
 
@@ -80,7 +86,7 @@ class User extends BaseUser implements UserInterface
      *
      * @ORM\OneToOne(targetEntity="Media", cascade={"remove"})
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id")
-     * @Groups({"editable", "readable"})
+     * @Groups({"user.editable", "user.readable"})
      */
     private $profilePicture;
 
@@ -89,7 +95,7 @@ class User extends BaseUser implements UserInterface
      *
      * @ORM\Column(name="has_received_welcome_email", type="boolean", length=1, nullable=false,
      *     options={"comment"="Indicates if the user already received his welcome email"})
-     * @Groups({"readable"})
+     * @Groups({"user.readable"})
      */
     private $hasReceivedWelcomeEmail = false;
 
@@ -98,7 +104,7 @@ class User extends BaseUser implements UserInterface
      *
      * @ORM\Column(name="has_received_setup_app_email", type="boolean", length=1, nullable=false,
      *     options={"comment"="Indicates if the user already received his setup app email"})
-     * @Groups({"readable"})
+     * @Groups({"user.readable"})
      */
     private $hasReceivedSetupAppEmail = false;
 
@@ -107,7 +113,7 @@ class User extends BaseUser implements UserInterface
      *
      * @ORM\Column(name="must_reset_password", type="boolean", length=1, nullable=false,
      *     options={"comment"="Indicates if the user already received his setup app email"})
-     * @Groups({"readable"})
+     * @Groups({"user.readable"})
      */
     private $mustResetPassword = false;
 
@@ -116,7 +122,7 @@ class User extends BaseUser implements UserInterface
      *
      * @ORM\ManyToOne(targetEntity="Team", inversedBy="users")
      * @ORM\JoinColumn(name="team_id", referencedColumnName="id")
-     * @Groups({"editable", "readable"})
+     * @Groups({"user.editable", "user.readable"})
      */
     private $team;
 
@@ -126,7 +132,7 @@ class User extends BaseUser implements UserInterface
      * @ORM\OneToMany(targetEntity="UserEmail", mappedBy="user", cascade={"persist"}, orphanRemoval=true)
      * @ApiSubresource()
      * @AtLeastOne()
-     * @Groups({"editable", "readable"})
+     * @Groups({"user.editable", "user.readable"})
      */
     private $emails;
 
@@ -135,7 +141,7 @@ class User extends BaseUser implements UserInterface
      *
      * @ORM\OneToMany(targetEntity="UserPhonenumber", mappedBy="user", cascade={"persist"})
      * @ApiSubresource()
-     * @Groups({"editable", "readable"})
+     * @Groups({"user.editable", "user.readable"})
      */
     private $phonenumbers;
 
