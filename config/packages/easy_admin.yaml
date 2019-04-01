@@ -174,7 +174,6 @@ easy_admin:
           - 'firstName'
           - 'lastName'
           - 'team'
-          - 'profilePicture'
       edit:
         fields:
           - '-email'
