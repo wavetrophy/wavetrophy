@@ -7,7 +7,6 @@ use App\Entity\User;
 use App\Entity\UserEmail;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 
 /**
@@ -43,11 +42,13 @@ class OnFlushListener
     public function onFlush(OnFlushEventArgs $args)
     {
         $em = $args->getEntityManager();
-        $insertEntities = $em->getUnitOfWork()->getScheduledEntityInsertions();
-        $this->iterate($insertEntities, $em, 'INSERT');
 
         $updateEntities = $em->getUnitOfWork()->getScheduledEntityUpdates();
         $this->iterate($updateEntities, $em, 'UPDATE');
+
+        $insertEntities = $em->getUnitOfWork()->getScheduledEntityInsertions();
+        $this->iterate($insertEntities, $em, 'INSERT');
+
 
         $updateCollections = $em->getUnitOfWork()->getScheduledCollectionUpdates();
         /** @var Collection $collection */
@@ -119,6 +120,6 @@ class OnFlushListener
     {
         $em->persist($entity);
         $meta = $em->getClassMetadata(get_class($entity));
-        $em->getUnitOfWork()->computeChangeSet($meta, $entity);
+        $em->getUnitOfWork()->recomputeSingleEntityChangeSet($meta, $entity);
     }
 }
