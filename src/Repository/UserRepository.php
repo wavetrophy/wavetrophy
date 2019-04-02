@@ -55,23 +55,6 @@ class UserRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param string $email
-     *
-     * @return bool
-     */
-    public function isEmailAlreadyRegistered(string $email): bool
-    {
-        $user = $this->createQueryBuilder('u')
-            ->select('1')
-            ->where('u.email = :email')
-            ->setParameter('email', $email)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult();
-        return $user !== null;
-    }
-
-    /**
      * @param UserEmail $userEmail
      *
      * @return string

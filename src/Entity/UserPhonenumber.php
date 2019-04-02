@@ -11,7 +11,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * UserPhonenumber
  *
  * @ORM\Table(name="user_phonenumber", indexes={@ORM\Index(name="fk_user_phonenumber_user1_idx", columns={"user_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\UserEmailRepository")
  * @ApiResource()
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  */

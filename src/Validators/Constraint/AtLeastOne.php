@@ -5,22 +5,27 @@ namespace App\Validators\Constraint;
 use Symfony\Component\Validator\Constraint;
 
 /**
- * Class UniqueEmail
+ * Class AtLeastOne
  *
  * @Annotation
  */
-class UniqueEmail extends Constraint
+class AtLeastOne extends Constraint
 {
     public $message;
 
     /**
-     * UniqueEmail constructor.
+     * AtLeastOne constructor.
      *
      * @param array|mixed $options
      */
     public function __construct($options)
     {
         parent::__construct($options);
-        $this->message = 'User already registered.';
+        $this->message = 'Needs to have at lease one element';
+    }
+
+    public function validatedBy()
+    {
+        return AtLeastOneValidator::class;
     }
 }

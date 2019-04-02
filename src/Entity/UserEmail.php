@@ -4,8 +4,10 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\Traits\MetaFieldTrait;
+use App\Validators\Constraint\UniqueEmail;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * UserEmail
@@ -14,6 +16,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Entity
  * @ApiResource()
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
+ * @UniqueEntity("email")
  */
 class UserEmail
 {
