@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\UserEmail;
-use App\Repository\UserEmailRepository;
 use Doctrine\ORM\EntityRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\EasyAdminController;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -24,27 +23,29 @@ class UserEditController extends EasyAdminController
     protected function createEntityFormBuilder($user, $view): FormBuilder
     {
         $formBuilder = parent::createEntityFormBuilder($user, $view);
-        $formBuilder->add(
-            'emails',
-            EntityType::class,
-            [
-                'class' => UserEmail::class,
-                'required' => false,
-                // same as in \EasyCorp\Bundle\EasyAdminBundle\Form\Type\Configurator\EntityTypeConfigurator::configure
-                'multiple' => true,
-                'attr' => [
+        if ($this->request->query->get('action') === 'edit') {
+            $formBuilder->add(
+                'emails',
+                EntityType::class,
+                [
+                    'class' => UserEmail::class,
+                    'required' => false,
                     // same as in \EasyCorp\Bundle\EasyAdminBundle\Form\Type\Configurator\EntityTypeConfigurator::configure
-                    'data-widget' => 'select2',
-                ],
-                // display profession only from same organization
-                'query_builder' => function (EntityRepository $repository) use ($user) {
-                    $query =  $repository->createQueryBuilder('ue')
-                        ->where('ue.user = :user')
-                        ->setParameter('user', $user);
-                    return $query;
-                },
-            ]
-        );
+                    'multiple' => true,
+                    'attr' => [
+                        // same as in \EasyCorp\Bundle\EasyAdminBundle\Form\Type\Configurator\EntityTypeConfigurator::configure
+                        'data-widget' => 'select2',
+                    ],
+                    // display profession only from same organization
+                    'query_builder' => function (EntityRepository $repository) use ($user) {
+                        $query = $repository->createQueryBuilder('ue')
+                            ->where('ue.user = :user')
+                            ->setParameter('user', $user);
+                        return $query;
+                    },
+                ]
+            );
+        }
 
         return $formBuilder;
     }
