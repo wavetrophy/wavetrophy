@@ -31,7 +31,7 @@ class AppFixtures extends Fixture
         $userEmail->setIsPublic(true);
         $userEmail->setUser($user);
 
-        $user->addEmail($userEmail);
+        $user->addEmails($userEmail);
         $user->setPlainPassword("bjoern");
         $user->setEnabled(true);
         $user->setSuperAdmin(true);

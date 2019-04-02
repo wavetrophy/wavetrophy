@@ -18,3 +18,5 @@ yarn-error.log
 ###< lexik/jwt-authentication-bundle ###
 
 bin/deploy.sh
+/public/media
+/public/img
