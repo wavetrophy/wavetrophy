@@ -3,6 +3,8 @@ api_platform:
     version: 1.0.0
     path_segment_name_generator: api_platform.path_segment_name_generator.dash
 
+    name_converter: 'Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter'
+
     exception_to_status:
         App\Exception\ResourceNotFoundException: 400
 

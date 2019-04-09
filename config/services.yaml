@@ -12,6 +12,8 @@ services:
     autowire: true      # Automatically injects dependencies in your services.
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
+  Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter: ~
+
   app.listeners.jwt_created_listener:
     class: App\Listeners\JWTCreatedListener
     tags:

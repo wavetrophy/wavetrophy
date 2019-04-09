@@ -4,17 +4,26 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\Traits\MetaFieldTrait;
-use App\Validators\Constraint\UniqueEmail;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 /**
  * UserEmail
  *
  * @ORM\Table(name="user_email", indexes={@ORM\Index(name="fk_user_email_user1_idx", columns={"user_id"})})
  * @ORM\Entity
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={
+ *         "groups"={"useremail.read"},
+ *         "enable_max_depth"=true,
+ *     },
+ *     denormalizationContext={
+ *         "groups"={"editable"}
+ *     },
+ * )
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  * @UniqueEntity("email")
  */
@@ -29,6 +38,7 @@ class UserEmail
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups({"readable","useremail.read"})
      */
     private $id;
 
@@ -36,6 +46,7 @@ class UserEmail
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255, nullable=false)
+     * @Groups({"readable", "useremail.read", "editable"})
      */
     private $email;
 
@@ -43,6 +54,7 @@ class UserEmail
      * @var bool
      *
      * @ORM\Column(name="is_public", type="boolean", nullable=false, options={"default"="1"})
+     * @Groups({"readable", "useremail.read", "editable"})
      */
     private $isPublic = false;
 
@@ -50,6 +62,7 @@ class UserEmail
      * @var bool
      *
      * @ORM\Column(name="confirmed", type="boolean", nullable=false, options={"default"="1"})
+     * @Groups({"readable", "useremail.read"})
      */
     private $confirmed = false;
 
@@ -65,6 +78,8 @@ class UserEmail
      *
      * @ORM\ManyToOne(targetEntity="User", inversedBy="emails")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @MaxDepth(1)
+     * @Groups({"readable", "useremail.read", "editable"})
      */
     private $user;
 
@@ -147,7 +162,7 @@ class UserEmail
         return $this;
     }
 
-    public function getConfirmationToken(): string
+    public function getConfirmationToken(): ?string
     {
         return $this->confirmationToken;
     }
