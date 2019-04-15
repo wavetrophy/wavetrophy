@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\UserEmail;
 use App\Exception\ResourceNotFoundException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use FOS\UserBundle\Model\UserInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -39,6 +40,47 @@ class UserRepository extends ServiceEntityRepository
         $result = $query->getResult();
 
         return $result;
+    }
+
+    /**
+     * @param string $username
+     *
+     * @return UserInterface
+     */
+    public function findByUsername(string $username): UserInterface
+    {
+        return $this->findOneBy(['username' => $username]);
+    }
+
+    /**
+     * @param string $username
+     *
+     * @return User|UserEmail|mixed|null
+     */
+    public function findUserByEmailsOrUsername(string $username)
+    {
+        $query = $this->createQueryBuilder('u');
+        $query->where('u.username = :username');
+        $query->setParameter('username', $username);
+        $query = $query->getQuery();
+        $result = $query->getResult();
+        if (!empty($result)) {
+            return $result[0];
+        }
+
+        $query = $this->_em->getRepository(UserEmail::class)->createQueryBuilder('ue');
+        $query->where('ue.email = :email')
+            ->andWhere('ue.deletedAt IS NULL OR ue.deletedAt <= :now');
+        $query->setParameter('email', $username);
+        $query->setParameter('now', date('Y-m-d H:i:s'));
+        $query = $query->getQuery();
+        /** @var UserEmail|null $result */
+        $result = $query->getResult();
+        if (empty($result)) {
+            return null;
+        }
+
+        return $result[0]->getUser();
     }
 
     /**
