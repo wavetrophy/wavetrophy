@@ -1,28 +1,31 @@
 api_platform:
-    title: "WAVE Trophy API"
-    version: 1.0.0
-    path_segment_name_generator: api_platform.path_segment_name_generator.dash
+  title: "WAVE Trophy API"
+  version: 1.0.0
+  path_segment_name_generator: api_platform.path_segment_name_generator.dash
 
-    name_converter: 'Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter'
+  name_converter: 'Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter'
 
-    exception_to_status:
-        App\Exception\ResourceNotFoundException: 400
+  exception_to_status:
+    App\Exception\ResourceNotFoundException: 400
 
-    mapping:
-        paths: ['%kernel.project_dir%/src/Entity']
+  eager_loading:
+    force_eager: false
 
-    formats:
-        json:
-            mime_types: ['application/json']
-        jsonld:
-            mime_types: ['application/ld+json']
-        html:
-            mime_types: ['text/html']
+  mapping:
+    paths: ['%kernel.project_dir%/src/Entity']
 
-    swagger:
-        api_keys:
-            apiKey:
-                name: Authorization
-                type: header
+  formats:
+    json:
+      mime_types: ['application/json']
+    jsonld:
+      mime_types: ['application/ld+json']
+    html:
+      mime_types: ['text/html']
 
-    enable_fos_user: true
+  swagger:
+    api_keys:
+      apiKey:
+        name: Authorization
+        type: header
+
+  enable_fos_user: true

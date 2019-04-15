@@ -133,10 +133,10 @@ class User extends BaseUser implements UserInterface
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="UserEmail", mappedBy="user", cascade={"persist"}, orphanRemoval=true)
-     * @MaxDepth(1)
+     * @ORM\OneToMany(targetEntity="UserEmail", mappedBy="user")
      * @ApiSubresource(maxDepth=1)
      * @AtLeastOne()
+     * @MaxDepth(1)
      * @Groups({"editable", "readable"})
      */
     private $emails;

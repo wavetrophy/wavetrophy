@@ -9,23 +9,24 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * UserEmail
  *
  * @ORM\Table(name="user_email", indexes={@ORM\Index(name="fk_user_email_user1_idx", columns={"user_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\UserEmailRepository")
  * @ApiResource(
  *     normalizationContext={
  *         "groups"={"useremail.read"},
  *         "enable_max_depth"=true,
  *     },
  *     denormalizationContext={
- *         "groups"={"editable"}
+ *         "groups"={"useremail.edit"}
  *     },
  * )
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
- * @UniqueEntity("email")
+ * @UniqueEntity(fields={"email"}, message="Email already registered")
  */
 class UserEmail
 {
@@ -45,8 +46,9 @@ class UserEmail
     /**
      * @var string
      *
+     * @Assert\Email(message="Please use a valid email")
      * @ORM\Column(name="email", type="string", length=255, nullable=false)
-     * @Groups({"readable", "useremail.read", "editable"})
+     * @Groups({"readable", "useremail.read", "editable", "useremail.edit"})
      */
     private $email;
 
@@ -54,7 +56,7 @@ class UserEmail
      * @var bool
      *
      * @ORM\Column(name="is_public", type="boolean", nullable=false, options={"default"="1"})
-     * @Groups({"readable", "useremail.read", "editable"})
+     * @Groups({"readable", "useremail.read", "editable", "useremail.edit"})
      */
     private $isPublic = false;
 
@@ -79,9 +81,15 @@ class UserEmail
      * @ORM\ManyToOne(targetEntity="User", inversedBy="emails")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      * @MaxDepth(1)
-     * @Groups({"readable", "useremail.read", "editable"})
+     * @Groups({"readable", "useremail.read", "editable", "useremail.edit"})
      */
     private $user;
+
+    /**
+     * @var bool
+     * @Groups({"readable", "useremail.read"})
+     */
+    private $isPrimary;
 
     /**
      * UserPhonenumber constructor.
@@ -170,5 +178,11 @@ class UserEmail
     public function setConfirmationToken(?string $confirmationToken): void
     {
         $this->confirmationToken = $confirmationToken;
+    }
+
+    public function getIsPrimary()
+    {
+        $email = $this->user->getEmail();
+        return $email === $this->email;
     }
 }
