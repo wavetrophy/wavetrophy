@@ -106,10 +106,10 @@ class OnFlushListener
     {
         $emails = $user->getEmails();
         $email = $emails->first();
-        if (!empty($email)) {
+        if (!empty($email) && $user->getEmail() !== $email->getEmail()) {
             $user->setEmail($email->getEmail());
+            $this->persist($user, $em);
         }
-        $this->persist($user, $em);
     }
 
     /**

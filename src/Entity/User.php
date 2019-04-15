@@ -58,14 +58,14 @@ class User extends BaseUser implements UserInterface
     protected $id;
 
     /**
-     * @Groups({"readable"})
+     * @Groups({"readable", "editable"})
      */
     protected $username;
 
     /**
      * @var bool
      *
-     * @Groups({"editable", "readable"})
+     * @Groups({"readable"})
      */
     protected $enabled = true;
 
@@ -283,10 +283,20 @@ class User extends BaseUser implements UserInterface
         return $this;
     }
 
+    public function setUsername($username)
+    {
+        parent::setUsername($username);
+        parent::setUsernameCanonical($username);
+
+        return $this;
+    }
+
     public function setEmail($email): self
     {
         parent::setEmail($email);
-        parent::setUsername($email);
+        if (empty($this->username)) {
+            parent::setUsername($email);
+        }
 
         $userEmail = new UserEmail($email, false, false, null, $this);
 
@@ -344,15 +354,5 @@ class User extends BaseUser implements UserInterface
         $this->phonenumbers->removeElement($phonenumber);
 
         return $this;
-    }
-
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
-    public function getUsername(): string
-    {
-        return (string)$this->email;
     }
 }
