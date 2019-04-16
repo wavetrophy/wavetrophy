@@ -144,9 +144,9 @@ class User extends BaseUser implements UserInterface
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="UserPhonenumber", mappedBy="user", cascade={"persist"})
-     * @MaxDepth(1)
+     * @ORM\OneToMany(targetEntity="UserPhonenumber", mappedBy="user")
      * @ApiSubresource(maxDepth=1)
+     * @MaxDepth(1)
      * @Groups({"editable", "readable"})
      */
     private $phonenumbers;

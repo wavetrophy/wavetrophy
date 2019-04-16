@@ -5,6 +5,7 @@ namespace App\Listeners;
 use App\Entity\Media;
 use App\Entity\User;
 use App\Entity\UserEmail;
+use App\Entity\UserPhonenumber;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\OnFlushEventArgs;
@@ -73,7 +74,7 @@ class OnFlushListener
             if ($entity instanceof User) {
                 $this->handleUser($entity, $em);
             }
-            if ($entity instanceof UserEmail) {
+            if ($entity instanceof UserEmail || $entity instanceof UserPhonenumber) {
                 $user = $entity->getUser();
                 $this->handleUser($user, $em);
             }

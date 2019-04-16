@@ -6,14 +6,31 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\Traits\MetaFieldTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 /**
  * UserPhonenumber
  *
  * @ORM\Table(name="user_phonenumber", indexes={@ORM\Index(name="fk_user_phonenumber_user1_idx", columns={"user_id"})})
- * @ORM\Entity(repositoryClass="App\Repository\UserEmailRepository")
- * @ApiResource()
+ * @ORM\Entity(repositoryClass="App\Repository\UserPhonenumberRepository")
+ * @ApiResource(
+ *     normalizationContext={
+ *         "groups"={"userphonenumber.read"},
+ *         "enable_max_depth"=true,
+ *     },
+ *     denormalizationContext={
+ *         "groups"={"userphonenumber.edit"}
+ *     },
+ * )
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
+ * @UniqueEntity(
+ *     fields={"phonenumber", "countryCode"},
+ *     repositoryMethod="isUnique",
+ *     errorPath="phonenumber",
+ *     message="Phonenumber already registered"
+ * )
  */
 class UserPhonenumber
 {
@@ -26,6 +43,7 @@ class UserPhonenumber
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups({"readable", "userphonenumber.read"})
      */
     private $id;
 
@@ -33,8 +51,9 @@ class UserPhonenumber
      * @var string
      *
      * @ORM\Column(name="phonenumber", type="string", length=30, nullable=false,
-     *      options={"comment"="The phone number of the user like +41765410128 (without spaces)"}
+     *      options={"comment"="The phone number of the user like 765410128 (without spaces)"}
      * )
+     * @Groups({"readable", "userphonenumber.read", "editable", "userphonenumber.edit"})
      */
     private $phonenumber;
 
@@ -44,6 +63,7 @@ class UserPhonenumber
      * @ORM\Column(name="country_code", type="string", length=5, nullable=false,
      *     options={"comment"="The Country code of the phone number (e.g. +41 or +1 or +502)"}
      *)
+     * @Groups({"readable", "userphonenumber.read", "editable", "userphonenumber.edit"})
      */
     private $countryCode;
 
@@ -51,16 +71,17 @@ class UserPhonenumber
      * @var bool
      *
      * @ORM\Column(name="is_public", type="boolean", nullable=false)
+     * @Groups({"readable", "userphonenumber.read", "editable", "userphonenumber.edit"})
      */
     private $isPublic = false;
 
     /**
      * @var User
      *
-     * @ORM\ManyToOne(targetEntity="User",inversedBy="phonenumbers")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     * })
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="phonenumbers")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @MaxDepth(1)
+     * @Groups({"readable", "userphonenumber.read", "editable", "userphonenumber.edit"})
      */
     private $user;
 
@@ -101,7 +122,7 @@ class UserPhonenumber
 
     public function setPhonenumber(?string $phonenumber): self
     {
-        $this->phonenumber = $phonenumber;
+        $this->phonenumber = preg_replace('/\s+/', '', trim($phonenumber));;
 
         return $this;
     }
@@ -113,7 +134,7 @@ class UserPhonenumber
 
     public function setCountryCode(?string $countryCode): self
     {
-        $this->countryCode = $countryCode;
+        $this->countryCode = preg_replace('/\s+/', '', trim($countryCode));
 
         return $this;
     }
@@ -141,6 +162,4 @@ class UserPhonenumber
 
         return $this;
     }
-
-
 }
