@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * Wave
  *
  * @ORM\Table(name="wave")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\WaveRepository")
  * @ApiResource(attributes={"denormalization_context"={"groups"={"editable"}}})
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  */
