@@ -31,6 +31,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
  *     errorPath="phonenumber",
  *     message="Phonenumber already registered"
  * )
+ * @ORM\HasLifecycleCallbacks
  */
 class UserPhonenumber
 {
@@ -108,6 +109,16 @@ class UserPhonenumber
     public function __toString(): ?string
     {
         return $this->countryCode . " " . $this->phonenumber;
+    }
+
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function handle()
+    {
+        $this->countryCode = preg_replace('/\s+/', '', trim($this->countryCode));
+        $this->phonenumber = preg_replace('/\s+/', '', trim($this->phonenumber));
     }
 
     public function getId(): ?int
