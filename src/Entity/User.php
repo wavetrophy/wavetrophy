@@ -133,7 +133,7 @@ class User extends BaseUser implements UserInterface
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="UserEmail", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="UserEmail", mappedBy="user", cascade={"all"})
      * @ApiSubresource(maxDepth=1)
      * @AtLeastOne()
      * @MaxDepth(1)
@@ -144,7 +144,7 @@ class User extends BaseUser implements UserInterface
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="UserPhonenumber", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="UserPhonenumber", mappedBy="user", cascade={"all"})
      * @ApiSubresource(maxDepth=1)
      * @MaxDepth(1)
      * @Groups({"editable", "readable"})

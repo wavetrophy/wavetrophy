@@ -6,9 +6,11 @@ use App\Entity\Media;
 use App\Entity\User;
 use App\Entity\UserEmail;
 use App\Entity\UserPhonenumber;
+use App\Service\Image\SVGProfilePicture;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\OnFlushEventArgs;
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * Class MediaPreFlushListener
@@ -23,16 +25,21 @@ class OnFlushListener
      * @var
      */
     private $uploadDir;
+    /**
+     * @var SVGProfilePicture
+     */
+    private $profilePictureGenerator;
 
     /**
      * OnFlushListener constructor.
      *
      * @param $data
      */
-    public function __construct($data)
+    public function __construct($data, SVGProfilePicture $profilePictureGenerator)
     {
         $this->uriPrefix = $data['media']['uri_prefix'];
         $this->uploadDir = $data['media']['upload_destination'];
+        $this->profilePictureGenerator = $profilePictureGenerator;
     }
 
     /**
@@ -89,11 +96,7 @@ class OnFlushListener
      */
     private function handleMedia(Media $entity, EntityManager $em): void
     {
-        $fileName = $entity->getFile()->getRealPath();
-        $url = str_replace($this->uploadDir, $this->uriPrefix, $fileName);
-        $path = dirname($url);
-        $entity->setPath($path);
-        $entity->setUrl($url);
+        $entity = $this->updateMedia($entity);
         $this->persist($entity, $em);
     }
 
@@ -111,6 +114,18 @@ class OnFlushListener
             $user->setEmail($email->getEmail());
             $this->persist($user, $em);
         }
+        if (empty($user->getProfilePicture())) {
+            $path = $this->profilePictureGenerator->generate();
+
+            $media = new Media();
+            $media->setFile(new File($path));
+            $media->setName(basename($path));
+            $media = $this->updateMedia($media);
+            $em->persist($media);
+            $em->getUnitOfWork()->computeChangeSets();
+            $user->setProfilePicture($media);
+            $this->persist($user, $em);
+        }
     }
 
     /**
@@ -124,5 +139,20 @@ class OnFlushListener
         $em->persist($entity);
         $meta = $em->getClassMetadata(get_class($entity));
         $em->getUnitOfWork()->recomputeSingleEntityChangeSet($meta, $entity);
+    }
+
+    /**
+     * @param Media $entity
+     *
+     * @return Media
+     */
+    private function updateMedia(Media $entity): Media
+    {
+        $fileName = $entity->getFile()->getRealPath();
+        $url = str_replace($this->uploadDir, $this->uriPrefix, $fileName);
+        $path = dirname($url);
+        $entity->setPath($path);
+        $entity->setUrl($url);
+        return $entity;
     }
 }
