@@ -11,6 +11,7 @@ use App\Entity\Team;
 use App\Entity\TeamParticipation;
 use App\Entity\User;
 use App\Entity\UserEmail;
+use App\Entity\UserPhonenumber;
 use App\Entity\Wave;
 use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -121,6 +122,29 @@ class AppFixtures extends Fixture
         $lorenz = new User('bjoern@pfoster.ch', 'Lorenz', 'Camenisch', $team1);
         $remo = new User('remo@example.com', 'Remo', 'Camenisch', $team1);
         $remo->setHasReceivedWelcomeEmail(true);
+        $remoMail1 = new UserEmail('remo1@cc.cc', true, true, null, $remo);
+        $remoMail2 = new UserEmail('remo2@cc.cc', true, true, null, $remo);
+        $remoMail3 = new UserEmail('remo3@cc.cc', true, true, null, $remo);
+        $remoMail4 = new UserEmail('remo4@cc.cc', true, true, null, $remo);
+        $remoMail5 = new UserEmail('remo5@cc.cc', true, true, null, $remo);
+
+        $manager->persist($remoMail1);
+        $manager->persist($remoMail2);
+        $manager->persist($remoMail3);
+        $manager->persist($remoMail4);
+        $manager->persist($remoMail5);
+
+        $remoPhone1 = new UserPhonenumber('761234567', '+41', true, $remo);
+        $remoPhone2 = new UserPhonenumber('762234567', '+41', true, $remo);
+        $remoPhone3 = new UserPhonenumber('763234567', '+41', true, $remo);
+        $remoPhone4 = new UserPhonenumber('764234567', '+41', true, $remo);
+        $remoPhone5 = new UserPhonenumber('765234567', '+41', true, $remo);
+
+        $manager->persist($remoPhone1);
+        $manager->persist($remoPhone2);
+        $manager->persist($remoPhone3);
+        $manager->persist($remoPhone4);
+        $manager->persist($remoPhone5);
 
         $team2 = new Team('Pilatus', 2, $group1);
         $andy = new User('andy@example.com', 'Andy', 'Alig', $team2);
