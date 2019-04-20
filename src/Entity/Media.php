@@ -128,5 +128,15 @@ class Media
         $this->path = $path;
     }
 
-
+    public function asArray()
+    {
+        return [
+            'id' => $this->id,
+// Excluded to not let out security relevant data
+//            'file' => $this->file,
+            'name' => $this->name,
+            'path' => $this->path,
+            'url' => $this->url,
+        ];
+    }
 }

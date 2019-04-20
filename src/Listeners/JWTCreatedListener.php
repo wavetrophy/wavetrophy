@@ -46,11 +46,16 @@ class JWTCreatedListener
         /** @var User $user */
         $user = $event->getUser();
 
+        $profilePicture = $user->getProfilePicture();
+        if (!empty($profilePicture)) {
+            $profilePicture = $profilePicture->asArray();
+        }
+
         $payload = $event->getData();
 
         $payload['ip'] = $request->getClientIp();
         $payload['user_id'] = $user->getId();
-        $payload['profile_picture'] = $user->getProfilePicture();
+        $payload['profile_picture'] = $profilePicture;
         $payload['current_wave'] = $this->wave->getCurrentWave();
         $payload['team_id'] = null;
         $payload['group_id'] = null;
