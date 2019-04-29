@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -17,7 +18,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="question", indexes={@ORM\Index(name="fk_question_user1_idx", columns={"user_id"}),
  *     @ORM\Index(name="fk_question_group1_idx", columns={"group_id"})})
  * @ORM\Entity
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={
+ *         "groups"={"question:read"},
+ *         "enable_max_depth"=true,
+ *     },
+ * )
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  */
 class Question
@@ -31,6 +37,7 @@ class Question
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups({"question:read"})
      */
     private $id;
 
@@ -40,6 +47,7 @@ class Question
      * @ORM\Column(name="title", type="string", length=40, nullable=false)
      * @Assert\NotBlank
      * @Assert\Length(max="40", min="10")
+     * @Groups({"question:read"})
      */
     private $title;
 
@@ -48,21 +56,24 @@ class Question
      *
      * @ORM\Column(name="question", type="string", length=1000, nullable=false)
      * @Assert\Length(max="1000", min="20")
+     * @Groups({"question:read"})
      */
     private $question;
 
     /**
-     * @var string
+     * @var bool
      *
-     * @ORM\Column(name="resolved", type="boolean", nullable=false, options={"default"="1"})
+     * @ORM\Column(name="resolved", type="boolean", nullable=false, options={"default"=0})
+     * @Groups({"question:read"})
      */
-    private $resolved;
+    private $resolved = false;
 
     /**
      * @var Group
      *
      * @ORM\ManyToOne(targetEntity="Group", inversedBy="questions")
-     * @ORM\JoinColumn(name="group_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="id", nullable=true)
+     * @Groups({"question:read"})
      */
     private $group;
 
@@ -71,6 +82,7 @@ class Question
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @Groups({"question:read"})
      */
     private $user;
 
@@ -79,6 +91,7 @@ class Question
      *
      * @ORM\OneToMany(targetEntity="Answer", mappedBy="question")
      * @ApiSubresource()
+     * @Groups({"question:read"})
      */
     private $answers;
 
@@ -92,99 +105,97 @@ class Question
     public function __construct(
         ?string $title = null,
         ?string $question = null,
-        ?bool $resolved = false,
         ?Group $group = null,
         ?User $user = null
     ) {
-        $this -> title = $title;
-        $this -> question = $question;
-        $this -> resolved = $resolved;
-        $this -> group = $group;
-        $this -> user = $user;
-        $this -> answers = new ArrayCollection();
+        $this->title = $title;
+        $this->question = $question;
+        $this->group = $group;
+        $this->user = $user;
+        $this->answers = new ArrayCollection();
     }
 
     public function __toString(): ?string
     {
-        return $this -> question;
+        return $this->question;
     }
 
     public function getId(): ?int
     {
-        return $this -> id;
+        return $this->id;
     }
 
     public function getTitle(): string
     {
-        return $this -> title;
+        return $this->title;
     }
 
     public function setTitle(string $title): void
     {
-        $this -> title = $title;
+        $this->title = $title;
     }
 
     public function getQuestion(): ?string
     {
-        return $this -> question;
+        return $this->question;
     }
 
     public function setQuestion(?string $question): self
     {
-        $this -> question = $question;
+        $this->question = $question;
 
         return $this;
     }
 
-    public function getResolved(): string
+    public function getResolved(): bool
     {
-        return $this -> resolved;
+        return $this->resolved;
     }
 
-    public function setResolved(string $resolved): void
+    public function setResolved(bool $resolved): void
     {
-        $this -> resolved = $resolved;
+        $this->resolved = $resolved;
     }
 
     public function getGroup(): ?Group
     {
-        return $this -> group;
+        return $this->group;
     }
 
     public function setGroup(?Group $group): self
     {
-        $this -> group = $group;
+        $this->group = $group;
 
         return $this;
     }
 
     public function getUser(): ?User
     {
-        return $this -> user;
+        return $this->user;
     }
 
     public function setUser(?User $user): self
     {
-        $this -> user = $user;
+        $this->user = $user;
 
         return $this;
     }
 
     public function getAnswers(): ?Collection
     {
-        return $this -> answers;
+        return $this->answers;
     }
 
     public function addAnswer(?Answer $answer): self
     {
-        $this -> answers -> add($answer);
+        $this->answers->add($answer);
 
         return $this;
     }
 
     public function removeAnswer(?Answer $answer): self
     {
-        $this -> answers -> removeElement($answer);
+        $this->answers->removeElement($answer);
 
         return $this;
     }

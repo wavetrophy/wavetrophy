@@ -29,29 +29,6 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
  *     denormalizationContext={
  *         "groups"={"user:edit"}
  *     },
- *     collectionOperations={
- *         "get"={
- *             "method"="GET",
- *             "denormalizationContext"={"groups"={"user:read"}}
- *         },
- *         "post"={
- *             "method"="POST",
- *             "denormalizationContext"={"groups"={"user:edit"}}
- *         },
- *     },
- *     itemOperations={
- *         "get"={
- *             "method"="GET",
- *             "denormalizationContext"={"groups"={"user:read"}},
- *         },
- *         "delete"={
- *             "method"="DELETE",
- *         },
- *         "PUT"={
- *              "method"="PUT",
- *              "denormalizationContext"={"groups"={"update"}},
- *         },
- *     },
  * )
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  *
@@ -71,7 +48,7 @@ class User extends BaseUser implements UserInterface
     protected $id;
 
     /**
-     * @Groups({"readable", "user:read", "editable", "user:edit"})
+     * @Groups({"readable", "user:read", "editable", "user:edit", "question:read"})
      */
     protected $username;
 
@@ -103,7 +80,7 @@ class User extends BaseUser implements UserInterface
      *
      * @ORM\OneToOne(targetEntity="Media", cascade={"remove"})
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id")
-     * @Groups({"editable", "user:edit", "readable", "user:read", "user:read"})
+     * @Groups({"editable", "user:edit", "readable", "user:read", "user:read", "question:read"})
      */
     private $profilePicture;
 

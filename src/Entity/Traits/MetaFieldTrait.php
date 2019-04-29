@@ -49,8 +49,6 @@ trait MetaFieldTrait
      * @ORM\Column(name="created_by", type="string", length=80, nullable=false, options={"comment"="The id of the
      *     user"})
      * @Groups({"readable"})
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(referencedColumnName="id")
      * @Gedmo\Blameable(on="create")
      */
     private $createdBy;
@@ -70,8 +68,6 @@ trait MetaFieldTrait
      * @ORM\Column(name="updated_by", type="string", length=80, nullable=true, options={"comment"="The user who
      *     updated the record"})
      * @Groups({"readable"})
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(referencedColumnName="id")
      * @Gedmo\Blameable(on="update")
      */
     private $updatedBy;
