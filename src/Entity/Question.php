@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Question
@@ -36,7 +37,9 @@ class Question
     /**
      * @var string
      *
-     * @ORM\Column(name="title", type="string", length=1000, nullable=false)
+     * @ORM\Column(name="title", type="string", length=40, nullable=false)
+     * @Assert\NotBlank
+     * @Assert\Length(max="40", min="10")
      */
     private $title;
 
@@ -44,6 +47,7 @@ class Question
      * @var string
      *
      * @ORM\Column(name="question", type="string", length=1000, nullable=false)
+     * @Assert\Length(max="1000", min="20")
      */
     private $question;
 
