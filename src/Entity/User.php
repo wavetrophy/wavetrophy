@@ -23,20 +23,33 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
  * @ORM\Entity
  * @ApiResource(
  *     normalizationContext={
- *         "groups"={"readable"},
+ *         "groups"={"user:read"},
  *         "enable_max_depth"=true,
  *     },
- *     denormalizationContext={"groups"={"editable"}},
+ *     denormalizationContext={
+ *         "groups"={"user:edit"}
+ *     },
  *     collectionOperations={
- *         "get"={"method"="GET"},
- *         "post"={"method"="POST"},
+ *         "get"={
+ *             "method"="GET",
+ *             "denormalizationContext"={"groups"={"user:read"}}
+ *         },
+ *         "post"={
+ *             "method"="POST",
+ *             "denormalizationContext"={"groups"={"user:edit"}}
+ *         },
  *     },
  *     itemOperations={
- *         "get"={"method"="GET"},
- *         "delete"={"method"="DELETE"},
+ *         "get"={
+ *             "method"="GET",
+ *             "denormalizationContext"={"groups"={"user:read"}},
+ *         },
+ *         "delete"={
+ *             "method"="DELETE",
+ *         },
  *         "PUT"={
  *              "method"="PUT",
- *              "denormalizationContext"={"groups"={"update"}}
+ *              "denormalizationContext"={"groups"={"update"}},
  *         },
  *     },
  * )
@@ -53,19 +66,19 @@ class User extends BaseUser implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @ORM\Column(type="integer")
-     * @Groups({"readable"})
+     * @Groups({"readable", "user:read"})
      */
     protected $id;
 
     /**
-     * @Groups({"readable", "editable"})
+     * @Groups({"readable", "user:read", "editable", "user:edit"})
      */
     protected $username;
 
     /**
      * @var bool
      *
-     * @Groups({"readable"})
+     * @Groups({"readable", "user:read"})
      */
     protected $enabled = true;
 
@@ -73,7 +86,7 @@ class User extends BaseUser implements UserInterface
      * @var string
      *
      * @ORM\Column(name="first_name", type="string", length=80, nullable=false)
-     * @Groups({"editable", "readable"})
+     * @Groups({"editable", "user:edit", "readable", "user:read", "user:read"})
      */
     private $firstName;
 
@@ -81,7 +94,7 @@ class User extends BaseUser implements UserInterface
      * @var string
      *
      * @ORM\Column(name="last_name", type="string", length=80, nullable=false)
-     * @Groups({"editable", "readable"})
+     * @Groups({"editable", "user:edit", "readable", "user:read", "user:read"})
      */
     private $lastName;
 
@@ -90,7 +103,7 @@ class User extends BaseUser implements UserInterface
      *
      * @ORM\OneToOne(targetEntity="Media", cascade={"remove"})
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id")
-     * @Groups({"editable", "readable"})
+     * @Groups({"editable", "user:edit", "readable", "user:read", "user:read"})
      */
     private $profilePicture;
 
@@ -99,7 +112,7 @@ class User extends BaseUser implements UserInterface
      *
      * @ORM\Column(name="has_received_welcome_email", type="boolean", length=1, nullable=false,
      *     options={"comment"="Indicates if the user already received his welcome email"})
-     * @Groups({"readable"})
+     * @Groups({"readable", "user:read"})
      */
     private $hasReceivedWelcomeEmail = false;
 
@@ -108,7 +121,7 @@ class User extends BaseUser implements UserInterface
      *
      * @ORM\Column(name="has_received_setup_app_email", type="boolean", length=1, nullable=false,
      *     options={"comment"="Indicates if the user already received his setup app email"})
-     * @Groups({"readable"})
+     * @Groups({"readable", "user:read"})
      */
     private $hasReceivedSetupAppEmail = false;
 
@@ -117,7 +130,7 @@ class User extends BaseUser implements UserInterface
      *
      * @ORM\Column(name="must_reset_password", type="boolean", length=1, nullable=false,
      *     options={"comment"="Indicates if the user already received his setup app email"})
-     * @Groups({"readable"})
+     * @Groups({"readable", "user:read"})
      */
     private $mustResetPassword = false;
 
@@ -126,7 +139,8 @@ class User extends BaseUser implements UserInterface
      *
      * @ORM\ManyToOne(targetEntity="Team", inversedBy="users")
      * @ORM\JoinColumn(name="team_id", referencedColumnName="id")
-     * @Groups({"editable", "readable"})
+     * @Groups({"editable", "user:edit", "readable", "user:read", "user:read"})
+     * @MaxDepth(1)
      */
     private $team;
 
@@ -137,7 +151,7 @@ class User extends BaseUser implements UserInterface
      * @ApiSubresource(maxDepth=1)
      * @AtLeastOne()
      * @MaxDepth(1)
-     * @Groups({"editable", "readable"})
+     * @Groups({"editable", "user:edit", "readable", "user:read", "user:read"})
      */
     private $emails;
 
@@ -147,7 +161,7 @@ class User extends BaseUser implements UserInterface
      * @ORM\OneToMany(targetEntity="UserPhonenumber", mappedBy="user", cascade={"all"})
      * @ApiSubresource(maxDepth=1)
      * @MaxDepth(1)
-     * @Groups({"editable", "readable"})
+     * @Groups({"editable", "user:edit", "readable", "user:read", "user:read"})
      */
     private $phonenumbers;
 
@@ -165,24 +179,24 @@ class User extends BaseUser implements UserInterface
         ?string $lastName = null,
         ?Team $team = null
     ) {
-        parent::__construct();
+        parent ::__construct();
 
-        $this->setEnabled(true);
-        $this->setPlainPassword(uniqid());
-        $this->emails = new ArrayCollection();
-        $this->phonenumbers = new ArrayCollection();
+        $this -> setEnabled(true);
+        $this -> setPlainPassword(uniqid());
+        $this -> emails = new ArrayCollection();
+        $this -> phonenumbers = new ArrayCollection();
 
         if (!empty($email)) {
-            $this->setEmail($email);
+            $this -> setEmail($email);
         }
         if (!empty($firstName)) {
-            $this->setFirstName($firstName);
+            $this -> setFirstName($firstName);
         }
         if (!empty($lastName)) {
-            $this->setLastName($lastName);
+            $this -> setLastName($lastName);
         }
         if (!empty($team)) {
-            $this->setTeam($team);
+            $this -> setTeam($team);
         }
     }
 
@@ -193,118 +207,118 @@ class User extends BaseUser implements UserInterface
 
     public function getId(): ?int
     {
-        return $this->id;
+        return $this -> id;
     }
 
     public function getFirstName(): ?string
     {
-        return $this->firstName;
+        return $this -> firstName;
     }
 
     public function setFirstName(string $firstName): self
     {
-        $this->firstName = $firstName;
+        $this -> firstName = $firstName;
 
         return $this;
     }
 
     public function getLastName(): ?string
     {
-        return $this->lastName;
+        return $this -> lastName;
     }
 
     public function setLastName(string $lastName): self
     {
-        $this->lastName = $lastName;
+        $this -> lastName = $lastName;
 
         return $this;
     }
 
     public function getProfilePicture(): ?Media
     {
-        return $this->profilePicture;
+        return $this -> profilePicture;
     }
 
     public function setProfilePicture(?Media $profilePicture): void
     {
-        $this->profilePicture = $profilePicture;
+        $this -> profilePicture = $profilePicture;
     }
 
     public function getHasReceivedWelcomeEmail(): ?bool
     {
-        return $this->hasReceivedWelcomeEmail;
+        return $this -> hasReceivedWelcomeEmail;
     }
 
     public function setHasReceivedWelcomeEmail(?bool $hasReceivedWelcomeEmail): self
     {
-        $this->hasReceivedWelcomeEmail = $hasReceivedWelcomeEmail;
+        $this -> hasReceivedWelcomeEmail = $hasReceivedWelcomeEmail;
 
         return $this;
     }
 
     public function hasReceivedSetupAppEmail(): bool
     {
-        return $this->hasReceivedSetupAppEmail;
+        return $this -> hasReceivedSetupAppEmail;
     }
 
     public function setHasReceivedSetupAppEmail(bool $hasReceivedSetupAppEmail): void
     {
-        $this->hasReceivedSetupAppEmail = $hasReceivedSetupAppEmail;
+        $this -> hasReceivedSetupAppEmail = $hasReceivedSetupAppEmail;
     }
 
     public function setPlainPassword($password, $mustResetPassword = true): self
     {
-        $this->setMustResetPassword($mustResetPassword);
+        $this -> setMustResetPassword($mustResetPassword);
 
-        return parent::setPlainPassword($password);
+        return parent ::setPlainPassword($password);
     }
 
     public function getMustResetPassword(): bool
     {
-        return $this->mustResetPassword;
+        return $this -> mustResetPassword;
     }
 
     public function setMustResetPassword(bool $mustResetPassword): void
     {
-        $this->setPasswordRequestedAt(new DateTime());
+        $this -> setPasswordRequestedAt(new DateTime());
 
-        $this->mustResetPassword = $mustResetPassword;
+        $this -> mustResetPassword = $mustResetPassword;
     }
 
     public function getTeam(): ?Team
     {
-        return $this->team;
+        return $this -> team;
     }
 
     public function setTeam(?Team $team): self
     {
-        $this->team = $team;
+        $this -> team = $team;
 
         return $this;
     }
 
     public function setUsername($username)
     {
-        parent::setUsername($username);
-        parent::setUsernameCanonical($username);
+        parent ::setUsername($username);
+        parent ::setUsernameCanonical($username);
 
         return $this;
     }
 
     public function setEmail($email): self
     {
-        parent::setEmail($email);
-        if (empty($this->username)) {
-            parent::setUsername($email);
+        parent ::setEmail($email);
+        if (empty($this -> username)) {
+            parent ::setUsername($email);
         }
 
         $userEmail = new UserEmail($email, false, false, null, $this);
 
-        $exist = $this->emails->exists(function ($key, UserEmail $email) use ($userEmail) {
-            return $email->getEmail() === $userEmail->getEmail();
+        $exist = $this -> emails -> exists(function ($key, UserEmail $email) use ($userEmail) {
+            return $email -> getEmail() === $userEmail -> getEmail();
         });
         if (!$exist) {
-            $this->emails->add($userEmail);
+            $this -> emails -> add($userEmail);
         }
 
         return $this;
@@ -312,15 +326,15 @@ class User extends BaseUser implements UserInterface
 
     public function getEmails(): ?Collection
     {
-        return $this->emails;
+        return $this -> emails;
     }
 
     public function addEmails(?UserEmail $email): self
     {
-        $this->emails->add($email);
+        $this -> emails -> add($email);
 
-        if (empty($this->email)) {
-            $this->setEmail($email->getEmail());
+        if (empty($this -> email)) {
+            $this -> setEmail($email -> getEmail());
         }
 
         return $this;
@@ -328,10 +342,10 @@ class User extends BaseUser implements UserInterface
 
     public function removeEmails(?UserEmail $email): self
     {
-        $this->emails->removeElement($email);
+        $this -> emails -> removeElement($email);
 
-        if ($this->email === $email->getEmail()) {
-            $this->setEmail($this->emails->first());
+        if ($this -> email === $email -> getEmail()) {
+            $this -> setEmail($this -> emails -> first());
         }
 
         return $this;
@@ -339,19 +353,19 @@ class User extends BaseUser implements UserInterface
 
     public function getPhonenumbers(): ?Collection
     {
-        return $this->phonenumbers;
+        return $this -> phonenumbers;
     }
 
     public function addPhonenumber(?UserPhonenumber $phonenumber): self
     {
-        $this->phonenumbers->add($phonenumber);
+        $this -> phonenumbers -> add($phonenumber);
 
         return $this;
     }
 
     public function removePhonenumber(?UserPhonenumber $phonenumber): self
     {
-        $this->phonenumbers->removeElement($phonenumber);
+        $this -> phonenumbers -> removeElement($phonenumber);
 
         return $this;
     }

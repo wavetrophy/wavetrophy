@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="App\Repository\UserEmailRepository")
  * @ApiResource(
  *     normalizationContext={
- *         "groups"={"useremail.read"},
+ *         "groups"={"useremail:read"},
  *         "enable_max_depth"=true,
  *     },
  *     denormalizationContext={
@@ -39,7 +39,7 @@ class UserEmail
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @Groups({"readable","useremail.read"})
+     * @Groups({"readable", "user:read","useremail:read"})
      */
     private $id;
 
@@ -48,7 +48,7 @@ class UserEmail
      *
      * @Assert\Email(message="Please use a valid email")
      * @ORM\Column(name="email", type="string", length=255, nullable=false)
-     * @Groups({"readable", "useremail.read", "editable", "useremail.edit"})
+     * @Groups({"readable", "user:read", "useremail:read", "editable", "useremail.edit"})
      */
     private $email;
 
@@ -56,7 +56,7 @@ class UserEmail
      * @var bool
      *
      * @ORM\Column(name="is_public", type="boolean", nullable=false, options={"default"="1"})
-     * @Groups({"readable", "useremail.read", "editable", "useremail.edit"})
+     * @Groups({"readable", "user:read", "useremail:read", "editable", "useremail.edit"})
      */
     private $isPublic = false;
 
@@ -64,7 +64,7 @@ class UserEmail
      * @var bool
      *
      * @ORM\Column(name="confirmed", type="boolean", nullable=false, options={"default"="1"})
-     * @Groups({"readable", "useremail.read"})
+     * @Groups({"readable", "user:read", "useremail:read"})
      */
     private $confirmed = false;
 
@@ -81,13 +81,13 @@ class UserEmail
      * @ORM\ManyToOne(targetEntity="User", inversedBy="emails")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      * @MaxDepth(1)
-     * @Groups({"readable", "useremail.read", "editable", "useremail.edit"})
+     * @Groups({"readable", "useremail:read", "editable", "useremail.edit"})
      */
     private $user;
 
     /**
      * @var bool
-     * @Groups({"readable", "useremail.read"})
+     * @Groups({"readable", "user:read", "useremail:read"})
      */
     private $isPrimary;
 

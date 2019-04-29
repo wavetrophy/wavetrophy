@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
  * @ORM\Entity(repositoryClass="App\Repository\UserPhonenumberRepository")
  * @ApiResource(
  *     normalizationContext={
- *         "groups"={"userphonenumber.read"},
+ *         "groups"={"userphonenumber:read"},
  *         "enable_max_depth"=true,
  *     },
  *     denormalizationContext={
@@ -44,7 +44,7 @@ class UserPhonenumber
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @Groups({"readable", "userphonenumber.read"})
+     * @Groups({"readable", "user:read", "userphonenumber:read"})
      */
     private $id;
 
@@ -54,7 +54,7 @@ class UserPhonenumber
      * @ORM\Column(name="phonenumber", type="string", length=30, nullable=false,
      *      options={"comment"="The phone number of the user like 765410128 (without spaces)"}
      * )
-     * @Groups({"readable", "userphonenumber.read", "editable", "userphonenumber.edit"})
+     * @Groups({"readable", "user:read", "userphonenumber:read", "editable", "userphonenumber.edit"})
      */
     private $phonenumber;
 
@@ -64,7 +64,7 @@ class UserPhonenumber
      * @ORM\Column(name="country_code", type="string", length=5, nullable=false,
      *     options={"comment"="The Country code of the phone number (e.g. +41 or +1 or +502)"}
      *)
-     * @Groups({"readable", "userphonenumber.read", "editable", "userphonenumber.edit"})
+     * @Groups({"readable", "user:read", "userphonenumber:read", "editable", "userphonenumber.edit"})
      */
     private $countryCode;
 
@@ -72,7 +72,7 @@ class UserPhonenumber
      * @var bool
      *
      * @ORM\Column(name="is_public", type="boolean", nullable=false)
-     * @Groups({"readable", "userphonenumber.read", "editable", "userphonenumber.edit"})
+     * @Groups({"readable", "user:read", "userphonenumber:read", "editable", "userphonenumber.edit"})
      */
     private $isPublic = false;
 
@@ -82,7 +82,7 @@ class UserPhonenumber
      * @ORM\ManyToOne(targetEntity="User", inversedBy="phonenumbers")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      * @MaxDepth(1)
-     * @Groups({"readable", "userphonenumber.read", "editable", "userphonenumber.edit"})
+     * @Groups({"readable", "userphonenumber:read", "editable", "userphonenumber.edit"})
      */
     private $user;
 

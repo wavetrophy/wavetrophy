@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Group
@@ -29,6 +30,7 @@ class Group
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups({"user:read"})
      */
     private $id;
 
@@ -36,6 +38,7 @@ class Group
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=80, nullable=false)
+     * @Groups({"user:read"})
      */
     private $name;
 
@@ -44,6 +47,7 @@ class Group
      *
      * @ORM\ManyToOne(targetEntity="Wave", inversedBy="groups", )
      * @ORM\JoinColumn(name="wave_id", referencedColumnName="id")
+     * @Groups({"user:read"})
      */
     private $wave;
 
