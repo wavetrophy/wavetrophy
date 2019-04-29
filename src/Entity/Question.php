@@ -36,9 +36,23 @@ class Question
     /**
      * @var string
      *
+     * @ORM\Column(name="title", type="string", length=1000, nullable=false)
+     */
+    private $title;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="question", type="string", length=1000, nullable=false)
      */
     private $question;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="resolved", type="boolean", nullable=false, options={"default"="1"})
+     */
+    private $resolved;
 
     /**
      * @var Group
@@ -72,77 +86,101 @@ class Question
      * @param User|null $user
      */
     public function __construct(
+        ?string $title = null,
         ?string $question = null,
+        ?bool $resolved = false,
         ?Group $group = null,
         ?User $user = null
     ) {
-        $this->question = $question;
-        $this->group = $group;
-        $this->user = $user;
-        $this->answers = new ArrayCollection();
+        $this -> title = $title;
+        $this -> question = $question;
+        $this -> resolved = $resolved;
+        $this -> group = $group;
+        $this -> user = $user;
+        $this -> answers = new ArrayCollection();
     }
 
     public function __toString(): ?string
     {
-        return $this->question;
+        return $this -> question;
     }
 
     public function getId(): ?int
     {
-        return $this->id;
+        return $this -> id;
+    }
+
+    public function getTitle(): string
+    {
+        return $this -> title;
+    }
+
+    public function setTitle(string $title): void
+    {
+        $this -> title = $title;
     }
 
     public function getQuestion(): ?string
     {
-        return $this->question;
+        return $this -> question;
     }
 
     public function setQuestion(?string $question): self
     {
-        $this->question = $question;
+        $this -> question = $question;
 
         return $this;
     }
 
+    public function getResolved(): string
+    {
+        return $this -> resolved;
+    }
+
+    public function setResolved(string $resolved): void
+    {
+        $this -> resolved = $resolved;
+    }
+
     public function getGroup(): ?Group
     {
-        return $this->group;
+        return $this -> group;
     }
 
     public function setGroup(?Group $group): self
     {
-        $this->group = $group;
+        $this -> group = $group;
 
         return $this;
     }
 
     public function getUser(): ?User
     {
-        return $this->user;
+        return $this -> user;
     }
 
     public function setUser(?User $user): self
     {
-        $this->user = $user;
+        $this -> user = $user;
 
         return $this;
     }
 
     public function getAnswers(): ?Collection
     {
-        return $this->answers;
+        return $this -> answers;
     }
 
     public function addAnswer(?Answer $answer): self
     {
-        $this->answers->add($answer);
+        $this -> answers -> add($answer);
 
         return $this;
     }
 
     public function removeAnswer(?Answer $answer): self
     {
-        $this->answers->removeElement($answer);
+        $this -> answers -> removeElement($answer);
 
         return $this;
     }
