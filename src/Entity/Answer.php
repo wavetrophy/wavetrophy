@@ -4,8 +4,10 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\Traits\MetaFieldTrait;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -28,6 +30,7 @@ class Answer
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups({"question:read"})
      */
     private $id;
 
@@ -36,6 +39,7 @@ class Answer
      *
      * @ORM\Column(name="answer", type="string", length=1000, nullable=false)
      * @Assert\NotBlank()
+     * @Groups({"question:read"})
      */
     private $answer;
 
@@ -43,6 +47,7 @@ class Answer
      * @var bool
      *
      * @ORM\Column(name="approved", type="boolean", nullable=false)
+     * @Groups({"question:read"})
      */
     private $approved = false;
 
@@ -53,6 +58,20 @@ class Answer
      * @ORM\JoinColumn(name="question_id", referencedColumnName="id")
      */
     private $question;
+
+    /**
+     * @var string
+     *
+     * @Groups({"question:read"})
+     */
+    private $username;
+
+    /**
+     * @var DateTimeInterface
+     *
+     * @Groups({"question:read"})
+     */
+    private $timestamp;
 
     /**
      * Answer constructor.
@@ -115,5 +134,15 @@ class Answer
         $this->question = $question;
 
         return $this;
+    }
+
+    public function getUsername(): string
+    {
+        return $this->getCreatedBy();
+    }
+
+    public function getTimestamp(): ?DateTimeInterface
+    {
+        return $this->getUpdatedAt();
     }
 }

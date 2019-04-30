@@ -19,6 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     @ORM\Index(name="fk_question_group1_idx", columns={"group_id"})})
  * @ORM\Entity
  * @ApiResource(
+ *     attributes={"order"={"createdAt": "DESC"}},
  *     normalizationContext={
  *         "groups"={"question:read"},
  *         "enable_max_depth"=true,
