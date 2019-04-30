@@ -46,7 +46,7 @@ class Answer
     /**
      * @var bool
      *
-     * @ORM\Column(name="approved", type="boolean", nullable=false)
+     * @ORM\Column(name="approved", type="boolean", nullable=false, options={"default"=0})
      * @Groups({"question:read"})
      */
     private $approved = false;
@@ -82,7 +82,7 @@ class Answer
      */
     public function __construct(
         ?string $answer = null,
-        ?bool $approved = null,
+        ?bool $approved = false,
         ?Question $question = null
     ) {
         $this->answer = $answer;

@@ -24,6 +24,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         "groups"={"question:read"},
  *         "enable_max_depth"=true,
  *     },
+ *     denormalizationContext={
+ *         "groups"={"question:edit"},
+ *     }
  * )
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  */
@@ -48,7 +51,7 @@ class Question
      * @ORM\Column(name="title", type="string", length=40, nullable=false)
      * @Assert\NotBlank
      * @Assert\Length(max="40", min="10")
-     * @Groups({"question:read"})
+     * @Groups({"question:read", "question:edit"})
      */
     private $title;
 
@@ -57,15 +60,15 @@ class Question
      *
      * @ORM\Column(name="question", type="string", length=1000, nullable=false)
      * @Assert\Length(max="1000", min="20")
-     * @Groups({"question:read"})
+     * @Groups({"question:read", "question:edit"})
      */
     private $question;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="resolved", type="boolean", nullable=false, options={"default"=0})
-     * @Groups({"question:read"})
+     * @ORM\Column(name="resolved", type="boolean", nullable=false, options={"default"="0"})
+     * @Groups({"question:read", "question:edit"})
      */
     private $resolved = false;
 
@@ -74,7 +77,7 @@ class Question
      *
      * @ORM\ManyToOne(targetEntity="Group", inversedBy="questions")
      * @ORM\JoinColumn(name="group_id", referencedColumnName="id", nullable=true)
-     * @Groups({"question:read"})
+     * @Groups({"question:read", "question:edit"})
      */
     private $group;
 
@@ -83,7 +86,7 @@ class Question
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     * @Groups({"question:read"})
+     * @Groups({"question:read", "question:edit"})
      */
     private $user;
 
@@ -92,7 +95,7 @@ class Question
      *
      * @ORM\OneToMany(targetEntity="Answer", mappedBy="question")
      * @ApiSubresource()
-     * @Groups({"question:read"})
+     * @Groups({"question:read", "question:edit"})
      */
     private $answers;
 
