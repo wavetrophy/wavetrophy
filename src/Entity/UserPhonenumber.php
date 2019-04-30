@@ -104,6 +104,8 @@ class UserPhonenumber
         $this->countryCode = $countryCode;
         $this->isPublic = $isPublic;
         $this->user = $user;
+        $this->setCreatedBy($user);
+        $this->setUpdatedBy($user);
     }
 
     public function __toString(): ?string

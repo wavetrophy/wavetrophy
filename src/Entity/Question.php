@@ -116,6 +116,8 @@ class Question
         $this->question = $question;
         $this->group = $group;
         $this->user = $user;
+        $this->setCreatedBy($user);
+        $this->setUpdatedBy($user);
         $this->answers = new ArrayCollection();
     }
 

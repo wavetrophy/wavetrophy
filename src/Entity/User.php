@@ -12,6 +12,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
@@ -33,6 +35,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  *
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
+ * @Security("user.getId() == entity.getCreatorId()")
  */
 class User extends BaseUser implements UserInterface
 {
@@ -179,7 +182,7 @@ class User extends BaseUser implements UserInterface
 
     public function __toString(): ?string
     {
-        return "{$this->firstName} {$this->lastName}";
+        return "{$this->getId()}";
     }
 
     public function getId(): ?int

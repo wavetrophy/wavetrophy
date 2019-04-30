@@ -2,12 +2,14 @@
 
 namespace App\Entity\Traits;
 
+use App\Entity\User;
 use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use DomainException;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 /**
  * Trait MetaFieldTrait
@@ -44,10 +46,11 @@ trait MetaFieldTrait
     private $createdAt;
 
     /**
-     * @var string
+     * @var User
      *
-     * @ORM\Column(name="created_by", type="string", length=80, nullable=false, options={"comment"="The id of the
-     *     user"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
+     * @MaxDepth(1)
      * @Groups({"readable"})
      * @Gedmo\Blameable(on="create")
      */
@@ -63,10 +66,11 @@ trait MetaFieldTrait
     private $updatedAt;
 
     /**
-     * @var string|null
+     * @var User
      *
-     * @ORM\Column(name="updated_by", type="string", length=80, nullable=true, options={"comment"="The user who
-     *     updated the record"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\JoinColumn(name="updated_by", referencedColumnName="id", nullable=true)
+     * @MaxDepth(1)
      * @Groups({"readable"})
      * @Gedmo\Blameable(on="update")
      */
@@ -91,18 +95,17 @@ trait MetaFieldTrait
         return $this->createdAt;
     }
 
-    public function setCreatedBy(?string $username): self
+    public function setCreatedBy(?User $user): self
     {
-        $this->createdBy = $username;
+        $this->createdBy = $user;
 
         return $this;
     }
 
-    public function getCreatedBy(): ?string
+    public function getCreatedBy(): ?User
     {
         return $this->createdBy;
     }
-
 
     public function setUpdatedAt(?DateTimeInterface $updatedAt): self
     {
@@ -116,14 +119,14 @@ trait MetaFieldTrait
         return $this->updatedAt;
     }
 
-    public function setUpdatedBy(?string $username): self
+    public function setUpdatedBy(?User $user): self
     {
-        $this->updatedBy = $username;
+        $this->updatedBy = $user;
 
         return $this;
     }
 
-    public function getUpdatedBy(): ?string
+    public function getUpdatedBy(): ?User
     {
         return $this->updatedBy;
     }

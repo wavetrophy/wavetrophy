@@ -112,6 +112,8 @@ class UserEmail
         $this->confirmed = $confirmed;
         $this->confirmationToken = $confirmationToken;
         $this->user = $user;
+        $this->setCreatedBy($user);
+        $this->setUpdatedBy($user);
     }
 
     public function __toString(): ?string

@@ -83,8 +83,9 @@ services:
     calls:
       - [ setAnnotationReader, [ "@annotation_reader" ] ]
   gedmo.listener.blameable:
-    class: Gedmo\Blameable\BlameableListener
+    class: App\Listeners\BlameableListener
     tags:
       - { name: doctrine.event_subscriber, connection: default, priority: 1 }
     calls:
       - [ setAnnotationReader, [ "@annotation_reader" ] ]
+      - [ setSecurityStorage, [ "@security.token_storage" ] ]
