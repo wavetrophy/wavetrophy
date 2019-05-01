@@ -15,7 +15,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * User
@@ -121,8 +120,7 @@ class User extends BaseUser implements UserInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="locale", type="string", length=4, nullable=false,
-     *     options={"comment"="Indicates if the user already received his setup app email"})
+     * @ORM\Column(name="locale", type="string", length=5, nullable=false, options={"comment"="The locale of the user"})
      * @Groups({"readable", "user:read", "editable", "user:edit"})
      */
     private $locale = 'en_GB';
