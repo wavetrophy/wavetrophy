@@ -67,6 +67,13 @@ class Answer
     private $username;
 
     /**
+     * @var int
+     *
+     * @Groups({"question:read"})
+     */
+    private $userId;
+
+    /**
      * @var DateTimeInterface
      *
      * @Groups({"question:read"})
@@ -138,7 +145,12 @@ class Answer
 
     public function getUsername(): string
     {
-        return $this->getCreatedBy();
+        return $this->getCreatedBy()->getUsername();
+    }
+
+    public function getUserId(): int
+    {
+        return $this->getCreatedBy()->getId();
     }
 
     public function getTimestamp(): ?DateTimeInterface

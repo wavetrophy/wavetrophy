@@ -30,7 +30,7 @@ class Group
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @Groups({"user:read"})
+     * @Groups({"user:read", "question:read"})
      */
     private $id;
 
@@ -38,7 +38,7 @@ class Group
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=80, nullable=false)
-     * @Groups({"user:read"})
+     * @Groups({"user:read", "question:read"})
      */
     private $name;
 

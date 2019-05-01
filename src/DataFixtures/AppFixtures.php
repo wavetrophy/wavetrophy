@@ -276,21 +276,22 @@ class AppFixtures extends Fixture
 
         $question1 = new Question('Where to park in lucerne', 'I just arrived in lucerne. Where do i park?', $group1,
             $lorenz);
+        $question1->setResolved(true);
         $question1->setCreatedBy($lorenz);
-        $answer1 = new Answer('At the trainstation near the center. There are some chargers near the exit. But its very costly',
+        $answer1 = new Answer('At the train station near the center. There are some chargers near the exit. But its very costly',
             true, $question1);
         $answer1->setCreatedBy($remo);
-        $answer2 = new Answer('Somewhere', true, $question1);
+        $answer2 = new Answer('Somewhere', false, $question1);
         $answer2->setCreatedBy($andy);
 
 
         $question2 = new Question('Where to park in basel', 'I just arrived in basel. Where do i park?', $group1,
             $lorenz);
         $question2->setCreatedBy($lorenz);
-        $answer3 = new Answer('At the trainstation near the center. There are some chargers near the exit. But its very costly',
-            true, $question1);
+        $answer3 = new Answer('At the train station near the center. There are some chargers near the exit. But its very costly',
+            false, $question2);
         $answer3->setCreatedBy($remo);
-        $answer4 = new Answer('Somewhere else', true, $question1);
+        $answer4 = new Answer('Somewhere else', false, $question2);
         $answer4->setCreatedBy($andy);
 
         $manager->persist($question1);
