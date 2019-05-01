@@ -25,7 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     },
  *     itemOperations={
  *         "get",
- *         "put"={"access_control"="user.getId() == object.getCreatorId()"},
+ *         "put"={"access_control"="user.getId() == object.getCreatorId() and object.getApproved() !== true"},
  *         "delete"={"access_control"="user.getId() == object.getCreatorId() and object.getApproved() !== true"},
  *     },
  *     collectionOperations={"get", "post"},
