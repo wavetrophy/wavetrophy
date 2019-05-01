@@ -13,15 +13,30 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity
- * @ApiResource(iri="http://schema.org/MediaObject", collectionOperations={
- *     "get",
- *     "post"={
- *         "method"="POST",
- *         "path"="/media",
- *         "controller"=CreateMediaAction::class,
- *         "defaults"={"_api_receive"=false},
+ * @ApiResource(
+ *     iri="http://schema.org/MediaObject",
+ *     normalizationContext={
+ *         "groups"={"media:read"},
+ *         "enable_max_depth"=true,
  *     },
- * })
+ *     denormalizationContext={
+ *         "groups"={"media:edit"}
+ *     },
+ *     itemOperations={
+ *         "get",
+ *         "put"={"access_control"="user.getId() == object.getCreatorId()"},
+ *         "delete"={"access_control"="user.getId() == object.getCreatorId()"},
+ *     },
+ *     collectionOperations={
+ *         "get",
+ *         "post"={
+ *             "method"="POST",
+ *             "path"="/media",
+ *             "controller"=CreateMediaAction::class,
+ *             "defaults"={"_api_receive"=false},
+ *         },
+ *     },
+ * )
  * @Vich\Uploadable
  */
 class Media
@@ -32,6 +47,7 @@ class Media
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups({"media:read"})
      */
     private $id;
 
@@ -39,27 +55,28 @@ class Media
      * @var File|null
      * @Assert\NotNull()
      * @Vich\UploadableField(mapping="media", fileNameProperty="name")
+     * @Groups({"media:read", "media:edit"})
      */
     private $file;
 
     /**
      * @var string|null
      * @ORM\Column(nullable=true)
-     * @Groups({"question:read"})
+     * @Groups({"media:read", "question:read", "media:edit"})
      */
     private $name;
 
     /**
      * @var string|null
      * @ORM\Column(nullable=true)
-     * @Groups({"question:read"})
+     * @Groups({"media:read", "question:read", "media:edit"})
      */
     private $path;
 
     /**
      * @var string|null
      * @ORM\Column(nullable=true)
-     * @Groups({"question:read"})
+     * @Groups({"media:read", "question:read", "media:edit"})
      */
     private $url;
 
@@ -97,9 +114,11 @@ class Media
         return $this->file;
     }
 
-    public function setFile(?File $file): void
+    public function setFile(?File $file): self
     {
         $this->file = $file;
+
+        return $this;
     }
 
     public function getUrl(): ?string
@@ -107,9 +126,11 @@ class Media
         return $this->url;
     }
 
-    public function setUrl(?string $url): void
+    public function setUrl(?string $url): self
     {
         $this->url = $url;
+
+        return $this;
     }
 
     public function getName(): ?string
@@ -117,9 +138,11 @@ class Media
         return $this->name;
     }
 
-    public function setName(?string $name): void
+    public function setName(?string $name): self
     {
         $this->name = $name;
+
+        return $this;
     }
 
     public function getPath(): ?string
@@ -127,17 +150,19 @@ class Media
         return $this->path;
     }
 
-    public function setPath(?string $path): void
+    public function setPath(?string $path): self
     {
         $this->path = $path;
+
+        return $this;
     }
 
     public function asArray()
     {
         return [
             'id' => $this->id,
-// Excluded to not let out security relevant data
-//            'file' => $this->file,
+            // Excluded to not let out security relevant data
+            //            'file' => $this->file,
             'name' => $this->name,
             'path' => $this->path,
             'url' => $this->url,

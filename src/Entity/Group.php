@@ -16,7 +16,21 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *
  * @ORM\Table(name="`group`", indexes={@ORM\Index(name="fk_group_wave1_idx", columns={"wave_id"})})
  * @ORM\Entity
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={
+ *         "groups"={"group:read"},
+ *         "enable_max_depth"=true,
+ *     },
+ *     denormalizationContext={
+ *         "groups"={"group:edit"}
+ *     },
+ *     itemOperations={
+ *         "get",
+ *         "put"={"access_control"="user.getId() == object.getCreatorId()"},
+ *         "delete"={"access_control"="user.getId() == object.getCreatorId()"},
+ *     },
+ *     collectionOperations={"get", "post"},
+ * )
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  */
 class Group
@@ -30,7 +44,7 @@ class Group
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @Groups({"user:read", "question:read"})
+     * @Groups({"group:read", "user:read", "question:read", "group:edit"})
      */
     private $id;
 
@@ -38,7 +52,7 @@ class Group
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=80, nullable=false)
-     * @Groups({"user:read", "question:read"})
+     * @Groups({"group:read", "user:read", "question:read", "group:edit"})
      */
     private $name;
 
@@ -47,7 +61,7 @@ class Group
      *
      * @ORM\ManyToOne(targetEntity="Wave", inversedBy="groups", )
      * @ORM\JoinColumn(name="wave_id", referencedColumnName="id")
-     * @Groups({"user:read"})
+     * @Groups({"group:read", "user:read", "group:edit"})
      */
     private $wave;
 
@@ -56,6 +70,7 @@ class Group
      *
      * @ORM\OneToMany(targetEntity="Team", mappedBy="group")
      * @ApiSubresource()
+     * @Groups({"group:read", "group:edit"})
      */
     private $teams;
 
@@ -64,6 +79,7 @@ class Group
      *
      * @ORM\OneToMany(targetEntity="Question", mappedBy="group")
      * @ApiSubresource()
+     * @Groups({"group:read", "group:edit"})
      */
     private $questions;
 

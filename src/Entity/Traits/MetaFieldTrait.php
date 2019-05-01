@@ -102,6 +102,11 @@ trait MetaFieldTrait
         return $this;
     }
 
+    public function getCreatorId()
+    {
+        return $this->getCreatedBy()->getId();
+    }
+
     public function getCreatedBy(): ?User
     {
         return $this->createdBy;

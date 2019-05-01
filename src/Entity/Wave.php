@@ -18,7 +18,22 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *
  * @ORM\Table(name="wave")
  * @ORM\Entity(repositoryClass="App\Repository\WaveRepository")
- * @ApiResource(attributes={"denormalization_context"={"groups"={"editable"}}})
+ * @ApiResource(
+ *     normalizationContext={
+ *         "groups"={"wave:read"},
+ *         "enable_max_depth"=true,
+ *     },
+ *     denormalizationContext={
+ *         "groups"={"wave:edit", "wave:edit"}
+ *     },
+ *     itemOperations={
+ *         "get",
+ *         "put"={"access_control"="user.getId() == object.getCreatorId()"},
+ *         "delete"={"access_control"="user.getId() == object.getCreatorId()"},
+ *     },
+ *     collectionOperations={"get", "post"},
+ *
+ * )
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  */
 class Wave
@@ -32,7 +47,7 @@ class Wave
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @Groups({"editable", "readonly"})
+     * @Groups({"wave:read", "wave:edit"})
      */
     private $id;
 
@@ -40,7 +55,7 @@ class Wave
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=80, nullable=false)
-     * @Groups({"editable", "readonly"})
+     * @Groups({"wave:read", "wave:edit"})
      */
     private $name;
 
@@ -48,7 +63,7 @@ class Wave
      * @var string
      *
      * @ORM\Column(name="country", type="string", length=80, nullable=false)
-     * @Groups({"editable", "readonly"})
+     * @Groups({"wave:read", "wave:edit"})
      */
     private $country;
 
@@ -57,7 +72,7 @@ class Wave
      *
      * @ORM\Column(name="start", type="datetime", nullable=false, options={"comment"="The start for the participants,
      *     not support"})
-     * @Groups({"editable", "readonly"})
+     * @Groups({"wave:read", "wave:edit"})
      */
     private $start;
 
@@ -65,7 +80,7 @@ class Wave
      * @var DateTime
      *
      * @ORM\Column(name="end", type="datetime", nullable=false)
-     * @Groups({"editable", "readonly"})
+     * @Groups({"wave:read", "wave:edit"})
      */
     private $end;
 
@@ -74,7 +89,7 @@ class Wave
      *
      * @ORM\OneToMany(targetEntity="Group", mappedBy="wave")
      * @ApiSubresource()
-     * @Groups({"readonly"})
+     * @Groups({"wave:read"})
      */
     private $groups;
 
@@ -83,7 +98,7 @@ class Wave
      *
      * @ORM\OneToMany(targetEntity="Location", mappedBy="wave")
      * @ApiSubresource()
-     * @Groups({"readonly"})
+     * @Groups({"wave:read"})
      */
     private $locations;
 

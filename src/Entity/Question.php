@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Entity\Traits\MetaFieldTrait;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -26,7 +27,13 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     },
  *     denormalizationContext={
  *         "groups"={"question:edit"},
- *     }
+ *     },
+ *     itemOperations={
+ *         "get",
+ *         "put"={"access_control"="user.getId() == object.getCreatorId()"},
+ *         "delete"={"access_control"="user.getId() == object.getCreatorId()"},
+ *     },
+ *     collectionOperations={"get", "post"={"groups"={"question:create"}}},
  * )
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  */
@@ -50,8 +57,13 @@ class Question
      *
      * @ORM\Column(name="title", type="string", length=40, nullable=false)
      * @Assert\NotBlank
-     * @Assert\Length(max="40", min="10")
-     * @Groups({"question:read", "question:edit"})
+     * @Assert\Length(
+     *     max="40",
+     *     min="10",
+     *     minMessage="The title should have at least 10 characters",
+     *     maxMessage="Please summarize your title a little bit. The maximum is 40 characters",
+     * )
+     * @Groups({"question:read", "question:create", "question:edit"})
      */
     private $title;
 
@@ -59,8 +71,14 @@ class Question
      * @var string
      *
      * @ORM\Column(name="question", type="string", length=1000, nullable=false)
-     * @Assert\Length(max="1000", min="20")
-     * @Groups({"question:read", "question:edit"})
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *     max="1000",
+     *     min="20",
+     *     minMessage="The question should have at least 20 characters",
+     *     maxMessage="Please summarize your question a little bit. The maximum is 1000 characters",
+     * )
+     * @Groups({"question:read", "question:create", "question:edit"})
      */
     private $question;
 
@@ -68,6 +86,7 @@ class Question
      * @var bool
      *
      * @ORM\Column(name="resolved", type="boolean", nullable=false, options={"default"="0"})
+     * @Assert\Blank(groups={"question:create"})
      * @Groups({"question:read", "question:edit"})
      */
     private $resolved = false;
@@ -86,6 +105,7 @@ class Question
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @Assert\NotBlank(groups={"question:create"})
      * @Groups({"question:read", "question:edit"})
      */
     private $user;
@@ -95,9 +115,17 @@ class Question
      *
      * @ORM\OneToMany(targetEntity="Answer", mappedBy="question")
      * @ApiSubresource()
+     * @Assert\Blank(groups={"question:create"})
      * @Groups({"question:read", "question:edit"})
      */
     private $answers;
+
+    /**
+     * @var DateTimeInterface
+     *
+     * @Groups({"question:read"})
+     */
+    private $askedAt;
 
     /**
      * Question constructor.
@@ -136,9 +164,11 @@ class Question
         return $this->title;
     }
 
-    public function setTitle(string $title): void
+    public function setTitle(string $title): self
     {
         $this->title = $title;
+
+        return $this;
     }
 
     public function getQuestion(): ?string
@@ -158,9 +188,11 @@ class Question
         return $this->resolved;
     }
 
-    public function setResolved(bool $resolved): void
+    public function setResolved(bool $resolved): self
     {
         $this->resolved = $resolved;
+
+        return $this;
     }
 
     public function getGroup(): ?Group
@@ -204,5 +236,10 @@ class Question
         $this->answers->removeElement($answer);
 
         return $this;
+    }
+
+    public function getAskedAt(): ?DateTimeInterface
+    {
+        return $this->getCreatedAt();
     }
 }

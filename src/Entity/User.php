@@ -12,11 +12,10 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * User
@@ -31,11 +30,16 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
  *     denormalizationContext={
  *         "groups"={"user:edit"}
  *     },
+ *     itemOperations={
+ *         "get",
+ *         "put"={"access_control"="user.getId() == object.getCreatorId()"},
+ *         "delete"={"access_control"="user.getId() == object.getCreatorId()"},
+ *     },
+ *     collectionOperations={"get", "post"},
  * )
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  *
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
- * @Security("user.getId() == entity.getCreatorId()")
  */
 class User extends BaseUser implements UserInterface
 {
@@ -115,6 +119,15 @@ class User extends BaseUser implements UserInterface
     private $mustResetPassword = false;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="locale", type="string", length=4, nullable=false,
+     *     options={"comment"="Indicates if the user already received his setup app email"})
+     * @Groups({"readable", "user:read", "editable", "user:edit"})
+     */
+    private $locale = 'en_GB';
+
+    /**
      * @var Team
      *
      * @ORM\ManyToOne(targetEntity="Team", inversedBy="users")
@@ -165,6 +178,7 @@ class User extends BaseUser implements UserInterface
         $this->setPlainPassword(uniqid());
         $this->emails = new ArrayCollection();
         $this->phonenumbers = new ArrayCollection();
+        $this->locale = 'en_GB';
 
         if (!empty($email)) {
             $this->setEmail($email);
@@ -174,6 +188,11 @@ class User extends BaseUser implements UserInterface
         }
         if (!empty($lastName)) {
             $this->setLastName($lastName);
+        }
+        if (!empty($firstName) && !empty($lastName)) {
+            $this->setUsername(mb_strtolower($firstName) . "." . mb_strtolower($lastName));
+        } else {
+            $this->setUsername(uniqid("User "));
         }
         if (!empty($team)) {
             $this->setTeam($team);
@@ -219,9 +238,11 @@ class User extends BaseUser implements UserInterface
         return $this->profilePicture;
     }
 
-    public function setProfilePicture(?Media $profilePicture): void
+    public function setProfilePicture(?Media $profilePicture): self
     {
         $this->profilePicture = $profilePicture;
+
+        return $this;
     }
 
     public function getHasReceivedWelcomeEmail(): ?bool
@@ -241,9 +262,11 @@ class User extends BaseUser implements UserInterface
         return $this->hasReceivedSetupAppEmail;
     }
 
-    public function setHasReceivedSetupAppEmail(bool $hasReceivedSetupAppEmail): void
+    public function setHasReceivedSetupAppEmail(bool $hasReceivedSetupAppEmail): self
     {
         $this->hasReceivedSetupAppEmail = $hasReceivedSetupAppEmail;
+
+        return $this;
     }
 
     public function setPlainPassword($password, $mustResetPassword = true): self
@@ -258,11 +281,31 @@ class User extends BaseUser implements UserInterface
         return $this->mustResetPassword;
     }
 
-    public function setMustResetPassword(bool $mustResetPassword): void
+    public function setMustResetPassword(bool $mustResetPassword): self
     {
         $this->setPasswordRequestedAt(new DateTime());
 
         $this->mustResetPassword = $mustResetPassword;
+
+        return $this;
+    }
+
+    public function getLocale(): string
+    {
+        return $this->locale;
+    }
+
+    public function setLocale(string $locale): self
+    {
+        $allowed = [
+            'en_GB' => true,
+            'de_CH' => true,
+        ];
+        if (isset($allowed[$locale])) {
+            $this->locale = $locale;
+        }
+
+        return $this;
     }
 
     public function getTeam(): ?Team
@@ -288,9 +331,6 @@ class User extends BaseUser implements UserInterface
     public function setEmail($email): self
     {
         parent::setEmail($email);
-        if (empty($this->username)) {
-            parent::setUsername($email);
-        }
 
         $userEmail = new UserEmail($email, false, false, null, $this);
 

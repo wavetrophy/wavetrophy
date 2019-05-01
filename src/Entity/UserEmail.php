@@ -22,8 +22,14 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         "enable_max_depth"=true,
  *     },
  *     denormalizationContext={
- *         "groups"={"useremail.edit"}
+ *         "groups"={"useremail:edit"}
  *     },
+ *     itemOperations={
+ *         "get",
+ *         "put"={"access_control"="user.getId() == object.getCreatorId()"},
+ *         "delete"={"access_control"="user.getId() == object.getCreatorId()"},
+ *     },
+ *     collectionOperations={"get", "post"},
  * )
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  * @UniqueEntity(fields={"email"}, message="Email already registered")
@@ -48,7 +54,7 @@ class UserEmail
      *
      * @Assert\Email(message="Please use a valid email")
      * @ORM\Column(name="email", type="string", length=255, nullable=false)
-     * @Groups({"readable", "user:read", "useremail:read", "editable", "useremail.edit"})
+     * @Groups({"readable", "user:read", "useremail:read", "editable", "useremail:edit"})
      */
     private $email;
 
@@ -56,7 +62,7 @@ class UserEmail
      * @var bool
      *
      * @ORM\Column(name="is_public", type="boolean", nullable=false, options={"default"="1"})
-     * @Groups({"readable", "user:read", "useremail:read", "editable", "useremail.edit"})
+     * @Groups({"readable", "user:read", "useremail:read", "editable", "useremail:edit"})
      */
     private $isPublic = false;
 
@@ -81,7 +87,7 @@ class UserEmail
      * @ORM\ManyToOne(targetEntity="User", inversedBy="emails")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      * @MaxDepth(1)
-     * @Groups({"readable", "useremail:read", "editable", "useremail.edit"})
+     * @Groups({"readable", "useremail:read", "editable", "useremail:edit"})
      */
     private $user;
 
@@ -155,9 +161,11 @@ class UserEmail
         return $this->confirmed;
     }
 
-    public function setConfirmed(bool $confirmed): void
+    public function setConfirmed(bool $confirmed): self
     {
         $this->confirmed = $confirmed;
+
+        return $this;
     }
 
     public function getUser(): ?User
@@ -177,9 +185,11 @@ class UserEmail
         return $this->confirmationToken;
     }
 
-    public function setConfirmationToken(?string $confirmationToken): void
+    public function setConfirmationToken(?string $confirmationToken): self
     {
         $this->confirmationToken = $confirmationToken;
+
+        return $this;
     }
 
     public function getIsPrimary()

@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * TeamParticipation
@@ -19,7 +20,21 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *     }
  * )
  * @ORM\Entity
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={
+ *         "groups"={"teamparticipation:read"},
+ *         "enable_max_depth"=true,
+ *     },
+ *     denormalizationContext={
+ *         "groups"={"teamparticipation:edit"}
+ *     },
+ *     itemOperations={
+ *         "get",
+ *         "put"={"access_control"="user.getId() == object.getCreatorId()"},
+ *         "delete"={"access_control"="user.getId() == object.getCreatorId()"},
+ *     },
+ *     collectionOperations={"get", "post"},
+ * )
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  */
 class TeamParticipation
@@ -33,6 +48,7 @@ class TeamParticipation
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups({"teamparticipation:read"})
      */
     private $id;
 
@@ -40,6 +56,7 @@ class TeamParticipation
      * @var DateTimeInterface
      *
      * @ORM\Column(name="arrival", type="datetime", nullable=false)
+     * @Groups({"teamparticipation:read", "teamparticipation:edit"})
      */
     private $arrival;
 
@@ -47,6 +64,7 @@ class TeamParticipation
      * @var DateTimeInterface
      *
      * @ORM\Column(name="departure", type="datetime", length=80, nullable=false)
+     * @Groups({"teamparticipation:read", "teamparticipation:edit"})
      */
     private $departure;
 
@@ -55,6 +73,7 @@ class TeamParticipation
      *
      * @ORM\ManyToOne(targetEntity="Location", inversedBy="teamParticipations")
      * @ORM\JoinColumn(name="location_id", referencedColumnName="id")
+     * @Groups({"teamparticipation:read", "teamparticipation:edit"})
      */
     private $location;
 
@@ -63,6 +82,7 @@ class TeamParticipation
      *
      * @ORM\ManyToMany(targetEntity="Team", cascade={"persist"})
      * @ORM\JoinTable(name="team_has_participations")
+     * @Groups({"teamparticipation:read", "teamparticipation:edit"})
      */
     private $teams;
 

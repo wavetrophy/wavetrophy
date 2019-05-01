@@ -17,7 +17,21 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
  *
  * @ORM\Table(name="team", indexes={@ORM\Index(name="fk_team_group1_idx", columns={"group_id"})})
  * @ORM\Entity
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={
+ *         "groups"={"team:read"},
+ *         "enable_max_depth"=true,
+ *     },
+ *     denormalizationContext={
+ *         "groups"={"team:edit"}
+ *     },
+ *     itemOperations={
+ *         "get",
+ *         "put"={"access_control"="user.getId() == object.getCreatorId()"},
+ *         "delete"={"access_control"="user.getId() == object.getCreatorId()"},
+ *     },
+ *     collectionOperations={"get", "post"},
+ * )
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  */
 class Team
@@ -31,7 +45,7 @@ class Team
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @Groups({"readable", "user:read"})
+     * @Groups({"team:read", "readable", "user:read"})
      */
     private $id;
 
@@ -39,7 +53,7 @@ class Team
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=80, nullable=false)
-     * @Groups({"readable", "user:read"})
+     * @Groups({"team:read", "readable", "user:read", "team:edit"})
      */
     private $name;
 
@@ -49,7 +63,7 @@ class Team
      * @ORM\Column(name="start_number", type="integer", nullable=false,
      *     options={"comment"="The start number of the team (like 56 or 2)"}
      * )
-     * @Groups({"readable", "user:read"})
+     * @Groups({"team:read", "readable", "user:read", "team:edit"})
      */
     private $startNumber;
 
@@ -58,7 +72,7 @@ class Team
      *
      * @ORM\ManyToOne(targetEntity="Group", inversedBy="teams")
      * @ORM\JoinColumn(name="group_id", referencedColumnName="id")
-     * @Groups({"readable", "user:read"})
+     * @Groups({"team:read", "readable", "user:read", "team:edit"})
      */
     private $group;
 
@@ -68,7 +82,7 @@ class Team
      * @ORM\OneToMany(targetEntity="User", mappedBy="team")
      * @ApiSubresource(maxDepth=1)
      * @MaxDepth(1)
-     * @Groups({"readable", "editable"})
+     * @Groups({"team:read", "readable", "team:edit", "editable"})
      */
     private $users;
 

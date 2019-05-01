@@ -7,13 +7,28 @@ use App\Entity\Traits\MetaFieldTrait;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Hotel
  *
  * @ORM\Table(name="hotel", indexes={@ORM\Index(name="fk_hotel_location1_idx", columns={"location_id"})})
  * @ORM\Entity
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={
+ *         "groups"={"hotel:read"},
+ *         "enable_max_depth"=true,
+ *     },
+ *     denormalizationContext={
+ *         "groups"={"hotel:edit"}
+ *     },
+ *     itemOperations={
+ *         "get",
+ *         "put"={"access_control"="user.getId() == object.getCreatorId()"},
+ *         "delete"={"access_control"="user.getId() == object.getCreatorId()"},
+ *     },
+ *     collectionOperations={"get", "post"},
+ * )
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  */
 class Hotel
@@ -27,6 +42,7 @@ class Hotel
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups({"hotel:read"})
      */
     private $id;
 
@@ -34,6 +50,7 @@ class Hotel
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=80, nullable=false)
+     * @Groups({"hotel:read", "hotel:edit"})
      */
     private $name;
 
@@ -41,6 +58,7 @@ class Hotel
      * @var bool
      *
      * @ORM\Column(name="breakfast_included", type="boolean", nullable=false, options={"default"="1"})
+     * @Groups({"hotel:read", "hotel:edit"})
      */
     private $breakfastIncluded = true;
 
@@ -48,6 +66,7 @@ class Hotel
      * @var \DateTime|null
      *
      * @ORM\Column(name="last_check_in", type="datetime", nullable=true)
+     * @Groups({"hotel:read", "hotel:edit"})
      */
     private $lastCheckIn;
 
@@ -55,6 +74,7 @@ class Hotel
      * @var string|null
      *
      * @ORM\Column(name="comment", type="text", length=0, nullable=true)
+     * @Groups({"hotel:read", "hotel:edit"})
      */
     private $comment;
 
@@ -63,6 +83,7 @@ class Hotel
      *
      * @ORM\ManyToOne(targetEntity="Location")
      * @ORM\JoinColumn(name="location_id", referencedColumnName="id")
+     * @Groups({"hotel:read", "hotel:edit"})
      */
     private $location;
 

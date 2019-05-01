@@ -7,13 +7,21 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Lodging
  *
  * @ORM\Table(name="lodging", indexes={@ORM\Index(name="fk_lodging_hotel1_idx", columns={"hotel_id"})})
  * @ORM\Entity
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={
+ *         "groups"={"lodging:read"},
+ *         "enable_max_depth"=true,
+ *     },
+ *     itemOperations={"get"},
+ *     collectionOperations={"get"},
+ * )
  */
 class Lodging
 {
@@ -23,6 +31,7 @@ class Lodging
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups({"lodging:read"})
      */
     private $id;
 
@@ -31,6 +40,7 @@ class Lodging
      *
      * @ORM\Column(name="comment", type="string", length=1000, nullable=true,
      *      options={"comment"="Some personal information for the user"})
+     * @Groups({"lodging:read"})
      */
     private $comment;
 
@@ -41,6 +51,7 @@ class Lodging
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="hotel_id", referencedColumnName="id")
      * })
+     * @Groups({"lodging:read"})
      */
     private $hotel;
 
@@ -49,6 +60,7 @@ class Lodging
      *
      * @ApiSubresource()
      * @ORM\ManyToMany(targetEntity="User")
+     * @Groups({"lodging:read"})
      */
     private $users;
 

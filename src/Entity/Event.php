@@ -8,13 +8,28 @@ use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Event
  *
  * @ORM\Table(name="event", indexes={@ORM\Index(name="fk_event_location1_idx", columns={"location_id"})})
  * @ORM\Entity
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={
+ *         "groups"={"event:read"},
+ *         "enable_max_depth"=true,
+ *     },
+ *     denormalizationContext={
+ *         "groups"={"event:edit"}
+ *     },
+ *     itemOperations={
+ *         "get",
+ *         "put"={"access_control"="user.getId() == object.getCreatorId()"},
+ *         "delete"={"access_control"="user.getId() == object.getCreatorId()"},
+ *     },
+ *     collectionOperations={"get", "post"},
+ * )
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  */
 class Event
@@ -28,6 +43,7 @@ class Event
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups({"event:read"})
      */
     private $id;
 
@@ -35,6 +51,7 @@ class Event
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=80, nullable=false)
+     * @Groups({"event:read", "event:edit"})
      */
     private $name;
 
@@ -42,6 +59,7 @@ class Event
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=250, nullable=true)
+     * @Groups({"event:read", "event:edit"})
      */
     private $description;
 
@@ -56,6 +74,7 @@ class Event
      * @var DateTime
      *
      * @ORM\Column(name="end", type="datetime", length=80, nullable=false)
+     * @Groups({"event:read", "event:edit"})
      */
     private $end;
 
@@ -64,6 +83,7 @@ class Event
      *
      * @ORM\ManyToOne(targetEntity="Location",inversedBy="events")
      * @ORM\JoinColumn(name="location_id", referencedColumnName="id")
+     * @Groups({"event:read", "event:edit"})
      */
     private $location;
 

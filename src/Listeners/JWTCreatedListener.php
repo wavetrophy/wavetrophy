@@ -53,10 +53,16 @@ class JWTCreatedListener
 
         $payload = $event->getData();
 
+        $locale = $user->getLocale();
+
         $payload['ip'] = $request->getClientIp();
         $payload['user_id'] = $user->getId();
         $payload['profile_picture'] = $profilePicture;
         $payload['current_wave'] = $this->wave->getCurrentWave();
+        $payload['locale'] = [
+            'short' => mb_substr($locale, 0, 2),
+            'long' => $locale,
+        ];
         $payload['team_id'] = null;
         $payload['group_id'] = null;
 

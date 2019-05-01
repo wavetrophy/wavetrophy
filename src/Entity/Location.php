@@ -8,13 +8,28 @@ use App\Entity\Traits\MetaFieldTrait;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Location
  *
  * @ORM\Table(name="location")
  * @ORM\Entity
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={
+ *         "groups"={"location:read"},
+ *         "enable_max_depth"=true,
+ *     },
+ *     denormalizationContext={
+ *         "groups"={"location:edit"}
+ *     },
+ *     itemOperations={
+ *         "get",
+ *         "put"={"access_control"="user.getId() == object.getCreatorId()"},
+ *         "delete"={"access_control"="user.getId() == object.getCreatorId()"},
+ *     },
+ *     collectionOperations={"get", "post"},
+ * )
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  */
 class Location
@@ -28,6 +43,7 @@ class Location
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups({"location:read"})
      */
     private $id;
 
@@ -35,6 +51,7 @@ class Location
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=80, nullable=false)
+     * @Groups({"location:read", "location:edit"})
      */
     private $name;
 
@@ -42,6 +59,7 @@ class Location
      * @var string
      *
      * @ORM\Column(name="lat", type="string", length=80, nullable=false)
+     * @Groups({"location:read", "location:edit"})
      */
     private $lat;
 
@@ -49,6 +67,7 @@ class Location
      * @var string
      *
      * @ORM\Column(name="lon", type="string", length=80, nullable=false)
+     * @Groups({"location:read", "location:edit"})
      */
     private $lon;
 
@@ -57,6 +76,7 @@ class Location
      *
      * @ORM\ManyToOne(targetEntity="Wave", inversedBy="locations")
      * @ORM\JoinColumn(name="wave_id", referencedColumnName="id")
+     * @Groups({"location:read", "location:edit"})
      */
     private $wave;
 
@@ -65,6 +85,7 @@ class Location
      *
      * @ORM\OneToMany(targetEntity="Event", mappedBy="location")
      * @ApiSubresource(maxDepth=1)
+     * @Groups({"location:read", "location:edit"})
      */
     private $events;
 
@@ -73,6 +94,7 @@ class Location
      *
      * @ORM\OneToMany(targetEntity="TeamParticipation", mappedBy="location")
      * @ApiSubresource()
+     * @Groups({"location:read", "location:edit"})
      */
     private $teamParticipations;
 

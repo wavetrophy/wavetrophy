@@ -23,6 +23,12 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
  *     denormalizationContext={
  *         "groups"={"userphonenumber.edit"}
  *     },
+ *     itemOperations={
+ *         "get",
+ *         "put"={"access_control"="user.getId() == object.getCreatorId()"},
+ *         "delete"={"access_control"="user.getId() == object.getCreatorId()"},
+ *     },
+ *     collectionOperations={"get", "post"},
  * )
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  * @UniqueEntity(

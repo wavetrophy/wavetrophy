@@ -15,7 +15,21 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="answer", indexes={@ORM\Index(name="fk_answer_question1_idx", columns={"question_id"})})
  * @ORM\Entity
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={
+ *         "groups"={"answer:read"},
+ *         "enable_max_depth"=true,
+ *     },
+ *     denormalizationContext={
+ *         "groups"={"answer:edit"}
+ *     },
+ *     itemOperations={
+ *         "get",
+ *         "put"={"access_control"="user.getId() == object.getCreatorId()"},
+ *         "delete"={"access_control"="user.getId() == object.getCreatorId() and object.getApproved() !== true"},
+ *     },
+ *     collectionOperations={"get", "post"},
+ * )
  *
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  */
@@ -30,7 +44,7 @@ class Answer
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @Groups({"question:read"})
+     * @Groups({"answer:read", "question:read"})
      */
     private $id;
 
@@ -39,7 +53,7 @@ class Answer
      *
      * @ORM\Column(name="answer", type="string", length=1000, nullable=false)
      * @Assert\NotBlank()
-     * @Groups({"question:read"})
+     * @Groups({"answer:read", "question:read", "answer:edit"})
      */
     private $answer;
 
@@ -47,36 +61,38 @@ class Answer
      * @var bool
      *
      * @ORM\Column(name="approved", type="boolean", nullable=false, options={"default"=0})
-     * @Groups({"question:read"})
+     * @Groups({"answer:read", "question:read", "answer:edit"})
      */
     private $approved = false;
 
     /**
      * @var Question
      *
-     * @ORM\ManyToOne(targetEntity="Question",inversedBy="answers")
+     * @ORM\ManyToOne(targetEntity="Question", inversedBy="answers")
      * @ORM\JoinColumn(name="question_id", referencedColumnName="id")
+     * @Groups({"answer:read", "answer:edit"})
+     * @Assert\NotBlank()
      */
     private $question;
 
     /**
      * @var string
      *
-     * @Groups({"question:read"})
+     * @Groups({"answer:read", "question:read"})
      */
     private $username;
 
     /**
      * @var int
      *
-     * @Groups({"question:read"})
+     * @Groups({"answer:read", "question:read"})
      */
     private $userId;
 
     /**
      * @var DateTimeInterface
      *
-     * @Groups({"question:read"})
+     * @Groups({"answer:read", "question:read"})
      */
     private $timestamp;
 
