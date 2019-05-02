@@ -7,7 +7,7 @@
 #
 # Host: localhost (MySQL 8.0.12)
 # Database: wave
-# Generation Time: 2019-04-02 07:49:08 +0000
+# Generation Time: 2019-05-02 17:26:05 +0000
 # ************************************************************
 
 
@@ -24,6 +24,18 @@ SET NAMES utf8mb4;
 # Dump of table answer
 # ------------------------------------------------------------
 
+LOCK TABLES `answer` WRITE;
+/*!40000 ALTER TABLE `answer` DISABLE KEYS */;
+
+INSERT INTO `answer` (`id`, `question_id`, `created_by`, `updated_by`, `answer`, `approved`, `created_at`, `updated_at`, `deleted_at`)
+VALUES
+(1,1,3,1,'At the train station near the center. There are some chargers near the exit. But its very costly',1,'2019-05-02 17:24:42','2019-05-02 17:24:42',NULL),
+(2,1,4,1,'Somewhere',0,'2019-05-02 17:24:42','2019-05-02 17:24:42',NULL),
+(3,2,3,1,'At the train station near the center. There are some chargers near the exit. But its very costly',0,'2019-05-02 17:24:42','2019-05-02 17:24:42',NULL),
+(4,2,4,1,'Somewhere else',0,'2019-05-02 17:24:42','2019-05-02 17:24:42',NULL);
+
+/*!40000 ALTER TABLE `answer` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table event
@@ -32,16 +44,16 @@ SET NAMES utf8mb4;
 LOCK TABLES `event` WRITE;
 /*!40000 ALTER TABLE `event` DISABLE KEYS */;
 
-INSERT INTO `event` (`id`, `location_id`, `name`, `description`, `start`, `end`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`)
+INSERT INTO `event` (`id`, `location_id`, `created_by`, `updated_by`, `name`, `description`, `start`, `end`, `created_at`, `updated_at`, `deleted_at`)
 VALUES
-	(25,13,'Begrüssung','Die Begrüssung im Theater','2019-06-14 10:00:00','2019-06-14 10:45:00','2019-04-02 07:42:06','anonymous','2019-04-02 07:42:06','anonymous',NULL),
-	(26,13,'Auto Show','Eine Auto Show aller Autos der WAVE','2019-06-14 11:00:00','2019-06-14 11:45:00','2019-04-02 07:42:06','anonymous','2019-04-02 07:42:06','anonymous',NULL),
-	(27,13,'Lunch',NULL,'2019-06-14 12:00:00','2019-06-14 13:00:00','2019-04-02 07:42:06','anonymous','2019-04-02 07:42:06','anonymous',NULL),
-	(28,13,'Abfahrt','Abfahrt aller Autos im 2 Minuten Rhytmus','2019-06-14 14:00:00','2019-06-14 14:30:00','2019-04-02 07:42:06','anonymous','2019-04-02 07:42:06','anonymous',NULL),
-	(29,14,'Begrüssung','Die Begrüssung im Dreispitz','2019-06-14 15:00:00','2019-06-14 15:45:00','2019-04-02 07:42:06','anonymous','2019-04-02 07:42:06','anonymous',NULL),
-	(30,14,'Führung','Die Führung durch das Dreispitzareal','2019-06-14 16:00:00','2019-06-14 16:45:00','2019-04-02 07:42:06','anonymous','2019-04-02 07:42:06','anonymous',NULL),
-	(31,14,'Abendessen',NULL,'2019-06-14 18:00:00','2019-06-14 19:00:00','2019-04-02 07:42:06','anonymous','2019-04-02 07:42:06','anonymous',NULL),
-	(32,14,'Abfahrt','Abfahrt aller Autos im 2 Minuten Rhytmus','2019-06-14 20:00:00','2019-06-14 20:30:00','2019-04-02 07:42:06','anonymous','2019-04-02 07:42:06','anonymous',NULL);
+(1,1,1,1,'Begrüssung','Die Begrüssung im Theater','2019-06-14 10:00:00','2019-06-14 10:45:00','2019-05-02 17:24:40','2019-05-02 17:24:40',NULL),
+(2,1,1,1,'Auto Show','Eine Auto Show aller Autos der WAVE','2019-06-14 11:00:00','2019-06-14 11:45:00','2019-05-02 17:24:40','2019-05-02 17:24:40',NULL),
+(3,1,1,1,'Lunch',NULL,'2019-06-14 12:00:00','2019-06-14 13:00:00','2019-05-02 17:24:40','2019-05-02 17:24:40',NULL),
+(4,1,1,1,'Abfahrt','Abfahrt aller Autos im 2 Minuten Rhytmus','2019-06-14 14:00:00','2019-06-14 14:30:00','2019-05-02 17:24:40','2019-05-02 17:24:40',NULL),
+(5,2,1,1,'Begrüssung','Die Begrüssung im Dreispitz','2019-06-14 15:00:00','2019-06-14 15:45:00','2019-05-02 17:24:40','2019-05-02 17:24:40',NULL),
+(6,2,1,1,'Führung','Die Führung durch das Dreispitzareal','2019-06-14 16:00:00','2019-06-14 16:45:00','2019-05-02 17:24:40','2019-05-02 17:24:40',NULL),
+(7,2,1,1,'Abendessen',NULL,'2019-06-14 18:00:00','2019-06-14 19:00:00','2019-05-02 17:24:40','2019-05-02 17:24:40',NULL),
+(8,2,1,1,'Abfahrt','Abfahrt aller Autos im 2 Minuten Rhytmus','2019-06-14 20:00:00','2019-06-14 20:30:00','2019-05-02 17:24:40','2019-05-02 17:24:40',NULL);
 
 /*!40000 ALTER TABLE `event` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -63,10 +75,10 @@ UNLOCK TABLES;
 LOCK TABLES `group` WRITE;
 /*!40000 ALTER TABLE `group` DISABLE KEYS */;
 
-INSERT INTO `group` (`id`, `wave_id`, `name`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`)
+INSERT INTO `group` (`id`, `wave_id`, `created_by`, `updated_by`, `name`, `created_at`, `updated_at`, `deleted_at`)
 VALUES
-	(7,4,'Gruppe 1','2019-04-02 07:42:06','anonymous','2019-04-02 07:42:06','anonymous',NULL),
-	(8,4,'Gruppe 2','2019-04-02 07:42:06','anonymous','2019-04-02 07:42:06','anonymous',NULL);
+(1,1,1,1,'Gruppe 1','2019-05-02 17:24:40','2019-05-02 17:24:40',NULL),
+(2,1,1,1,'Gruppe 2','2019-05-02 17:24:40','2019-05-02 17:24:40',NULL);
 
 /*!40000 ALTER TABLE `group` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -78,10 +90,10 @@ UNLOCK TABLES;
 LOCK TABLES `hotel` WRITE;
 /*!40000 ALTER TABLE `hotel` DISABLE KEYS */;
 
-INSERT INTO `hotel` (`id`, `location_id`, `name`, `breakfast_included`, `last_check_in`, `comment`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`)
+INSERT INTO `hotel` (`id`, `location_id`, `created_by`, `updated_by`, `name`, `breakfast_included`, `last_check_in`, `comment`, `created_at`, `updated_at`, `deleted_at`)
 VALUES
-	(7,15,'Jugi Riehen',1,NULL,'Es hat 10 Ladestationen am Bahnhof','2019-04-02 07:42:08','anonymous','2019-04-02 07:42:08','anonymous',NULL),
-	(8,16,'Trois Rois',1,NULL,'Ladestationen verfügbar','2019-04-02 07:42:08','anonymous','2019-04-02 07:42:08','anonymous',NULL);
+(1,3,1,1,'Jugi Riehen',1,NULL,'Es hat 10 Ladestationen am Bahnhof','2019-05-02 17:24:42','2019-05-02 17:24:42',NULL),
+(2,4,1,1,'Trois Rois',1,NULL,'Ladestationen verfügbar','2019-05-02 17:24:42','2019-05-02 17:24:42',NULL);
 
 /*!40000 ALTER TABLE `hotel` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -98,12 +110,12 @@ UNLOCK TABLES;
 LOCK TABLES `location` WRITE;
 /*!40000 ALTER TABLE `location` DISABLE KEYS */;
 
-INSERT INTO `location` (`id`, `wave_id`, `name`, `lat`, `lon`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`)
+INSERT INTO `location` (`id`, `wave_id`, `created_by`, `updated_by`, `name`, `lat`, `lon`, `created_at`, `updated_at`, `deleted_at`)
 VALUES
-	(13,4,'Luzern','47.03892207982464','8.318022908459511','2019-04-02 07:42:06','anonymous','2019-04-02 07:42:06','anonymous',NULL),
-	(14,4,'Basel','47.529612457152716','7.583999021162867','2019-04-02 07:42:06','anonymous','2019-04-02 07:42:06','anonymous',NULL),
-	(15,4,'Riehen','47.548154349374464','7.68454967271316','2019-04-02 07:42:08','anonymous','2019-04-02 07:42:08','anonymous',NULL),
-	(16,4,'Trois Rois','47.560441018678915','7.5876688957214355','2019-04-02 07:42:08','anonymous','2019-04-02 07:42:08','anonymous',NULL);
+(1,1,1,1,'Luzern','47.03892207982464','8.318022908459511','2019-05-02 17:24:40','2019-05-02 17:24:40',NULL),
+(2,1,1,1,'Basel','47.529612457152716','7.583999021162867','2019-05-02 17:24:40','2019-05-02 17:24:40',NULL),
+(3,1,1,1,'Riehen','47.548154349374464','7.68454967271316','2019-05-02 17:24:42','2019-05-02 17:24:42',NULL),
+(4,1,1,1,'Trois Rois','47.560441018678915','7.5876688957214355','2019-05-02 17:24:42','2019-05-02 17:24:42',NULL);
 
 /*!40000 ALTER TABLE `location` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -117,8 +129,8 @@ LOCK TABLES `lodging` WRITE;
 
 INSERT INTO `lodging` (`id`, `hotel_id`, `comment`)
 VALUES
-	(7,7,NULL),
-	(8,8,'Bitte anständige Kleidung (Business Casual) anziehen');
+(1,1,NULL),
+(2,2,'Bitte anständige Kleidung (Business Casual) anziehen');
 
 /*!40000 ALTER TABLE `lodging` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -132,13 +144,13 @@ LOCK TABLES `lodging_user` WRITE;
 
 INSERT INTO `lodging_user` (`lodging_id`, `user_id`)
 VALUES
-	(7,15),
-	(7,18),
-	(7,19),
-	(7,20),
-	(7,21),
-	(8,16),
-	(8,17);
+(1,1),
+(1,4),
+(1,5),
+(1,6),
+(1,7),
+(2,2),
+(2,3);
 
 /*!40000 ALTER TABLE `lodging_user` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -147,6 +159,21 @@ UNLOCK TABLES;
 # Dump of table media
 # ------------------------------------------------------------
 
+LOCK TABLES `media` WRITE;
+/*!40000 ALTER TABLE `media` DISABLE KEYS */;
+
+INSERT INTO `media` (`id`, `name`, `path`, `url`)
+VALUES
+(1,'5ccb27d89b5438.95809913.svg','/media/2019/05/02','/media/2019/05/02/5ccb27d89b5438.95809913.svg'),
+(2,'5ccb27daf1d086.15435643.svg','/media/2019/05/02','/media/2019/05/02/5ccb27daf1d086.15435643.svg'),
+(3,'5ccb27daf308e7.49991381.svg','/media/2019/05/02','/media/2019/05/02/5ccb27daf308e7.49991381.svg'),
+(4,'5ccb27db000961.64584529.svg','/media/2019/05/02','/media/2019/05/02/5ccb27db000961.64584529.svg'),
+(5,'5ccb27db013216.49021381.svg','/media/2019/05/02','/media/2019/05/02/5ccb27db013216.49021381.svg'),
+(6,'5ccb27db025804.46693592.svg','/media/2019/05/02','/media/2019/05/02/5ccb27db025804.46693592.svg'),
+(7,'5ccb27db037e86.21100378.svg','/media/2019/05/02','/media/2019/05/02/5ccb27db037e86.21100378.svg');
+
+/*!40000 ALTER TABLE `media` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table migration_versions
@@ -157,17 +184,7 @@ LOCK TABLES `migration_versions` WRITE;
 
 INSERT INTO `migration_versions` (`version`, `executed_at`)
 VALUES
-	('20190303113230','2019-04-02 07:35:47'),
-	('20190306235802','2019-04-02 07:35:47'),
-	('20190311123710','2019-04-02 07:35:47'),
-	('20190314210052','2019-04-02 07:35:48'),
-	('20190320125551','2019-04-02 07:35:48'),
-	('20190320231407','2019-04-02 07:35:48'),
-	('20190327155455','2019-04-02 07:35:48'),
-	('20190327163549','2019-04-02 07:35:48'),
-	('20190402073556','2019-04-02 07:41:04'),
-	('20190402074156','2019-04-02 07:41:57'),
-	('20190402074203','2019-04-02 07:42:05');
+('20190502172412','2019-05-02 17:24:28');
 
 /*!40000 ALTER TABLE `migration_versions` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -176,6 +193,16 @@ UNLOCK TABLES;
 # Dump of table question
 # ------------------------------------------------------------
 
+LOCK TABLES `question` WRITE;
+/*!40000 ALTER TABLE `question` DISABLE KEYS */;
+
+INSERT INTO `question` (`id`, `group_id`, `user_id`, `created_by`, `updated_by`, `title`, `question`, `resolved`, `created_at`, `updated_at`, `deleted_at`)
+VALUES
+(1,1,2,2,2,'Where to park in lucerne','I just arrived in lucerne. Where do i park?',1,'2019-05-02 17:24:42','2019-05-02 17:24:42',NULL),
+(2,1,2,2,2,'Where to park in basel','I just arrived in basel. Where do i park?',0,'2019-05-02 17:24:42','2019-05-02 17:24:42',NULL);
+
+/*!40000 ALTER TABLE `question` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table team
@@ -184,11 +211,11 @@ UNLOCK TABLES;
 LOCK TABLES `team` WRITE;
 /*!40000 ALTER TABLE `team` DISABLE KEYS */;
 
-INSERT INTO `team` (`id`, `group_id`, `name`, `start_number`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`)
+INSERT INTO `team` (`id`, `group_id`, `created_by`, `updated_by`, `name`, `start_number`, `created_at`, `updated_at`, `deleted_at`)
 VALUES
-	(10,7,'Renault',1,'2019-04-02 07:42:06','anonymous','2019-04-02 07:42:06','anonymous',NULL),
-	(11,7,'Pilatus',2,'2019-04-02 07:42:06','anonymous','2019-04-02 07:42:06','anonymous',NULL),
-	(12,8,'Jura Energie',3,'2019-04-02 07:42:06','anonymous','2019-04-02 07:42:06','anonymous',NULL);
+(1,1,1,1,'Renault',1,'2019-05-02 17:24:40','2019-05-02 17:24:40',NULL),
+(2,1,1,1,'Pilatus',2,'2019-05-02 17:24:40','2019-05-02 17:24:40',NULL),
+(3,2,1,1,'Jura Energie',3,'2019-05-02 17:24:40','2019-05-02 17:24:40',NULL);
 
 /*!40000 ALTER TABLE `team` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -202,9 +229,9 @@ LOCK TABLES `team_has_participations` WRITE;
 
 INSERT INTO `team_has_participations` (`team_participation_id`, `team_id`)
 VALUES
-	(7,11),
-	(8,10),
-	(8,12);
+(1,2),
+(2,1),
+(2,3);
 
 /*!40000 ALTER TABLE `team_has_participations` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -216,10 +243,10 @@ UNLOCK TABLES;
 LOCK TABLES `team_participation` WRITE;
 /*!40000 ALTER TABLE `team_participation` DISABLE KEYS */;
 
-INSERT INTO `team_participation` (`id`, `location_id`, `arrival`, `departure`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`)
+INSERT INTO `team_participation` (`id`, `location_id`, `created_by`, `updated_by`, `arrival`, `departure`, `created_at`, `updated_at`, `deleted_at`)
 VALUES
-	(7,14,'2019-06-14 15:15:00','2019-06-14 20:15:00','2019-04-02 07:42:08','anonymous','2019-04-02 07:42:08','anonymous',NULL),
-	(8,13,'2019-06-14 10:15:00','2019-06-14 14:15:00','2019-04-02 07:42:08','anonymous','2019-04-02 07:42:08','anonymous',NULL);
+(1,2,1,1,'2019-06-14 15:15:00','2019-06-14 20:15:00','2019-05-02 17:24:42','2019-05-02 17:24:42',NULL),
+(2,1,1,1,'2019-06-14 10:15:00','2019-06-14 14:15:00','2019-05-02 17:24:42','2019-05-02 17:24:42',NULL);
 
 /*!40000 ALTER TABLE `team_participation` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -231,15 +258,15 @@ UNLOCK TABLES;
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 
-INSERT INTO `user` (`id`, `team_id`, `username`, `username_canonical`, `email`, `email_canonical`, `enabled`, `salt`, `password`, `last_login`, `confirmation_token`, `password_requested_at`, `roles`, `first_name`, `last_name`, `has_received_welcome_email`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `has_received_setup_app_email`, `must_reset_password`, `media_id`)
+INSERT INTO `user` (`id`, `media_id`, `team_id`, `created_by`, `updated_by`, `username`, `username_canonical`, `email`, `email_canonical`, `enabled`, `salt`, `password`, `last_login`, `confirmation_token`, `password_requested_at`, `roles`, `first_name`, `last_name`, `has_received_welcome_email`, `has_received_setup_app_email`, `must_reset_password`, `locale`, `created_at`, `updated_at`, `deleted_at`)
 VALUES
-	(15,NULL,'bjoern','bjoern','bjoern','bjoern',1,NULL,'$2y$13$DfRhBK.igpPBYBjOFnqk.O.63dKzigzX8yuIbX.5hFiZee5i7Fb6m',NULL,NULL,'2019-04-02 07:42:05','a:2:{i:0;s:10:\"ROLE_ADMIN\";i:1;s:16:\"ROLE_SUPER_ADMIN\";}','Björn','Pfoster',1,'2019-04-02 07:42:05','anonymous','2019-04-02 07:42:05','anonymous',NULL,0,1,NULL),
-	(16,10,'bjoern@pfoster.ch','bjoern@pfoster.ch','bjoern@pfoster.ch','bjoern@pfoster.ch',1,NULL,'$2y$13$9Ago6HtdaP7ZrtgQVJwXj.ARNV3dfBmfYXtI7so9WQ57YAfyWQOYG',NULL,NULL,'2019-04-02 07:42:06','a:0:{}','Lorenz','Camenisch',0,'2019-04-02 07:42:06','anonymous','2019-04-02 07:42:06','anonymous',NULL,0,1,NULL),
-	(17,10,'remo@example.com','remo@example.com','remo@example.com','remo@example.com',1,NULL,'$2y$13$K4kbjrmgr8g0NHJXGnIqzeGWcgAbh.NxeT7EMT7iH9IkA/L6Nyvoy',NULL,NULL,'2019-04-02 07:42:06','a:0:{}','Remo','Camenisch',1,'2019-04-02 07:42:06','anonymous','2019-04-02 07:42:06','anonymous',NULL,0,1,NULL),
-	(18,11,'andy@example.com','andy@example.com','andy@example.com','andy@example.com',1,NULL,'$2y$13$qtOSkolFizQSklbRMS/X0OvMg4/llhGgFzqDi0B8zWYnQKvbQBnnu',NULL,NULL,'2019-04-02 07:42:06','a:0:{}','Andy','Alig',1,'2019-04-02 07:42:06','anonymous','2019-04-02 07:42:06','anonymous',NULL,0,1,NULL),
-	(19,11,'edy@example.com','edy@example.com','edy@example.com','edy@example.com',1,NULL,'$2y$13$Kwklr5jAANFsxm7v1gT6MeLByVONMHZyOcu.s1ySHCOdlhGzVyTKa',NULL,NULL,'2019-04-02 07:42:06','a:0:{}','Edy','Künzli',1,'2019-04-02 07:42:07','anonymous','2019-04-02 07:42:07','anonymous',NULL,0,1,NULL),
-	(20,12,'jean@example.com','jean@example.com','jean@example.com','jean@example.com',1,NULL,'$2y$13$.AMK/khYARAep0yt0XrBxOXISzOJl/KLr9jwkyLucI0eH2gGnmdy.',NULL,NULL,'2019-04-02 07:42:06','a:0:{}','Jean','Oppliger',1,'2019-04-02 07:42:07','anonymous','2019-04-02 07:42:07','anonymous',NULL,0,1,NULL),
-	(21,12,'esther@example.com','esther@example.com','esther@example.com','esther@example.com',1,NULL,'$2y$13$BxGgguiT66ZxBFbk2ZLS9OiPu7LTBVT/5r4uqYrfnYHatu.ctyVyS',NULL,NULL,'2019-04-02 07:42:06','a:0:{}','Esther','Oppliger',1,'2019-04-02 07:42:08','anonymous','2019-04-02 07:42:08','anonymous',NULL,0,1,NULL);
+(1,1,NULL,1,NULL,'bjoern','bjoern','bjoern','bjoern',1,NULL,'$2y$13$422dD9/z8JvkYFfthr59Y.K11WcYKxcryTKlb6Pmuel6vt8i19.gW',NULL,NULL,'2019-05-02 17:24:40','a:2:{i:0;s:10:\"ROLE_ADMIN\";i:1;s:16:\"ROLE_SUPER_ADMIN\";}','Björn','Pfoster',1,0,1,'en_GB','2019-05-02 17:24:40','2019-05-02 17:24:42',NULL),
+(2,3,1,1,1,'lorenz.camenisch','lorenz.camenisch','bjoern@pfoster.ch','bjoern@pfoster.ch',1,NULL,'$2y$13$ohUsmvNQNwpOowF7N8yW/OVr3sza2cPMXC96.ERWj9QRDpKHLo.B2',NULL,NULL,'2019-05-02 17:24:40','a:0:{}','Lorenz','Camenisch',0,0,1,'en_GB','2019-05-02 17:24:40','2019-05-02 17:24:40',NULL),
+(3,2,1,1,1,'remo.camenisch','remo.camenisch','remo@example.com','remo@example.com',1,NULL,'$2y$13$uxyHUEexLJ6E..IDk.Z3y.mfKajow3lhR9Rz9rh7S.qxi2QxCpTFW',NULL,NULL,'2019-05-02 17:24:40','a:0:{}','Remo','Camenisch',1,0,1,'en_GB','2019-05-02 17:24:41','2019-05-02 17:24:41',NULL),
+(4,4,2,1,1,'andy.alig','andy.alig','andy@example.com','andy@example.com',1,NULL,'$2y$13$6BDJV3kXZAtSRqk7j5y/u..0kyWEcC4NzGVuxhiUMfCU3B0Fdhfo6',NULL,NULL,'2019-05-02 17:24:40','a:0:{}','Andy','Alig',1,0,1,'en_GB','2019-05-02 17:24:41','2019-05-02 17:24:41',NULL),
+(5,5,2,1,1,'edy.künzli','edy.künzli','edy@example.com','edy@example.com',1,NULL,'$2y$13$uLzRc5/Rm01eT2SIKEYBieGBbMIT3I4zvpsHIlbWRwS6uwCh24sjC',NULL,NULL,'2019-05-02 17:24:40','a:0:{}','Edy','Künzli',1,0,1,'en_GB','2019-05-02 17:24:41','2019-05-02 17:24:41',NULL),
+(6,6,3,1,1,'jean.oppliger','jean.oppliger','jean@example.com','jean@example.com',1,NULL,'$2y$13$ffGz5xigIBsyGVaNN0gAa.WCARl9bXFqDhi/aVpXMdaeBjzLGLcai',NULL,NULL,'2019-05-02 17:24:40','a:0:{}','Jean','Oppliger',1,0,1,'en_GB','2019-05-02 17:24:42','2019-05-02 17:24:42',NULL),
+(7,7,3,1,1,'esther.oppliger','esther.oppliger','esther@example.com','esther@example.com',1,NULL,'$2y$13$4XjVedew6MLrqxhv/SLvoeBw1k9.pY7dbtNmEnJuKWkY1/R/bCzKe',NULL,NULL,'2019-05-02 17:24:40','a:0:{}','Esther','Oppliger',1,0,1,'en_GB','2019-05-02 17:24:42','2019-05-02 17:24:42',NULL);
 
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -251,15 +278,21 @@ UNLOCK TABLES;
 LOCK TABLES `user_email` WRITE;
 /*!40000 ALTER TABLE `user_email` DISABLE KEYS */;
 
-INSERT INTO `user_email` (`id`, `user_id`, `email`, `is_public`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `confirmed`, `confirmation_token`)
+INSERT INTO `user_email` (`id`, `user_id`, `created_by`, `updated_by`, `email`, `is_public`, `confirmed`, `confirmation_token`, `created_at`, `updated_at`, `deleted_at`)
 VALUES
-	(15,15,'bjoern',1,'2019-04-02 07:42:06','anonymous','2019-04-02 07:42:06','anonymous',NULL,0,NULL),
-	(16,16,'bjoern@pfoster.ch',0,'2019-04-02 07:42:06','anonymous','2019-04-02 07:42:06','anonymous',NULL,0,NULL),
-	(17,17,'remo@example.com',0,'2019-04-02 07:42:06','anonymous','2019-04-02 07:42:06','anonymous',NULL,0,NULL),
-	(18,18,'andy@example.com',0,'2019-04-02 07:42:07','anonymous','2019-04-02 07:42:07','anonymous',NULL,0,NULL),
-	(19,19,'edy@example.com',0,'2019-04-02 07:42:07','anonymous','2019-04-02 07:42:07','anonymous',NULL,0,NULL),
-	(20,20,'jean@example.com',0,'2019-04-02 07:42:08','anonymous','2019-04-02 07:42:08','anonymous',NULL,0,NULL),
-	(21,21,'esther@example.com',0,'2019-04-02 07:42:08','anonymous','2019-04-02 07:42:08','anonymous',NULL,0,NULL);
+(1,1,1,1,'bjoern',0,0,NULL,'2019-05-02 17:24:40','2019-05-02 17:24:40',NULL),
+(2,1,1,1,'bjoern',1,0,NULL,'2019-05-02 17:24:40','2019-05-02 17:24:40',NULL),
+(3,3,3,3,'remo1@cc.cc',1,1,NULL,'2019-05-02 17:24:40','2019-05-02 17:24:40',NULL),
+(4,3,3,3,'remo2@cc.cc',1,1,NULL,'2019-05-02 17:24:40','2019-05-02 17:24:40',NULL),
+(5,3,3,3,'remo3@cc.cc',1,1,NULL,'2019-05-02 17:24:40','2019-05-02 17:24:40',NULL),
+(6,3,3,3,'remo4@cc.cc',1,1,NULL,'2019-05-02 17:24:40','2019-05-02 17:24:40',NULL),
+(7,3,3,3,'remo5@cc.cc',1,1,NULL,'2019-05-02 17:24:40','2019-05-02 17:24:40',NULL),
+(8,2,2,2,'bjoern@pfoster.ch',0,0,NULL,'2019-05-02 17:24:41','2019-05-02 17:24:41',NULL),
+(9,3,3,3,'remo@example.com',0,0,NULL,'2019-05-02 17:24:41','2019-05-02 17:24:41',NULL),
+(10,4,4,4,'andy@example.com',0,0,NULL,'2019-05-02 17:24:41','2019-05-02 17:24:41',NULL),
+(11,5,5,5,'edy@example.com',0,0,NULL,'2019-05-02 17:24:42','2019-05-02 17:24:42',NULL),
+(12,6,6,6,'jean@example.com',0,0,NULL,'2019-05-02 17:24:42','2019-05-02 17:24:42',NULL),
+(13,7,7,7,'esther@example.com',0,0,NULL,'2019-05-02 17:24:42','2019-05-02 17:24:42',NULL);
 
 /*!40000 ALTER TABLE `user_email` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -268,6 +301,19 @@ UNLOCK TABLES;
 # Dump of table user_phonenumber
 # ------------------------------------------------------------
 
+LOCK TABLES `user_phonenumber` WRITE;
+/*!40000 ALTER TABLE `user_phonenumber` DISABLE KEYS */;
+
+INSERT INTO `user_phonenumber` (`id`, `user_id`, `created_by`, `updated_by`, `phonenumber`, `country_code`, `is_public`, `created_at`, `updated_at`, `deleted_at`)
+VALUES
+(1,3,3,3,'761234567','+41',1,'2019-05-02 17:24:40','2019-05-02 17:24:40',NULL),
+(2,3,3,3,'762234567','+41',1,'2019-05-02 17:24:40','2019-05-02 17:24:40',NULL),
+(3,3,3,3,'763234567','+41',1,'2019-05-02 17:24:40','2019-05-02 17:24:40',NULL),
+(4,3,3,3,'764234567','+41',1,'2019-05-02 17:24:40','2019-05-02 17:24:40',NULL),
+(5,3,3,3,'765234567','+41',1,'2019-05-02 17:24:40','2019-05-02 17:24:40',NULL);
+
+/*!40000 ALTER TABLE `user_phonenumber` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table wave
@@ -276,9 +322,9 @@ UNLOCK TABLES;
 LOCK TABLES `wave` WRITE;
 /*!40000 ALTER TABLE `wave` DISABLE KEYS */;
 
-INSERT INTO `wave` (`id`, `name`, `country`, `start`, `end`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`)
+INSERT INTO `wave` (`id`, `created_by`, `updated_by`, `name`, `country`, `start`, `end`, `created_at`, `updated_at`, `deleted_at`)
 VALUES
-	(4,'WAVE Switzerland','Switzerland','2019-06-14 10:00:00','2019-06-22 18:00:00','2019-04-02 07:42:06','anonymous','2019-04-02 07:42:06','anonymous',NULL);
+(1,1,1,'WAVE Switzerland','Switzerland','2019-06-14 10:00:00','2019-06-22 18:00:00','2019-05-02 17:24:40','2019-05-02 17:24:40',NULL);
 
 /*!40000 ALTER TABLE `wave` ENABLE KEYS */;
 UNLOCK TABLES;
