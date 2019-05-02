@@ -84,7 +84,7 @@ class UserEmail
     /**
      * @var User
      *
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="emails")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="emails", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      * @MaxDepth(1)
      * @Groups({"readable", "useremail:read", "editable", "useremail:edit"})
