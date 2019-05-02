@@ -176,20 +176,6 @@ VALUES
 UNLOCK TABLES;
 
 
-# Dump of table migration_versions
-# ------------------------------------------------------------
-
-LOCK TABLES `migration_versions` WRITE;
-/*!40000 ALTER TABLE `migration_versions` DISABLE KEYS */;
-
-INSERT INTO `migration_versions` (`version`, `executed_at`)
-VALUES
-('20190502172412','2019-05-02 17:24:28');
-
-/*!40000 ALTER TABLE `migration_versions` ENABLE KEYS */;
-UNLOCK TABLES;
-
-
 # Dump of table question
 # ------------------------------------------------------------
 
