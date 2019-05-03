@@ -14,3 +14,15 @@ html, body {
     display: flex;
     align-items: center;
 }
+
+.row {
+    margin-bottom: 2rem;
+}
+
+.hidden {
+    display: none;
+}
+
+.margin-1 {
+    margin: 1rem;
+}

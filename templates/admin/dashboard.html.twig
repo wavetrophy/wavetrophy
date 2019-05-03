@@ -1,6 +1,15 @@
 {% extends '@EasyAdmin/default/layout.html.twig' %}
 
 {% block content_title %}{{ 'Dashboard'|trans }}{% endblock %}
+{% block head_stylesheets %}
+    <link rel="stylesheet" href="{{ asset('bundles/easyadmin/app.css') }}">
+    <style>
+        :root {
+            --color-primary: {{ easyadmin_config('design.brand_color') }};
+        }
+    </style>
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+{% endblock %}
 
 {% block content %}
     <div class="content">
@@ -14,12 +23,67 @@
 
         <section id="main" class="content-body container">
             <div class="row">
-                <p>{{ 'Here are some custom actions' }}</p>
-            </div>
-            <div class="row" style="margin-bottom: 2rem;">
-                <div class="col-6"></div>
                 <div class="col-6">
-                    <button class="btn btn-primary" type="submit" data-send-welcome-emails>Send welcome mails</button>
+                    <h3>{{ 'Send Welcome Emails'|trans }}</h3>
+                    <p>{{ 'All new users must be welcomed. Do this by sending them a welcome email.'|trans }}</p>
+                    <button class="btn btn-primary"
+                            type="submit"
+                            data-send-welcome-emails>
+                        {{ 'Send welcome mails'|trans }}
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <h3>{{ 'Send notification to the app'|trans }}</h3>
+                    <p>{{ 'If there is a urgent information for the users, you can push some messages. This has a cooldown time of an hour'|trans }}</p>
+                    <h5>{{ 'Topic'|trans }}</h5>
+                    <div class="row col-6">
+                        <select class="form-control" data-notification-topics>
+                            <option value="{{ topics.wave.key }}">{{ topics.wave.name }}</option>
+                            {% for topic in topics.list %}
+                                <option value="{{ topic.key }}"
+                                        data-type="{{ topic.type }}">
+                                    {{ topic.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="row col-6">
+                        <input type="text" class="form-control" placeholder="{{ 'Message' }}" data-notification-message>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input type="checkbox"
+                                       id="enable-schedule"
+                                       class="form-check-input"
+                                       data-notification-schedule-enable>
+                                <label class="form-check-label" for="enable-schedule">{{ 'Scheduling'|trans }}</label>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form-inline hidden" data-notification-schedule>
+                                <select class="form-control margin-1" data-notification-day>
+                                    <option value="0">{{ 'today'|trans }}</option>
+                                    <option value="1">{{ 'tomorrow'|trans }}</option>
+                                    {% for date in dates %}
+                                        <option value="{{ date.value }}">{{ 'at %s'|trans|format(date.day) }}</option>
+                                    {% endfor %}
+                                </select>
+                                &nbsp;
+                                <input type="time" class="form-control margin-1" data-notification-time>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row col-6">
+                        <button class="btn btn-primary"
+                                type="submit"
+                                data-send-push-notification>
+                            {{ 'Send push notification' }}
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -45,7 +109,33 @@
                         }
                     })
                 }
-            })
+            });
+            $('[data-notification-schedule-enable]').on('click', function (event) {
+                var checked = $(this).prop('checked');
+                var schedule = $('[data-notification-schedule]');
+                if (checked) {
+                    schedule.removeClass('hidden');
+                } else {
+                    schedule.addClass('hidden');
+                }
+            });
+            $('[data-send-push-notification]').on('click', function (event) {
+                var result = confirm('{{ 'Are you sure to send the push notification?' }}');
+                if (result) {
+                    $.ajax({
+                        method: "POST",
+                        url: '/api/push',
+                        xhrFields: {
+                            withCredentials: true,
+                        }
+                    }).done(function (response) {
+                        console.log(response);
+                        if (response.success) {
+                            alert('{{ 'Welcome Emails sent'|trans }}')
+                        }
+                    })
+                }
+            });
         })
     </script>
 {% endblock %}

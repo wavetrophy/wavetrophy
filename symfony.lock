@@ -138,6 +138,9 @@
     "fig/link-util": {
         "version": "1.0.0"
     },
+    "fightbulc/moment": {
+        "version": "1.30.0"
+    },
     "friendsofsymfony/user-bundle": {
         "version": "v2.1.2"
     },

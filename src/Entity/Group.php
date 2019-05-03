@@ -15,7 +15,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * Group
  *
  * @ORM\Table(name="`group`", indexes={@ORM\Index(name="fk_group_wave1_idx", columns={"wave_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\GroupRepository")
  * @ApiResource(
  *     normalizationContext={
  *         "groups"={"group:read"},

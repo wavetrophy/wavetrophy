@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="question", indexes={@ORM\Index(name="fk_question_user1_idx", columns={"user_id"}),
  *     @ORM\Index(name="fk_question_group1_idx", columns={"group_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\QuestionRepository")
  * @ApiResource(
  *     attributes={"order"={"createdAt": "DESC"}},
  *     normalizationContext={
