@@ -68,6 +68,7 @@ class NotificationService extends FirebaseService
     {
         $date = new Moment();
         $data = [
+            'open' => '/wave/stream',
             'creator' => $this->getCurrentUserData(),
             'issued_at' => $date->format(),
         ];

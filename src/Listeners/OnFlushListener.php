@@ -2,10 +2,12 @@
 
 namespace App\Listeners;
 
+use App\Entity\Answer;
 use App\Entity\Media;
 use App\Entity\User;
 use App\Entity\UserEmail;
 use App\Entity\UserPhonenumber;
+use App\Service\Firebase\NotificationService;
 use App\Service\Image\SVGProfilePicture;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManager;
@@ -29,17 +31,27 @@ class OnFlushListener
      * @var SVGProfilePicture
      */
     private $profilePictureGenerator;
+    /**
+     * @var NotificationService
+     */
+    private $notifications;
 
     /**
      * OnFlushListener constructor.
      *
      * @param $data
+     * @param SVGProfilePicture $profilePictureGenerator
+     * @param NotificationService $notifications
      */
-    public function __construct($data, SVGProfilePicture $profilePictureGenerator)
-    {
+    public function __construct(
+        $data,
+        SVGProfilePicture $profilePictureGenerator,
+        NotificationService $notifications
+    ) {
         $this->uriPrefix = $data['media']['uri_prefix'];
         $this->uploadDir = $data['media']['upload_destination'];
         $this->profilePictureGenerator = $profilePictureGenerator;
+        $this->notifications = $notifications;
     }
 
     /**
@@ -85,6 +97,9 @@ class OnFlushListener
                 $user = $entity->getUser();
                 $this->handleUser($user, $em);
             }
+            if ($entity instanceof Answer) {
+                $this->handleAnswer($entity, $method);
+            }
         }
     }
 
@@ -125,6 +140,26 @@ class OnFlushListener
             $em->getUnitOfWork()->computeChangeSets();
             $user->setProfilePicture($media);
             $this->persist($user, $em);
+        }
+    }
+
+    /**
+     * Handle answer
+     *
+     * @param Answer $answer
+     */
+    private function handleAnswer(Answer $answer, string $method)
+    {
+        $questionId = $answer->getQuestion()->getId();
+        $topic = "question-{$questionId}";
+        switch ($method) {
+            case 'INSERT':
+                $message = "{$answer->getCreatedBy()->getUsername()} answered your Question \"{$answer->getQuestion()->getTitle()}\"";
+                $this->notifications->toTopic($topic, $message, ['open' => '/question/' . $questionId]);
+                break;
+            case 'UPDATE':
+                // do nothing
+                break;
         }
     }
 
