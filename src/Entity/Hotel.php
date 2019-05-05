@@ -24,8 +24,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     },
  *     itemOperations={
  *         "get",
- *         "put"={"access_control"="user.getId() == object.getCreatorId()"},
- *         "delete"={"access_control"="user.getId() == object.getCreatorId()"},
+ *         "put"={"access_control"="(user.getId() == object.getCreatorId() or is_granted('ROLE_ADMIN'))"},
+ *         "delete"={"access_control"="(user.getId() == object.getCreatorId() or is_granted('ROLE_ADMIN'))",
  *     },
  *     collectionOperations={"get", "post"},
  * )
