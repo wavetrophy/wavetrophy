@@ -34,55 +34,130 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-6">
+                <div class="col-8">
                     <h3>{{ 'Send notification to the app'|trans }}</h3>
                     <p>{{ 'If there is a urgent information for the users, you can push some messages. This has a cooldown time of an hour'|trans }}</p>
-                    <h5>{{ 'Topic'|trans }}</h5>
-                    <div class="row col-6">
-                        <select class="form-control" data-notification-topics>
-                            <option value="{{ topics.wave.key }}">{{ topics.wave.name }}</option>
-                            {% for topic in topics.list %}
-                                <option value="{{ topic.key }}"
-                                        data-type="{{ topic.type }}">
-                                    {{ topic.name }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="row col-6">
-                        <input type="text" class="form-control" placeholder="{{ 'Message' }}" data-notification-message>
-                    </div>
                     <div class="row">
-                        <div class="col-12">
-                            <div class="form-check">
-                                <input type="checkbox"
-                                       id="enable-schedule"
-                                       class="form-check-input"
-                                       data-notification-schedule-enable>
-                                <label class="form-check-label" for="enable-schedule">{{ 'Scheduling'|trans }}</label>
+                        <div class="col-6">
+                            <h5>{{ 'Topic'|trans }}</h5>
+                            <div class="row col-12">
+                                <select class="form-control" data-notification-topic>
+                                    <option value="{{ topics.wave.key }}">{{ topics.wave.name }}</option>
+
+                                    {% for topic in topics.list %}
+                                        <option value="{{ topic.key }}"
+                                                data-type="{{ topic.type }}">
+                                            {{ topic.name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="row col-12">
+                                <input type="text"
+                                       class="form-control"
+                                       placeholder="{{ 'Message' }}"
+                                       data-notification-message>
+                            </div>
+
+                            <div class="row col-12">
+                                <div class="form-check">
+                                    <input type="checkbox"
+                                           id="enable-schedule"
+                                           class="form-check-input"
+                                           data-notification-schedule-enable>
+
+                                    <label class="form-check-label" for="enable-schedule">
+                                        {{ 'Scheduling'|trans }}
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="row col-12">
+                                <div class="form-inline hidden" data-notification-schedule>
+                                    <select class="form-control margin-1" data-notification-day>
+                                        <option value="0">{{ 'today'|trans }}</option>
+
+                                        <option value="1">{{ 'tomorrow'|trans }}</option>
+
+                                        {% for date in dates %}
+                                            <option value="{{ date.value }}">{{ 'at %s'|trans|format(date.day) }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    &nbsp;
+                                    <input type="time" class="form-control margin-1" data-notification-time>
+                                </div>
+                            </div>
+
+                            <div class="row col-12">
+                                <button class="btn btn-primary"
+                                        type="submit"
+                                        data-send-push-notification>
+                                    {{ 'Send push notification' }}
+                                </button>
                             </div>
                         </div>
 
-                        <div class="col-12">
-                            <div class="form-inline hidden" data-notification-schedule>
-                                <select class="form-control margin-1" data-notification-day>
-                                    <option value="0">{{ 'today'|trans }}</option>
-                                    <option value="1">{{ 'tomorrow'|trans }}</option>
-                                    {% for date in dates %}
-                                        <option value="{{ date.value }}">{{ 'at %s'|trans|format(date.day) }}</option>
+                        <div class="col-6">
+                            <h5>User</h5>
+
+                            <div class="row col-12">
+                                <select class="form-control" data-notification-user>
+                                    {% for user in users %}
+                                        <option value="{{ user.id }}">
+                                            {{ user.firstname }} {{ user.lastname }}
+                                        </option>
                                     {% endfor %}
                                 </select>
-                                &nbsp;
-                                <input type="time" class="form-control margin-1" data-notification-time>
+                            </div>
+
+                            <div class="row col-12">
+                                <input type="text"
+                                       class="form-control"
+                                       placeholder="{{ 'Message' }}"
+                                       data-notification-personalized-message>
+                            </div>
+
+                            <div class="row col-12">
+                                <div class="form-check">
+                                    <input type="checkbox"
+                                           id="enable-personalized-schedule"
+                                           class="form-check-input"
+                                           data-notification-schedule-personalized-enable>
+
+                                    <label class="form-check-label"
+                                           for="enable-personalized-schedule">
+                                        {{ 'Scheduling'|trans }}
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="row col-12">
+                                <div class="form-inline hidden" data-notification-personalized-schedule>
+                                    <select class="form-control margin-1" data-notification-personalized-day>
+                                        <option value="0">{{ 'today'|trans }}</option>
+
+                                        <option value="1">{{ 'tomorrow'|trans }}</option>
+
+                                        {% for date in dates %}
+                                            <option value="{{ date.value }}">{{ 'at %s'|trans|format(date.day) }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    &nbsp;
+                                    <input type="time"
+                                           class="form-control margin-1"
+                                           data-notification-personalized-time>
+                                </div>
+                            </div>
+
+                            <div class="row col-12">
+                                <button class="btn btn-primary"
+                                        type="submit"
+                                        data-send-push-personalized-notification>
+                                    {{ 'Send push notification' }}
+                                </button>
                             </div>
                         </div>
-                    </div>
-                    <div class="row col-6">
-                        <button class="btn btn-primary"
-                                type="submit"
-                                data-send-push-notification>
-                            {{ 'Send push notification' }}
-                        </button>
                     </div>
                 </div>
             </div>
@@ -93,8 +168,25 @@
     </div>
     <script type="application/javascript">
         $(function () {
+            var sendNotification = function (type, data) {
+                data = $.extend({type: type}, data);
+                $.ajax({
+                    method: 'POST',
+                    contentType: 'application/json',
+                    url: '/notifications',
+                    xhrFields: {
+                        withCredentials: true,
+                    },
+                    data: JSON.stringify(data),
+                }).done(function (response) {
+                    console.log(response);
+                    if (response.success) {
+                        alert('{{ 'Notification sent'|trans }}')
+                    }
+                })
+            };
             $('[data-send-welcome-emails]').on('click', function (event) {
-                var result = confirm('{{ 'Are you sure to send welcome emails now?' }}');
+                var result = confirm('{{ 'Are you sure to send welcome emails now?'|trans }}');
                 if (result) {
                     $.ajax({
                         method: "POST",
@@ -120,20 +212,52 @@
                 }
             });
             $('[data-send-push-notification]').on('click', function (event) {
-                var result = confirm('{{ 'Are you sure to send the push notification?' }}');
+                var result = confirm('{{ 'Are you sure to send the push notification?'|trans }}');
                 if (result) {
-                    $.ajax({
-                        method: "POST",
-                        url: '/api/push',
-                        xhrFields: {
-                            withCredentials: true,
-                        }
-                    }).done(function (response) {
-                        console.log(response);
-                        if (response.success) {
-                            alert('{{ 'Welcome Emails sent'|trans }}')
-                        }
-                    })
+                    var topic = $('[data-notification-topic]').val();
+                    var message = $('[data-notification-message]').val();
+                    var scheduled = $('[data-notification-schedule-enable]').prop('checked');
+
+                    var day = $('[data-notification-day]').val();
+                    var time = $('[data-notification-time]').val();
+                    var data = {
+                        data: topic,
+                        message: message,
+                        scheduled: scheduled,
+                        day: day,
+                        time: time,
+                    };
+                    sendNotification('topic', data)
+                }
+            });
+            $('[data-notification-schedule-personalized-enable]').on('click', function (event) {
+                var checked = $(this).prop('checked');
+                var schedule = $('[data-notification-personalized-schedule]');
+                if (checked) {
+                    schedule.removeClass('hidden');
+                } else {
+                    schedule.addClass('hidden');
+                }
+            });
+            $('[data-send-push-personalized-notification]').on('click', function (event) {
+                var result = confirm('{{ 'Are you sure to send the push notification?'|trans }}');
+                if (result) {
+                    var user = $('[data-notification-user]').val();
+                    var message = $('[data-notification-personalized-message]').val();
+                    var scheduled = $('[data-notification-schedule-personalized-enable]').prop('checked');
+
+                    var day = $('[data-notification-personalized-day]').val();
+                    var time = $('[data-notification-personalized-time]').val();
+
+                    var data = {
+                        data: user,
+                        message: message,
+                        scheduled: scheduled,
+                        day: day,
+                        time: time,
+                    };
+
+                    sendNotification('user', data);
                 }
             });
         })

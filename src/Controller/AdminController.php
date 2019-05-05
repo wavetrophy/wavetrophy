@@ -4,11 +4,14 @@ namespace App\Controller;
 
 
 use App\Entity\User;
-use App\Service\FCM\TopicService;
+use App\Service\Firebase\DatabaseService;
+use App\Service\Firebase\TopicService;
 use App\Service\Group\GroupService;
 use App\Service\Question\QuestionService;
+use App\Service\User\UserService;
 use App\Service\Wave\WaveService;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\EasyAdminController;
+use EasyCorp\Bundle\EasyAdminBundle\Form\Type\EasyAdminAutocompleteType;
 use Moment\Moment;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,6 +28,10 @@ class AdminController extends EasyAdminController
      */
     private $wave;
     /**
+     * @var UserService
+     */
+    private $user;
+    /**
      * @var QuestionService
      */
     private $question;
@@ -40,28 +47,38 @@ class AdminController extends EasyAdminController
      * @var TokenStorageInterface
      */
     private $storage;
+    /**
+     * @var DatabaseService
+     */
+    private $firebaseDB;
 
     /**
      * AdminController constructor.
      *
      * @param WaveService $wave
+     * @param UserService $user
      * @param QuestionService $question
      * @param GroupService $group
      * @param TopicService $topic
      * @param TokenStorageInterface $storage
+     * @param DatabaseService $database
      */
     public function __construct(
         WaveService $wave,
+        UserService $user,
         QuestionService $question,
         GroupService $group,
         TopicService $topic,
-        TokenStorageInterface $storage
+        TokenStorageInterface $storage,
+        DatabaseService $database
     ) {
         $this->wave = $wave;
+        $this->user = $user;
         $this->question = $question;
         $this->group = $group;
         $this->topic = $topic;
         $this->storage = $storage;
+        $this->firebaseDB = $database;
     }
 
     /**
@@ -79,6 +96,7 @@ class AdminController extends EasyAdminController
             $waveId = $this->wave->getCurrentWaveId();
             $groups = $this->group->getGroupsForWave($waveId);
             $questions = $this->question->getQuestionsForWave($waveId);
+            $users = $this->user->getWaveParticipants($waveId);
 
             $topics = $this->topic->getTopics($waveId, $groups, $questions);
 
@@ -99,7 +117,11 @@ class AdminController extends EasyAdminController
                 ];
             }
 
-            return $this->render('admin/dashboard.html.twig', ['topics' => $topics, 'dates' => $dates]);
+
+            return $this->render(
+                'admin/dashboard.html.twig',
+                ['topics' => $topics, 'dates' => $dates, 'users' => $users]
+            );
         }
 
         return parent::indexAction($request);

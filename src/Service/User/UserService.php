@@ -27,6 +27,16 @@ class UserService
     }
 
     /**
+     * @param int $waveId
+     *
+     * @return mixed
+     */
+    public function getWaveParticipants(int $waveId)
+    {
+        return $this->userRepository->findUsersForWave($waveId);
+    }
+
+    /**
      * Send welcome emails.
      *
      * @return User[]

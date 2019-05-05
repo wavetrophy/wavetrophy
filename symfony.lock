@@ -135,11 +135,17 @@
     "egulias/email-validator": {
         "version": "2.1.7"
     },
+    "fig/http-message-util": {
+        "version": "1.1.3"
+    },
     "fig/link-util": {
         "version": "1.0.0"
     },
     "fightbulc/moment": {
         "version": "1.30.0"
+    },
+    "firebase/php-jwt": {
+        "version": "v5.0.0"
     },
     "friendsofsymfony/user-bundle": {
         "version": "v2.1.2"
@@ -150,6 +156,45 @@
     "gesdinet/jwt-refresh-token-bundle": {
         "version": "v0.5.4"
     },
+    "giggsey/libphonenumber-for-php": {
+        "version": "8.10.11"
+    },
+    "giggsey/locale": {
+        "version": "1.7.1"
+    },
+    "google/auth": {
+        "version": "v1.5.1"
+    },
+    "google/cloud-core": {
+        "version": "v1.28.0"
+    },
+    "google/cloud-firestore": {
+        "version": "v1.5.0"
+    },
+    "google/cloud-storage": {
+        "version": "v1.12.1"
+    },
+    "google/common-protos": {
+        "version": "1.0"
+    },
+    "google/gax": {
+        "version": "1.0.2"
+    },
+    "google/grpc-gcp": {
+        "version": "0.1.4"
+    },
+    "google/protobuf": {
+        "version": "v3.7.1"
+    },
+    "grpc/grpc": {
+        "version": "1.19.0"
+    },
+    "guzzlehttp/guzzle": {
+        "version": "6.3.3"
+    },
+    "guzzlehttp/promises": {
+        "version": "v1.3.1"
+    },
     "guzzlehttp/psr7": {
         "version": "1.5.2"
     },
@@ -159,8 +204,20 @@
     "jms/metadata": {
         "version": "2.0.0"
     },
+    "kreait/firebase-php": {
+        "version": "4.20.1"
+    },
+    "kreait/firebase-tokens": {
+        "version": "1.7.2"
+    },
+    "kreait/gcp-metadata": {
+        "version": "1.0.1"
+    },
     "lcobucci/jwt": {
         "version": "3.2.5"
+    },
+    "league/flysystem": {
+        "version": "1.0.51"
     },
     "lexik/jwt-authentication-bundle": {
         "version": "2.5",
@@ -176,6 +233,9 @@
     },
     "monolog/monolog": {
         "version": "1.24.0"
+    },
+    "mtdowling/jmespath.php": {
+        "version": "2.4.0"
     },
     "namshi/jose": {
         "version": "7.2.3"
@@ -294,6 +354,12 @@
     "ralouphie/getallheaders": {
         "version": "2.0.5"
     },
+    "ramsey/uuid": {
+        "version": "3.8.0"
+    },
+    "rize/uri-template": {
+        "version": "0.3.2"
+    },
     "sensio/framework-extra-bundle": {
         "version": "5.2",
         "recipe": {
@@ -317,6 +383,9 @@
         "files": [
             "config/packages/stof_doctrine_extensions.yaml"
         ]
+    },
+    "superbalist/flysystem-google-storage": {
+        "version": "7.2.1"
     },
     "swiftmailer/swiftmailer": {
         "version": "v6.1.3"

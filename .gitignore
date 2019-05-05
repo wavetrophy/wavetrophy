@@ -17,6 +17,11 @@ yarn-error.log
 /config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
 
+###> Firebase ###
+/config/fcm/*.json
+###< Firebase ###
+
+
 bin/deploy.sh
 /public/media
 /public/img

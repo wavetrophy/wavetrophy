@@ -28,6 +28,25 @@ class UserRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param int $waveId
+     *
+     * @return mixed
+     */
+    public function findUsersForWave(int $waveId)
+    {
+        $query = $this->createQueryBuilder('u');
+        $query->join('u.team', 't');
+        $query->join('t.group', 'g');
+        $query->join('g.wave', 'w');
+        $query->where('w.id = :waveId');
+        $query->setParameter('waveId', $waveId);
+        $query = $query->getQuery();
+        $result = $query->getResult();
+
+        return $result;
+    }
+
+    /**
      * Find all users that did not received a welcome email.
      *
      * @return User[]

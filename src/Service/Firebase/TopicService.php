@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\FCM;
+namespace App\Service\Firebase;
 
 use App\Entity\Group;
 use App\Entity\Question;

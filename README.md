@@ -11,6 +11,7 @@ Requirements
 - PHP >= 7.1.13
 - Composer (latest)
 - Git (latest)
+- gRPC
 
 Instalation
 ===========

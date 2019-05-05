@@ -35,7 +35,8 @@ class UserEditController extends EasyAdminController
                     'multiple' => true,
                     'attr' => [
                         // same as in \EasyCorp\Bundle\EasyAdminBundle\Form\Type\Configurator\EntityTypeConfigurator::configure
-                        'data-widget' => 'select2',
+                        'data-widget' => '
+                        select2',
                     ],
                     // display profession only from same organization
                     'query_builder' => function (EntityRepository $repository) use ($user) {
