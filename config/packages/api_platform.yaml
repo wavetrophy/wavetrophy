@@ -7,6 +7,7 @@ api_platform:
 
   exception_to_status:
     App\Exception\ResourceNotFoundException: 400
+    App\Exception\ValidationException: 400
 
   eager_loading:
     force_eager: false

@@ -7,6 +7,7 @@ use App\Entity\Media;
 use App\Entity\User;
 use App\Entity\UserEmail;
 use App\Entity\UserPhonenumber;
+use App\Exception\ValidationException;
 use App\Service\Firebase\NotificationService;
 use App\Service\Image\SVGProfilePicture;
 use Doctrine\Common\Collections\Collection;
@@ -98,7 +99,7 @@ class OnFlushListener
                 $this->handleUser($user, $em);
             }
             if ($entity instanceof Answer) {
-                $this->handleAnswer($entity, $method);
+                $this->handleAnswer($entity, $em, $method);
             }
         }
     }
@@ -147,18 +148,34 @@ class OnFlushListener
      * Handle answer
      *
      * @param Answer $answer
+     * @param EntityManager $em
+     * @param string $method
      */
-    private function handleAnswer(Answer $answer, string $method)
+    private function handleAnswer(Answer $answer, EntityManager $em, string $method)
     {
         $questionId = $answer->getQuestion()->getId();
         $topic = "question-{$questionId}";
         switch ($method) {
             case 'INSERT':
-                $message = "{$answer->getCreatedBy()->getUsername()} answered your Question \"{$answer->getQuestion()->getTitle()}\"";
-                $this->notifications->toTopic($topic, $message, ['open' => '/question/' . $questionId]);
+                $message = "{$answer->getCreatedBy()->getUsername()} answered \"{$answer->getQuestion()->getTitle()}\"";
+                $this->notifications->toTopic(
+                    $topic,
+                    $message,
+                    ['open' => '/question/' . $questionId, 'answer' => $answer->getAnswer()]
+                );
                 break;
             case 'UPDATE':
-                // do nothing
+                $uow = $em->getUnitOfWork();
+                $uow->computeChangeSets();
+                $changeset = $uow->getEntityChangeSet($answer);
+                $approvedIsChangedToTrue = false;
+                if (isset($changeset['approved'])) {
+                    $approvedIsChangedToTrue = $changeset['approved'][0] === false && $changeset['approved'][1] === true;
+                }
+                // Approved is true and is not changed from false to true
+                if ($answer->getApproved() === true && $approvedIsChangedToTrue === false) {
+                    throw new ValidationException('You can not edit an approved answer');
+                }
                 break;
         }
     }
