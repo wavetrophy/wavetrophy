@@ -7,15 +7,27 @@ parameters:
 
 doctrine:
   dbal:
-    # configure these for your database server
-    driver: 'pdo_mysql'
-    server_version: '5.7'
-    charset: utf8mb4
-    default_table_options:
-      charset: utf8mb4
-      collate: utf8mb4_unicode_ci
+    default_connection:       default
+    connections:
+      default:
+        url: '%env(resolve:DATABASE_URL)%'
+        # configure these for your database server
+        driver: 'pdo_mysql'
+        server_version: '5.7'
+        charset: utf8mb4
+        default_table_options:
+          charset: utf8mb4
+          collate: utf8mb4_unicode_ci
+      migrations:
+        url: '%env(resolve:DATABASE_URL_MIGRATIONS)%'
+        # configure these for your database server
+        driver: 'pdo_mysql'
+        server_version: '5.7'
+        charset: utf8mb4
+        default_table_options:
+          charset: utf8mb4
+          collate: utf8mb4_unicode_ci
 
-    url: '%env(resolve:DATABASE_URL)%'
   orm:
     auto_generate_proxy_classes: true
     entity_managers:
