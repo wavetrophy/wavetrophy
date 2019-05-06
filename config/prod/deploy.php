@@ -16,7 +16,8 @@ return new class extends DefaultDeployer
         return $this->getConfigBuilder()
             // SSH connection string to connect to the remote server (format: user@host-or-IP:port-number)
             ->server("{$user}@{$host}:{$port}")
-            ->sharedFilesAndDirs(['public/media'])
+            // shared directories
+            ->sharedFilesAndDirs(['.env.local','public/media', 'config/jwt', 'config/fcm'])
             // the absolute path of the remote server directory where the project is deployed
             ->deployDir($dir)
             // the URL of the Git repository where the project code is hosted
