@@ -1,11 +1,16 @@
 <?php
 
 use EasyCorp\Bundle\EasyDeployBundle\Deployer\DefaultDeployer;
+use Symfony\Component\Dotenv\Dotenv;
 
 return new class extends DefaultDeployer
 {
     public function configure()
     {
+        $configFile = __DIR__ . '/.env.deploy';
+        if (is_file($configFile)) {
+            (new Dotenv())->loadEnv($configFile);
+        }
         $host = getenv('DEPLOY_HOST');
         $port = getenv('DEPLOY_PORT');
         $user = getenv('DEPLOY_USER');
@@ -17,7 +22,7 @@ return new class extends DefaultDeployer
             // SSH connection string to connect to the remote server (format: user@host-or-IP:port-number)
             ->server("{$user}@{$host}:{$port}")
             // shared directories
-            ->sharedFilesAndDirs(['.env.local','public/media', 'config/jwt', 'config/fcm'])
+            ->sharedFilesAndDirs(['.env.local', 'public/media', 'config/jwt', 'config/fcm'])
             // the absolute path of the remote server directory where the project is deployed
             ->deployDir($dir)
             // the URL of the Git repository where the project code is hosted
@@ -26,7 +31,7 @@ return new class extends DefaultDeployer
             ->repositoryBranch($branch)
             // the composer binary
             ->remoteComposerBinaryPath($composer)
-            ->composerInstallFlags('--prefer-dist --no-interaction --no-dev --optimize-autoloader -vvv')
+            ->composerInstallFlags('--prefer-dist --no-interaction --no-dev --optimize-autoloader')
             // update the composer binary
             ->updateRemoteComposerBinary(false);
     }
@@ -39,13 +44,21 @@ return new class extends DefaultDeployer
 
     public function beforeUpdating()
     {
+        // see https://github.com/EasyCorp/easy-deploy-bundle/issues/35
+        // see https://github.com/EasyCorp/easy-deploy-bundle/blob/14edd418d82d2c616d79ecf2830c6140b0dc3971/src/Deployer/DefaultDeployer.php
+        $this->runRemote('cp {{ deploy_dir }}/repo/.env {{ project_dir }} 2>/dev/null');
+        $this->runRemote('cp {{ deploy_dir }}/shared/.env.local {{ project_dir }} 2>/dev/null');
+        $this->runRemote('cp -r {{ deploy_dir }}/shared/config {{ project_dir }}/config 2>/dev/null');
     }
 
     // run some local or remote commands after the deployment is finished
     public function beforeFinishingDeploy()
     {
+//        $this->runRemote('cp {{ deploy_dir }}/repo/.env {{ project_dir }} 2>/dev/null');
+//        $this->runRemote('cp {{ deploy_dir }}/shared/.env.local {{ project_dir }} 2>/dev/null');
+//        $this->runRemote('cp -r {{ deploy_dir }}/shared/config {{ project_dir }}/config 2>/dev/null');
         $this->log('Migrating database');
-        $this->runRemote('{{ console_bin }} doctrine:migrations:migrate');
+        $this->runRemote('{{ console_bin }} doctrine:migrations:migrate --connection=migrations');
         $this->log("The deployment has finished.");
     }
 };
