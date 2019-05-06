@@ -13,7 +13,6 @@ doctrine:
         url: '%env(resolve:DATABASE_URL)%'
         # configure these for your database server
         driver: 'pdo_mysql'
-        server_version: '5.7'
         charset: utf8mb4
         default_table_options:
           charset: utf8mb4
@@ -22,7 +21,6 @@ doctrine:
         url: '%env(resolve:DATABASE_URL_MIGRATIONS)%'
         # configure these for your database server
         driver: 'pdo_mysql'
-        server_version: '5.7'
         charset: utf8mb4
         default_table_options:
           charset: utf8mb4
@@ -32,6 +30,7 @@ doctrine:
     auto_generate_proxy_classes: true
     entity_managers:
       default:
+        connection: default
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
         mappings:
@@ -75,3 +74,5 @@ doctrine:
           softdeleteable:
             class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter
             enabled: true
+      migrations:
+        connection: migrations

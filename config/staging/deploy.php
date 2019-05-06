@@ -7,7 +7,7 @@ return new class extends DefaultDeployer
 {
     public function configure()
     {
-        $configFile = dirname(__DIR__) . '/.env.deploy';
+        $configFile = __DIR__ . '/.env.deploy';
         if (is_file($configFile)) {
             (new Dotenv())->loadEnv($configFile);
         }
@@ -31,7 +31,7 @@ return new class extends DefaultDeployer
             ->repositoryBranch($branch)
             // the composer binary
             ->remoteComposerBinaryPath($composer)
-            ->composerInstallFlags('--prefer-dist --no-interaction --no-dev --optimize-autoloader -vvv')
+            ->composerInstallFlags('--prefer-dist --no-interaction --no-dev --optimize-autoloader')
             // update the composer binary
             ->updateRemoteComposerBinary(false);
     }
@@ -44,11 +44,17 @@ return new class extends DefaultDeployer
 
     public function beforeUpdating()
     {
+        // see https://github.com/EasyCorp/easy-deploy-bundle/issues/35
+        // see https://github.com/EasyCorp/easy-deploy-bundle/blob/14edd418d82d2c616d79ecf2830c6140b0dc3971/src/Deployer/DefaultDeployer.php
+        $this->runRemote('cp {{ deploy_dir }}/repo/.env {{ project_dir }} 2>/dev/null');
+        $this->runRemote('cp {{ deploy_dir }}/shared/.env.local {{ project_dir }} 2>/dev/null');
+        $this->runRemote('cp -r {{ deploy_dir }}/shared/config {{ project_dir }}/config 2>/dev/null');
     }
 
     // run some local or remote commands after the deployment is finished
     public function beforeFinishingDeploy()
     {
+        $this->runRemote('{{ console_bin }} cache:clear');
         $this->log('Migrating database');
         $this->runRemote('{{ console_bin }} doctrine:migrations:migrate');
         $this->log("The deployment has finished.");

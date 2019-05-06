@@ -54,11 +54,9 @@ return new class extends DefaultDeployer
     // run some local or remote commands after the deployment is finished
     public function beforeFinishingDeploy()
     {
-//        $this->runRemote('cp {{ deploy_dir }}/repo/.env {{ project_dir }} 2>/dev/null');
-//        $this->runRemote('cp {{ deploy_dir }}/shared/.env.local {{ project_dir }} 2>/dev/null');
-//        $this->runRemote('cp -r {{ deploy_dir }}/shared/config {{ project_dir }}/config 2>/dev/null');
+        $this->runRemote('{{ console_bin }} cache:clear');
         $this->log('Migrating database');
-        $this->runRemote('{{ console_bin }} doctrine:migrations:migrate --connection=migrations');
+        $this->runRemote('{{ console_bin }} doctrine:migrations:migrate --em=migrations');
         $this->log("The deployment has finished.");
     }
 };
