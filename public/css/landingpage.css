@@ -1,0 +1,14 @@
+body, html {
+    font-family: "San Francisco", Roboto, sans-serif;
+    background: #a8ff78; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #a8ff78, #78ffd6); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #a8ff78, #78ffd6);
+}
+
+.title {
+    color: #FFFFFF;
+}
+
+.download-badge {
+    height: 5vh;
+}

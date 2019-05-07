@@ -1,11 +1,54 @@
-<body>
-<h1>WAVE Trophy App</h1>
-<h3>Download</h3>
-<a class="mu-apple-btn" href="https://itunes.apple.com/us/app/wavetrophy/id1436640280" target="_blank">
-    <i class="fa fa-apple"></i><span>apple store</span>
-</a>
-<br>
-<a class="mu-google-btn" href="https://play.google.com/store/apps/details?id=com.wavetrophy.app" target="_blank">
-    <i class="fa fa-android"></i><span>google play</span>
-</a>
-</body>
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/landingpage.css') }}">
+{% endblock %}
+
+{% block content %}
+    {#    <div class="container">#}
+    {#        <div class="row ">#}
+    {#            <div class="col-12 text-center">#}
+    {#                <h1 class="title">WAVE Trophy App</h1>#}
+    {#            </div>#}
+    {#        </div>#}
+    {#        <h3>Download</h3>#}
+    {#        <a class="mu-apple-btn" href="https://itunes.apple.com/us/app/wavetrophy/id1436640280" target="_blank">#}
+    {#            <i class="fa fa-apple"></i><span>apple store</span>#}
+    {#        </a>#}
+    {#        <br>#}
+    {#        <a class="mu-google-btn" href="https://play.google.com/store/apps/details?id=com.wavetrophy.app" target="_blank">#}
+    {#            <i class="fa fa-android"></i><span>google play</span>#}
+    {#        </a>#}
+    {#    </div>#}
+    <div class="container h-100">
+        <div class="row h-100 justify-content-center align-items-center">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <h1 class="title">WAVE Trophy App</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <h3 class="title">Jetzt Herunterladen</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 text-center text-md-right">
+                        <a class="mu-google-btn" href="//play.google.com/store/apps/details?id=com.wavetrophy.app"
+                           target="_blank">
+                            <img src="{{ asset('badges/google-play-badge.svg') }}" alt="Google Play" class="download-badge">
+                        </a>
+                    </div>
+                    <div class="col-6 text-center text-md-left">
+                        <a class="mu-google-btn" href="//itunes.apple.com/app/id1436640280?mt=8"
+                           target="_blank">
+                            <img src="{{ asset('badges/appstore-badge.svg') }}" alt="AppStore" class="download-badge">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
