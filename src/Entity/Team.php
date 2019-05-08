@@ -79,7 +79,7 @@ class Team
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="User", mappedBy="team", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="User", mappedBy="team")
      * @ApiSubresource(maxDepth=1)
      * @MaxDepth(1)
      * @Groups({"team:read", "readable", "team:edit", "editable"})

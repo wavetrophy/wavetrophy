@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 
+use App\Entity\Team;
 use App\Entity\User;
 use App\Service\Firebase\DatabaseService;
 use App\Service\Firebase\TopicService;
@@ -124,5 +125,29 @@ class AdminController extends EasyAdminController
         }
 
         return parent::indexAction($request);
+    }
+
+    protected function persistTeamEntity(Team $team)
+    {
+        $em = $this->em;
+        $team->getUsers()->forAll(function ($key, User $user) use ($team, $em) {
+            $user->setTeam($team);
+            $em->persist($user);
+            return true;
+        });
+
+        $this->persistEntity($team);
+    }
+
+    protected function updateTeamEntity(Team $team)
+    {
+        $em = $this->em;
+        $team->getUsers()->forAll(function ($key, User $user) use ($team, $em) {
+            $user->setTeam($team);
+            $em->persist($user);
+            return true;
+        });
+
+        $this->persistEntity($team);
     }
 }

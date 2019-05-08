@@ -3,7 +3,6 @@
 namespace App\Listeners;
 
 use App\Entity\Answer;
-use App\Entity\Location;
 use App\Entity\Media;
 use App\Entity\User;
 use App\Entity\UserEmail;

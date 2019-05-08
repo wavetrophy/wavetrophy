@@ -35,15 +35,15 @@ class UserEditController extends EasyAdminController
                     'multiple' => true,
                     'attr' => [
                         // same as in \EasyCorp\Bundle\EasyAdminBundle\Form\Type\Configurator\EntityTypeConfigurator::configure
-                        'data-widget' => '
-                        select2',
+                        'data-widget' => 'select2',
                     ],
-                    // display profession only from same organization
+                    // display email only from same user
                     'query_builder' => function (EntityRepository $repository) use ($user) {
                         $query = $repository->createQueryBuilder('ue')
-                            ->where('ue.user = :user')
-                            ->where('ue.isPublic = true')
-                            ->setParameter('user', $user);
+                            ->join('ue.user', 'u')
+                            ->andWhere('u.id = :id')
+                            ->andWhere('ue.isPublic = true')
+                            ->setParameter('id', $user->getId());
                         return $query;
                     },
                 ]
@@ -60,12 +60,13 @@ class UserEditController extends EasyAdminController
                         // same as in \EasyCorp\Bundle\EasyAdminBundle\Form\Type\Configurator\EntityTypeConfigurator::configure
                         'data-widget' => 'select2',
                     ],
-                    // display phonenumber only from same organization
+                    // display phonenumber only from same user
                     'query_builder' => function (EntityRepository $repository) use ($user) {
                         $query = $repository->createQueryBuilder('up')
-                            ->where('up.user = :user')
-                            ->where('up.isPublic = true')
-                            ->setParameter('user', $user);
+                            ->innerJoin('up.user', 'u')
+                            ->andWhere('u.id = :id')
+                            ->andWhere('up.isPublic = true')
+                            ->setParameter('id', $user->getId());
                         return $query;
                     },
                 ]

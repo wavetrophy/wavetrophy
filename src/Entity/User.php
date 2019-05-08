@@ -139,7 +139,7 @@ class User extends BaseUser implements UserInterface
      * @var Team
      *
      * @ORM\ManyToOne(targetEntity="Team", inversedBy="users")
-     * @ORM\JoinColumn(name="team_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="team_id", referencedColumnName="id", nullable=true)
      * @Groups({"editable", "user:edit", "readable", "user:read", "user:read"})
      * @MaxDepth(1)
      */
