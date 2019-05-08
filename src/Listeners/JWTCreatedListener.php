@@ -5,6 +5,7 @@ namespace App\Listeners;
 use App\Entity\User;
 use App\Repository\WaveRepository;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -21,17 +22,24 @@ class JWTCreatedListener
      * @var WaveRepository
      */
     private $wave;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * @param RequestStack $requestStack
      * @param WaveRepository $wave
+     * @param LoggerInterface $logger
      */
     public function __construct(
         RequestStack $requestStack,
-        WaveRepository $wave
+        WaveRepository $wave,
+        LoggerInterface $logger
     ) {
         $this->requestStack = $requestStack;
         $this->wave = $wave;
+        $this->logger = $logger;
     }
 
     /**
@@ -71,6 +79,15 @@ class JWTCreatedListener
             $payload['team_id'] = $team->getId();
             $payload['group_id'] = $team->getGroup()->getId();
         }
+
+        $this->logger->info(
+            "User {userId} logged in from {ip}.\nInfo:\n{info}",
+            [
+                'userId' => $payload['user_id'],
+                'ip' => $payload['ip'],
+                'info' => json_encode($payload, JSON_PRETTY_PRINT),
+            ]
+        );
 
         $event->setData($payload);
 

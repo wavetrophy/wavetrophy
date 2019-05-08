@@ -69,8 +69,12 @@ class Wave
     /**
      * @var DateTime
      *
-     * @ORM\Column(name="start", type="datetime", nullable=false, options={"comment"="The start for the participants,
-     *     not support"})
+     * @ORM\Column(
+     *     name="start",
+     *     type="datetime",
+     *     nullable=false,
+     *     options={"comment"="The start for the participants, not support"}
+     * )
      * @Groups({"wave:read", "wave:edit"})
      */
     private $start;

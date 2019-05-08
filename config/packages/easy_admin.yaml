@@ -169,7 +169,7 @@ easy_admin:
       controller: App\Controller\UserEditController
       class: App\Entity\User
       list:
-        dql_filter: 'entity.deletedAt is NULL'
+        dql_filter: 'entity.deletedAt IS NULL'
         fields:
           - 'id'
           - 'email'

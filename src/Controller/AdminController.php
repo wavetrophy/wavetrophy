@@ -11,8 +11,12 @@ use App\Service\Group\GroupService;
 use App\Service\Question\QuestionService;
 use App\Service\User\UserService;
 use App\Service\Wave\WaveService;
+use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\EasyAdminController;
+use EasyCorp\Bundle\EasyAdminBundle\Event\EasyAdminEvents;
 use Moment\Moment;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -51,6 +55,10 @@ class AdminController extends EasyAdminController
      * @var DatabaseService
      */
     private $firebaseDB;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * AdminController constructor.
@@ -62,6 +70,7 @@ class AdminController extends EasyAdminController
      * @param TopicService $topic
      * @param TokenStorageInterface $storage
      * @param DatabaseService $database
+     * @param LoggerInterface $logger
      */
     public function __construct(
         WaveService $wave,
@@ -70,7 +79,8 @@ class AdminController extends EasyAdminController
         GroupService $group,
         TopicService $topic,
         TokenStorageInterface $storage,
-        DatabaseService $database
+        DatabaseService $database,
+        LoggerInterface $logger
     ) {
         $this->wave = $wave;
         $this->user = $user;
@@ -79,6 +89,7 @@ class AdminController extends EasyAdminController
         $this->topic = $topic;
         $this->storage = $storage;
         $this->firebaseDB = $database;
+        $this->logger = $logger;
     }
 
     /**
@@ -127,6 +138,11 @@ class AdminController extends EasyAdminController
         return parent::indexAction($request);
     }
 
+    /**
+     * Persist entity hook
+     *
+     * @param Team $team
+     */
     protected function persistTeamEntity(Team $team)
     {
         $em = $this->em;
@@ -139,6 +155,11 @@ class AdminController extends EasyAdminController
         $this->persistEntity($team);
     }
 
+    /**
+     * Update entity Hook
+     *
+     * @param Team $team
+     */
     protected function updateTeamEntity(Team $team)
     {
         $em = $this->em;
@@ -149,5 +170,123 @@ class AdminController extends EasyAdminController
         });
 
         $this->persistEntity($team);
+    }
+
+    /**
+     * Find all
+     *
+     * @param string $entityClass
+     * @param int $page
+     * @param int $maxPerPage
+     * @param null $sortField
+     * @param null $sortDirection
+     * @param null $dqlFilter
+     *
+     * @return mixed|\Pagerfanta\Pagerfanta
+     */
+    protected function findAll(
+        $entityClass,
+        $page = 1,
+        $maxPerPage = 15,
+        $sortField = null,
+        $sortDirection = null,
+        $dqlFilter = null
+    ) {
+        $alias = $this->getAlias($entityClass);
+        $query = $this->em->getRepository($entityClass)
+            ->createQueryBuilder($alias)
+            ->where($alias . '.deletedAt IS NULL and ' . $alias . '.createdAt IS NOT NULL');
+
+        // The checked aliases arent really required, but its good for debugging to have them...
+        $checkedAliases = [];
+        $checkedAliases[$alias] = true;
+
+        $query = $this->getRecursiveEntityDeletedAtQuery($query, $entityClass, $alias, $checkedAliases);
+        $this->logger->info(
+            "Read query \n\n{query}\n\n with aliases\n{aliases}",
+            ['query' => $query->getDQL(), 'aliases' => json_encode($checkedAliases, JSON_PRETTY_PRINT)]
+        );
+
+        if (null === $sortDirection || !\in_array(\strtoupper($sortDirection), ['ASC', 'DESC'])) {
+            $sortDirection = 'DESC';
+        }
+
+        $this->dispatch(EasyAdminEvents::POST_LIST_QUERY_BUILDER, [
+            'query_builder' => $query,
+            'sort_field' => $sortField,
+            'sort_direction' => $sortDirection,
+        ]);
+
+        return $this->get('easyadmin.paginator')->createOrmPaginator($query, $page, $maxPerPage);
+    }
+
+    /**
+     * Generate a query that checks recursively for deleted parent (ManyToOne) entites (Group -> checks for deleted
+     * Wave)
+     *
+     * @param QueryBuilder $query
+     * @param $entityClass
+     * @param string $entityAlias
+     * @param $checkedAliases
+     *
+     * @return QueryBuilder
+     */
+    private function getRecursiveEntityDeletedAtQuery(
+        QueryBuilder $query,
+        $entityClass,
+        string $entityAlias,
+        &$checkedAliases
+    ) {
+        $meta = $this->em->getMetadataFactory()->getMetadataFor($entityClass);
+        $names = $this->getAssociationFields($meta);
+
+        foreach ($names as $name) {
+            $mapping = $meta->getAssociationMapping($name);
+
+            if ($mapping['isOwningSide']) {
+                $alias = $this->getAlias($mapping['targetEntity']);
+                $join = $entityAlias . '.' . $mapping['fieldName'];
+
+                $query->innerJoin($join,
+                    $alias)->andWhere($alias . '.deletedAt IS NULL and ' . $alias . '.createdAt IS NOT NULL');
+
+                $checkedAliases[$alias] = true;
+                $this->getRecursiveEntityDeletedAtQuery($query, $mapping['targetEntity'], $alias, $checkedAliases);
+            }
+        }
+
+        return $query;
+    }
+
+    /**
+     * Converts the Class\Name\Of\A\Class to class_name_of_a_class
+     *
+     * @param string $className
+     *
+     * @return string
+     */
+    private function getAlias(string $className)
+    {
+        $class = str_replace('\\', '_', $className) . uniqid('___');
+        return strtolower($class);
+    }
+
+    /**
+     * @param ClassMetadata $meta
+     *
+     * @return array|string[]
+     */
+    private function getAssociationFields(ClassMetadata $meta)
+    {
+        $names = $meta->getAssociationNames();
+        $map = [
+            'createdBy' => true,
+            'updatedBy' => true,
+        ];
+        $names = array_filter($names, function ($name) use ($map) {
+            // remove all names that are in the map
+            return !isset($map[$name]);
+        });
+        return $names;
     }
 }
