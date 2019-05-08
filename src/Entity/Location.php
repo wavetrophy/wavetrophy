@@ -5,10 +5,14 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Entity\Traits\MetaFieldTrait;
+use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * Location
@@ -31,6 +35,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     collectionOperations={"get", "post"},
  * )
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
+ * @Vich\Uploadable()
  */
 class Location
 {
@@ -97,6 +102,21 @@ class Location
      * @Groups({"location:read", "location:edit"})
      */
     private $teamParticipations;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
+     * @Groups({"editable", "location:edit", "readable", "location:read"})
+     */
+    private $thumbnail;
+
+    /**
+     * @var File
+     * @Vich\UploadableField(mapping="location_thumbnail", fileNameProperty="thumbnail")
+     * @Assert\File()
+     * @Groups({"editable", "location:edit", "readable", "location:read"})
+     */
+    private $thumbnailImage;
 
     /**
      * Location constructor.
@@ -188,6 +208,31 @@ class Location
         $this->wave = $wave;
 
         return $this;
+    }
+
+    public function getThumbnail(): ?string
+    {
+        return $this->thumbnail;
+    }
+
+    public function setThumbnail(?string $url)
+    {
+        $this->thumbnail = $url;
+
+        return $this;
+    }
+
+    public function getThumbnailImage(): ?File
+    {
+        return $this->thumbnailImage;
+    }
+
+    public function setThumbnailImage(?File $thumbnailImage): void
+    {
+        $this->thumbnailImage = $thumbnailImage;
+        if ($thumbnailImage) {
+            $this->setUpdatedAt(new DateTime());
+        }
     }
 
     public function getEvents(): ?Collection

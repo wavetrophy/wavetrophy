@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Entity\Answer;
+use App\Entity\Location;
 use App\Entity\Media;
 use App\Entity\User;
 use App\Entity\UserEmail;
@@ -101,6 +102,9 @@ class OnFlushListener
             if ($entity instanceof Answer) {
                 $this->handleAnswer($entity, $em, $method);
             }
+            if ($entity instanceof Location) {
+
+            }
         }
     }
 
@@ -177,6 +181,22 @@ class OnFlushListener
                     throw new ValidationException('You can not edit an approved answer');
                 }
                 break;
+        }
+    }
+
+    /**
+     * Handle location
+     *
+     * @param Location $location
+     * @param EntityManager $em
+     */
+    public function handleLocation(Location $location, EntityManager $em)
+    {
+        $url = $location->getThumbnailimage();
+        $media = $em->getRepository(Media::class)->findByUrl($url);
+        if (!empty($media)) {
+            $location->setThumbnail($media);
+            $this->persist($location, $em);
         }
     }
 

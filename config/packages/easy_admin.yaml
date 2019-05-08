@@ -2,7 +2,7 @@ easy_admin:
   site_name: 'WAVE Trophy App'
   design:
     form_theme:
-      - '@EasyAdmin/form/bootstrap_4.html.twig'
+      - 'bootstrap.twig'
       # the following Twig template can be located anywhere in the application.
       # it can also be added to the twig.form_themes option to use it in the
       # entire application, not only the backend
@@ -55,9 +55,17 @@ easy_admin:
           - 'wave'
       form:
         fields:
+          - { property: 'thumbnailImage', type: 'vich_image' }
           - 'name'
           - 'wave'
-          - { property: location, type_options: { block_name: 'selection' } }
+          - { property: 'location' , type_options: { block_name: 'selection' } }
+
+      new:
+        fields:
+          - { property: 'thumbnailImage', type: 'vich_image', type_options: { required: false }}
+      edit:
+        fields:
+          - { property: 'thumbnailImage', type: 'vich_image', type_options: { required: false }}
 
     Event:
       class: App\Entity\Event
