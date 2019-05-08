@@ -79,7 +79,7 @@ class Team
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="User", mappedBy="team")
+     * @ORM\OneToMany(targetEntity="User", mappedBy="team", cascade={"persist"})
      * @ApiSubresource(maxDepth=1)
      * @MaxDepth(1)
      * @Groups({"team:read", "readable", "team:edit", "editable"})
@@ -98,10 +98,10 @@ class Team
         ?int $startNumber = null,
         ?Group $group = null
     ) {
-        $this -> name = $name;
-        $this -> startNumber = $startNumber;
-        $this -> group = $group;
-        $this -> users = new ArrayCollection();
+        $this->name = $name;
+        $this->startNumber = $startNumber;
+        $this->group = $group;
+        $this->users = new ArrayCollection();
     }
 
     public function __toString(): ?string
@@ -111,60 +111,60 @@ class Team
 
     public function getId(): ?int
     {
-        return $this -> id;
+        return $this->id;
     }
 
     public function getName(): ?string
     {
-        return $this -> name;
+        return $this->name;
     }
 
     public function setName(?string $name): self
     {
-        $this -> name = $name;
+        $this->name = $name;
 
         return $this;
     }
 
     public function getStartNumber(): ?int
     {
-        return $this -> startNumber;
+        return $this->startNumber;
     }
 
     public function setStartNumber(?int $startNumber): self
     {
-        $this -> startNumber = $startNumber;
+        $this->startNumber = $startNumber;
 
         return $this;
     }
 
     public function getGroup(): ?Group
     {
-        return $this -> group;
+        return $this->group;
     }
 
     public function setGroup(?Group $group): self
     {
-        $this -> group = $group;
+        $this->group = $group;
 
         return $this;
     }
 
     public function getUsers(): ?Collection
     {
-        return $this -> users;
+        return $this->users;
     }
 
     public function addUser(?User $user): self
     {
-        $this -> users -> add($user);
+        $this->users->add($user);
 
         return $this;
     }
 
     public function removeUser(?User $user): self
     {
-        $this -> users -> removeElement($user);
+        $this->users->removeElement($user);
 
         return $this;
     }

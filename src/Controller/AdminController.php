@@ -11,7 +11,6 @@ use App\Service\Question\QuestionService;
 use App\Service\User\UserService;
 use App\Service\Wave\WaveService;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\EasyAdminController;
-use EasyCorp\Bundle\EasyAdminBundle\Form\Type\EasyAdminAutocompleteType;
 use Moment\Moment;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

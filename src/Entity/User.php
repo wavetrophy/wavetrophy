@@ -199,7 +199,7 @@ class User extends BaseUser implements UserInterface
 
     public function __toString(): ?string
     {
-        return "{$this->getId()}";
+        return "{$this->getUsername()}";
     }
 
     public function getId(): ?int
