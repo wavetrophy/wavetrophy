@@ -12,15 +12,18 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * User
  *
  * @ORM\Table(name="user", indexes={@ORM\Index(name="fk_user_team1_idx", columns={"team_id"})})
  * @ORM\Entity
+ * @UniqueEntity("email")
  * @ApiResource(
  *     normalizationContext={
  *         "groups"={"user:read"},
@@ -64,6 +67,13 @@ class User extends BaseUser implements UserInterface
      * @Groups({"readable", "user:read"})
      */
     protected $enabled = true;
+
+    /**
+     * @var string
+     * @Assert\Email(message="Email not valid")
+     * @Assert\NotBlank()
+     */
+    protected $email;
 
     /**
      * @var string
