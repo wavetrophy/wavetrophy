@@ -14,6 +14,3 @@ vich_uploader:
       uri_prefix: /media/thumbnails/locations
       upload_destination: '%upload_directory%/thumbnails/locations'
       namer: Vich\UploaderBundle\Naming\UniqidNamer
-      directory_namer:
-        service: Vich\UploaderBundle\Naming\CurrentDateTimeDirectoryNamer
-        options: {date_time_format: 'Y/m/d'}

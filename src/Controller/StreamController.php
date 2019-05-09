@@ -42,9 +42,27 @@ class StreamController extends AbstractController
         try {
             $locations = $this->locationRepository->getLocationsForUser($user);
         } catch (Exception $exception) {
-            $this->logger->warn($exception->getMessage() . "\n" . $exception->getTraceAsString());
+            $this->logger->alert($exception->getMessage() . "\n" . $exception->getTraceAsString());
             return $this->json(['success' => false, 'message' => $exception->getMessage()]);
         }
         return $this->json(['locations' => $locations, 'success' => true]);
+    }
+
+    /**
+     * @Route("/api/users/{user}/stream/{location}", methods={"GET"}, name="api_users_get_stream_location")
+     *
+     * @param string $user
+     *
+     * @return JsonResponse
+     */
+    public function getLocation(string $user, string $location): JsonResponse
+    {
+        try {
+            $location = $this->locationRepository->getLocation($location, $user);
+        } catch (Exception $exception) {
+            $this->logger->alert($exception->getMessage() . "\n" . $exception->getTraceAsString());
+            return $this->json(['success' => false, 'message' => $exception->getMessage()]);
+        }
+        return $this->json(['location' => $location, 'success' => true]);
     }
 }

@@ -36,7 +36,7 @@ class AppFixtures extends Fixture
         $user->setFirstName("Björn");
         $user->setLastName("Pfoster");
         $user->setUsername("bjoern");
-        $user->setEmail("bjoern");
+        $user->setEmail("bjoern.pfoster@example.com");
         $manager->persist($user);
         $user->setPlainPassword("bjoern");
         $user->setHasReceivedWelcomeEmail(true);
@@ -47,13 +47,6 @@ class AppFixtures extends Fixture
 
         $manager->flush();
 
-        $userEmail = new UserEmail();
-        $userEmail->setEmail("bjoern");
-        $userEmail->setIsPublic(true);
-        $userEmail->setUser($user);
-        $userEmail->setCreatedBy($user);
-
-        $user->addEmails($userEmail);
         $user->setPlainPassword("bjoern");
         $user->setEnabled(true);
         $user->setSuperAdmin(true);
@@ -66,7 +59,6 @@ class AppFixtures extends Fixture
         $wave->setCreatedBy($user);
 
         $manager->persist($user);
-        $manager->persist($userEmail);
         $manager->persist($wave);
 
         $lucerne = new Location('Luzern', '47.03892207982464', '8.318022908459511', $wave);
