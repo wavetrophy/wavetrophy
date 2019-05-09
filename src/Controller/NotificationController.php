@@ -79,7 +79,7 @@ class NotificationController extends AbstractController
             if ($data['day'] > 0) {
                 $now = $now->addDays($data['day']);
             }
-            $date = $now->format('Y-m-d[T]H:i:s.0000[Z]');
+            $date = $now->setTimezone('UTC')->format('Y-m-d[T]H:i:s.0000[Z]');
         }
 
         $scheduled = $data['scheduled'] ? "{$data['day']} {$data['time']}" : "Not scheduled";
