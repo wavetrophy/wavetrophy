@@ -27,9 +27,10 @@ class DatabaseService extends FirebaseService
         $snapshot = $query->documents();
         $tokens = [];
         foreach ($snapshot as $document) {
+            $data = $document->data();
             $tokens[] = [
-                'token' => $document->deviceToken(),
-                'platform' => $document->platform(),
+                'token' => array_key_exists('token', $data) ? $data['token'] : null,
+                'platform' => array_key_exists('platform', $data) ? $data['platform'] : null,
             ];
         }
 
