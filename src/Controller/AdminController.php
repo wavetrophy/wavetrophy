@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-
 use App\Entity\Team;
+use App\Entity\Traits\MetaFieldTrait;
 use App\Entity\User;
 use App\Service\Firebase\DatabaseService;
 use App\Service\Firebase\TopicService;
@@ -31,30 +31,37 @@ class AdminController extends EasyAdminController
      * @var WaveService
      */
     private $wave;
+
     /**
      * @var UserService
      */
     private $user;
+
     /**
      * @var QuestionService
      */
     private $question;
+
     /**
      * @var GroupService
      */
     private $group;
+
     /**
      * @var TopicService
      */
     private $topic;
+
     /**
      * @var TokenStorageInterface
      */
     private $storage;
+
     /**
      * @var DatabaseService
      */
     private $firebaseDB;
+
     /**
      * @var LoggerInterface
      */
@@ -128,7 +135,6 @@ class AdminController extends EasyAdminController
                 ];
             }
 
-
             return $this->render(
                 'admin/dashboard.html.twig',
                 ['topics' => $topics, 'dates' => $dates, 'users' => $users]
@@ -149,6 +155,7 @@ class AdminController extends EasyAdminController
         $team->getUsers()->forAll(function ($key, User $user) use ($team, $em) {
             $user->setTeam($team);
             $em->persist($user);
+
             return true;
         });
 
@@ -166,6 +173,7 @@ class AdminController extends EasyAdminController
         $team->getUsers()->forAll(function ($key, User $user) use ($team, $em) {
             $user->setTeam($team);
             $em->persist($user);
+
             return true;
         });
 
@@ -194,19 +202,27 @@ class AdminController extends EasyAdminController
     ) {
         $alias = $this->getAlias($entityClass);
         $query = $this->em->getRepository($entityClass)
-            ->createQueryBuilder($alias)
-            ->where($alias . '.deletedAt IS NULL and ' . $alias . '.createdAt IS NOT NULL');
+            ->createQueryBuilder($alias);
 
-        // The checked aliases arent really required, but its good for debugging to have them...
-        $checkedAliases = [];
-        $checkedAliases[$alias] = true;
-
-        $query = $this->getRecursiveEntityDeletedAtQuery($query, $entityClass, $alias, $checkedAliases);
-        $this->logger->info(
-            "Read query \n\n{query}\n\n with aliases\n{aliases}",
-            ['query' => $query->getDQL(), 'aliases' => json_encode($checkedAliases, JSON_PRETTY_PRINT)]
+        $usingTrait = in_array(
+            MetaFieldTrait::class,
+            array_keys((new \ReflectionClass($entityClass))->getTraits())
         );
 
+        if ($usingTrait) {
+            $query->where($alias . '.deletedAt IS NULL and ' . $alias . '.createdAt IS NOT NULL');
+
+            // The checked aliases arent really required, but its good for debugging to have them...
+            $checkedAliases = [];
+            $checkedAliases[$alias] = true;
+
+            $query = $this->getRecursiveEntityDeletedAtQuery($query, $entityClass, $alias, $checkedAliases);
+            $this->logger->info(
+                "Read query \n\n{query}\n\n with aliases\n{aliases}",
+                ['query' => $query->getDQL(), 'aliases' => json_encode($checkedAliases, JSON_PRETTY_PRINT)]
+            );
+        }
+        
         if (null === $sortDirection || !\in_array(\strtoupper($sortDirection), ['ASC', 'DESC'])) {
             $sortDirection = 'DESC';
         }
@@ -268,6 +284,7 @@ class AdminController extends EasyAdminController
     private function getAlias(string $className)
     {
         $class = str_replace('\\', '_', $className) . uniqid('___');
+
         return strtolower($class);
     }
 
@@ -287,6 +304,7 @@ class AdminController extends EasyAdminController
             // remove all names that are in the map
             return !isset($map[$name]);
         });
+
         return $names;
     }
 }
