@@ -16,7 +16,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
  * Team
  *
  * @ORM\Table(name="team", indexes={@ORM\Index(name="fk_team_group1_idx", columns={"group_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\TeamRespository")
  * @ApiResource(
  *     normalizationContext={
  *         "groups"={"team:read"},
@@ -79,7 +79,7 @@ class Team
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="User", mappedBy="team")
+     * @ORM\OneToMany(targetEntity="User", mappedBy="team", cascade={"persist","remove"})
      * @ApiSubresource(maxDepth=1)
      * @MaxDepth(1)
      * @Groups({"team:read", "readable", "team:edit", "editable"})

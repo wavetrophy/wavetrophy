@@ -4,16 +4,18 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
+use App\Entity\Traits\MetaFieldTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Lodging
  *
  * @ORM\Table(name="lodging", indexes={@ORM\Index(name="fk_lodging_hotel1_idx", columns={"hotel_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\LodgingRepository")
  * @ApiResource(
  *     normalizationContext={
  *         "groups"={"lodging:read"},
@@ -22,9 +24,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     itemOperations={"get"},
  *     collectionOperations={"get"},
  * )
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  */
 class Lodging
 {
+    use MetaFieldTrait;
+    protected $iHaveSetTheSoftDeletedAnnotation = true;
     /**
      * @var int
      *
@@ -47,7 +52,7 @@ class Lodging
     /**
      * @var Hotel
      *
-     * @ORM\ManyToOne(targetEntity="Hotel")
+     * @ORM\ManyToOne(targetEntity="Hotel", inversedBy="lodgings")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="hotel_id", referencedColumnName="id")
      * })
@@ -81,7 +86,7 @@ class Lodging
 
     public function __toString(): ?string
     {
-        return $this->hotel->getName() . " " .  $this->comment;
+        return (string)$this->hotel->getName() . ' lodging of ' . $this->users->count();
     }
 
     public function getId(): ?int

@@ -30,7 +30,7 @@ class QuestionService
      *
      * @return Question[]
      */
-    public function getQuestionsForWave(int $waveId): array
+    public function getQuestionsForWave(?int $waveId): array
     {
         return $this->em->getRepository(Question::class)
             ->getQuestionsForWave($waveId);

@@ -33,7 +33,11 @@ abstract class FirebaseService
      */
     public function __construct(ContainerInterface $container)
     {
-        $user = $container->get('security.token_storage')->getToken()->getUser();
+        $token = $container->get('security.token_storage')->getToken();
+        $user = null;
+        if (!empty($token)) {
+            $user = $token->getUser();
+        }
         $this->currentUser = $user;
 
         $this->serviceAccount = ServiceAccount::fromJsonFile($container->get('service_container')->getParameter('firebase_config_file'));

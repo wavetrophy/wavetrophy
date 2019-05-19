@@ -25,7 +25,7 @@ class GroupRepository extends ServiceEntityRepository
      *
      * @return Group[]
      */
-    public function getByWave(int $waveId)
+    public function getByWave(?int $waveId)
     {
         $query = $this->createQueryBuilder('g');
         $query->innerJoin('g.wave', 'w')

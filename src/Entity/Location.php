@@ -97,11 +97,11 @@ class Location
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="TeamParticipation", mappedBy="location")
+     * @ORM\OneToMany(targetEntity="EventParticipation", mappedBy="location")
      * @ApiSubresource()
      * @Groups({"location:read", "location:edit"})
      */
-    private $teamParticipations;
+    private $eventparticipations;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -231,7 +231,7 @@ class Location
     {
         $this->thumbnailImage = $thumbnailImage;
         if ($thumbnailImage) {
-            $this->setUpdatedAt(new DateTime());
+            $this->setUpdatedAt(new DateTime('now', new \DateTimeZone('europe/zurich')));
         }
     }
 
@@ -254,21 +254,21 @@ class Location
         return $this;
     }
 
-    public function getTeamParticipations(): ?Collection
+    public function geteventparticipations(): ?Collection
     {
-        return $this->teamParticipations;
+        return $this->eventparticipations;
     }
 
-    public function addTeamParticipation(?TeamParticipation $teamParticipation): self
+    public function addeventparticipation(?EventParticipation $eventparticipation): self
     {
-        $this->teamParticipations->add($teamParticipation);
+        $this->eventparticipations->add($eventparticipation);
 
         return $this;
     }
 
-    public function removeTeamParticipation(?TeamParticipation $teamParticipation): self
+    public function removeeventparticipation(?EventParticipation $eventparticipation): self
     {
-        $this->teamParticipations->removeElement($teamParticipation);
+        $this->eventparticipations->removeElement($eventparticipation);
 
         return $this;
     }

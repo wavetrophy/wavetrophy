@@ -5,7 +5,7 @@ namespace App\Repository;
 use App\Entity\Event;
 use App\Entity\Location;
 use App\Entity\Team;
-use App\Entity\TeamParticipation;
+use App\Entity\EventParticipation;
 use App\Entity\User;
 use App\Exception\ResourceNotFoundException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -86,20 +86,20 @@ class LocationRepository extends ServiceEntityRepository
             $loc['arrival'] = $events[0]['start'];
             $loc['departure'] = end($events)['end'];
 
-            $teamParticipations = $location->getTeamParticipations()->getValues();
-            $hasTeamParticipation = false;
-            /** @var TeamParticipation $teamParticipation */
-            foreach ($teamParticipations as $teamParticipation) {
-                $teams = $teamParticipation->getTeams()->getValues();
+            $eventparticipations = $location->geteventparticipations()->getValues();
+            $haseventparticipation = false;
+            /** @var EventParticipation $eventparticipation */
+            foreach ($eventparticipations as $eventparticipation) {
+                $teams = $eventparticipation->getTeams()->getValues();
                 /** @var Team $team */
                 foreach ($teams as $team) {
                     if ($team->getId() === $teamId) {
-                        $hasTeamParticipation = true;
+                        $haseventparticipation = true;
                     }
                 }
-                if ($hasTeamParticipation) {
-                    $loc['arrival'] = $teamParticipation->getArrival()->format('Y-m-d H:i:s') ?: $loc['arrival'];
-                    $loc['departure'] = $teamParticipation->getDeparture()->format('Y-m-d H:i:s') ?: $loc['departure'];
+                if ($haseventparticipation) {
+                    $loc['arrival'] = $eventparticipation->getArrival()->format('Y-m-d H:i:s') ?: $loc['arrival'];
+                    $loc['departure'] = $eventparticipation->getDeparture()->format('Y-m-d H:i:s') ?: $loc['departure'];
                     $loc['must_participate'] = true;
                 }
             }
@@ -172,20 +172,20 @@ class LocationRepository extends ServiceEntityRepository
         $loc['arrival'] = $events[0]['start'];
         $loc['departure'] = end($events)['end'];
 
-        $teamParticipations = $location->getTeamParticipations()->getValues();
-        $hasTeamParticipation = false;
-        /** @var TeamParticipation $teamParticipation */
-        foreach ($teamParticipations as $teamParticipation) {
-            $teams = $teamParticipation->getTeams()->getValues();
+        $eventparticipations = $location->geteventparticipations()->getValues();
+        $haseventparticipation = false;
+        /** @var EventParticipation $eventparticipation */
+        foreach ($eventparticipations as $eventparticipation) {
+            $teams = $eventparticipation->getTeams()->getValues();
             /** @var Team $team */
             foreach ($teams as $team) {
                 if ($team->getId() === $teamId) {
-                    $hasTeamParticipation = true;
+                    $haseventparticipation = true;
                 }
             }
-            if ($hasTeamParticipation) {
-                $loc['arrival'] = $teamParticipation->getArrival()->format('Y-m-d H:i:s') ?: $loc['arrival'];
-                $loc['departure'] = $teamParticipation->getDeparture()->format('Y-m-d H:i:s') ?: $loc['departure'];
+            if ($haseventparticipation) {
+                $loc['arrival'] = $eventparticipation->getArrival()->format('Y-m-d H:i:s') ?: $loc['arrival'];
+                $loc['departure'] = $eventparticipation->getDeparture()->format('Y-m-d H:i:s') ?: $loc['departure'];
                 $loc['must_participate'] = true;
             }
         }

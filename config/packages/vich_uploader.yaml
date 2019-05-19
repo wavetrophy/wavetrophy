@@ -14,3 +14,13 @@ vich_uploader:
       uri_prefix: /media/thumbnails/locations
       upload_destination: '%upload_directory%/thumbnails/locations'
       namer: Vich\UploaderBundle\Naming\UniqidNamer
+
+    hotel_thumbnail:
+      uri_prefix: /media/thumbnails/hotels
+      upload_destination: '%upload_directory%/thumbnails/hotels'
+      namer: Vich\UploaderBundle\Naming\UniqidNamer
+
+    event_thumbnail:
+      uri_prefix: /media/thumbnails/events
+      upload_destination: '%upload_directory%/thumbnails/events'
+      namer: Vich\UploaderBundle\Naming\UniqidNamer

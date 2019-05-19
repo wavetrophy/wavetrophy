@@ -148,7 +148,7 @@ class User extends BaseUser implements UserInterface
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="UserEmail", mappedBy="user", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="UserEmail", mappedBy="user", cascade={"persist","remove"})
      * @ApiSubresource(maxDepth=1)
      * @AtLeastOne()
      * @MaxDepth(1)
@@ -291,7 +291,8 @@ class User extends BaseUser implements UserInterface
 
     public function setMustResetPassword(bool $mustResetPassword): self
     {
-        $this->setPasswordRequestedAt(new DateTime());
+        $this->setPasswordRequestedAt(new DateTime('now',
+            new \DateTimeZone('europe/zurich')));
 
         $this->mustResetPassword = $mustResetPassword;
 

@@ -4,7 +4,9 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\CreateMediaAction;
+use App\Entity\Traits\MetaFieldTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -38,9 +40,13 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *     },
  * )
  * @Vich\Uploadable
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  */
 class Media
 {
+    use MetaFieldTrait;
+    protected $iHaveSetTheSoftDeletedAnnotation = true;
+
     /**
      * @var int
      *

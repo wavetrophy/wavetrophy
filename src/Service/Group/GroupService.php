@@ -30,7 +30,7 @@ class GroupService
      *
      * @return Group[]
      */
-    public function getGroupsForWave(int $waveId)
+    public function getGroupsForWave(?int $waveId)
     {
         return $this->em->getRepository(Group::class)
             ->getByWave($waveId);

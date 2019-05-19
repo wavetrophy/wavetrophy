@@ -12,21 +12,17 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * TeamParticipation
+ * eventparticipation
  *
- * @ORM\Table(name="team_participation",
- *     indexes={
- *          @ORM\Index(name="fk_team_participation_location1_idx", columns={"location_id"})
- *     }
- * )
- * @ORM\Entity
+ * @ORM\Table(name="event_participation")
+ * @ORM\Entity(repositoryClass="App\Repository\EventParticipationRepository")
  * @ApiResource(
  *     normalizationContext={
- *         "groups"={"teamparticipation:read"},
+ *         "groups"={"eventparticipation:read"},
  *         "enable_max_depth"=true,
  *     },
  *     denormalizationContext={
- *         "groups"={"teamparticipation:edit"}
+ *         "groups"={"eventparticipation:edit"}
  *     },
  *     itemOperations={
  *         "get",
@@ -37,7 +33,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * )
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  */
-class TeamParticipation
+class EventParticipation
 {
     use MetaFieldTrait;
     protected $iHaveSetTheSoftDeletedAnnotation = true;
@@ -48,7 +44,7 @@ class TeamParticipation
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @Groups({"teamparticipation:read"})
+     * @Groups({"eventparticipation:read"})
      */
     private $id;
 
@@ -56,7 +52,7 @@ class TeamParticipation
      * @var DateTimeInterface
      *
      * @ORM\Column(name="arrival", type="datetime", nullable=false)
-     * @Groups({"teamparticipation:read", "teamparticipation:edit"})
+     * @Groups({"eventparticipation:read", "eventparticipation:edit"})
      */
     private $arrival;
 
@@ -64,49 +60,49 @@ class TeamParticipation
      * @var DateTimeInterface
      *
      * @ORM\Column(name="departure", type="datetime", length=80, nullable=false)
-     * @Groups({"teamparticipation:read", "teamparticipation:edit"})
+     * @Groups({"eventparticipation:read", "eventparticipation:edit"})
      */
     private $departure;
 
     /**
-     * @var Location
+     * @var Event
      *
-     * @ORM\ManyToOne(targetEntity="Location", inversedBy="teamParticipations")
-     * @ORM\JoinColumn(name="location_id", referencedColumnName="id")
-     * @Groups({"teamparticipation:read", "teamparticipation:edit"})
+     * @ORM\ManyToOne(targetEntity="Event", inversedBy="eventParticipations")
+     * @ORM\JoinColumn(name="event_id", referencedColumnName="id")
+     * @Groups({"eventparticipation:read", "eventparticipation:edit"})
      */
-    private $location;
+    private $event;
 
     /**
      * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="Team", cascade={"persist"})
      * @ORM\JoinTable(name="team_has_participations")
-     * @Groups({"teamparticipation:read", "teamparticipation:edit"})
+     * @Groups({"eventparticipation:read", "eventparticipation:edit"})
      */
     private $teams;
 
     /**
-     * TeamParticipation constructor.
+     * eventparticipation constructor.
      *
      * @param DateTimeInterface|null $arrival
      * @param DateTimeInterface|null $departure
-     * @param Location|null $location
+     * @param Event|null $event
      */
     public function __construct(
         ?DateTimeInterface $arrival = null,
         ?DateTimeInterface $departure = null,
-        ?Location $location = null
+        ?Event $event = null
     ) {
         $this->arrival = $arrival;
         $this->departure = $departure;
-        $this->location = $location;
+        $this->event = $event;
         $this->teams = new ArrayCollection();
     }
 
     public function __toString(): ?string
     {
-        $name = $this->location->getName();
+        $name = $this->event->getName();
         $arrival = $this->arrival->format('d. M. H:i');
         $departure = $this->departure->format('d. M. H:i');
         return "{$name}: {$arrival} - {$departure}";
@@ -141,14 +137,14 @@ class TeamParticipation
         return $this;
     }
 
-    public function getLocation(): ?Location
+    public function getEvent(): ?Event
     {
-        return $this->location;
+        return $this->event;
     }
 
-    public function setLocation(?Location $location): self
+    public function setEvent(?Event $event): self
     {
-        $this->location = $location;
+        $this->event = $event;
 
         return $this;
     }

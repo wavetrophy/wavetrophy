@@ -31,7 +31,7 @@ class UserService
      *
      * @return mixed
      */
-    public function getWaveParticipants(int $waveId)
+    public function getWaveParticipants(?int $waveId)
     {
         return $this->userRepository->findUsersForWave($waveId);
     }

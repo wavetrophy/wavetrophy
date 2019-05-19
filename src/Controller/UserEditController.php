@@ -42,7 +42,8 @@ class UserEditController extends EasyAdminController
                         $query = $repository->createQueryBuilder('ue')
                             ->join('ue.user', 'u')
                             ->andWhere('u.id = :id')
-                            ->andWhere('ue.isPublic = true')
+                            // Disabled because emails wont be shown in user edit
+                            // ->andWhere('ue.isPublic = true')
                             ->setParameter('id', $user->getId());
                         return $query;
                     },
@@ -65,7 +66,8 @@ class UserEditController extends EasyAdminController
                         $query = $repository->createQueryBuilder('up')
                             ->innerJoin('up.user', 'u')
                             ->andWhere('u.id = :id')
-                            ->andWhere('up.isPublic = true')
+                            // Disabled because phonenumbers wont be shown in user edit
+                            // ->andWhere('up.isPublic = true')
                             ->setParameter('id', $user->getId());
                         return $query;
                     },

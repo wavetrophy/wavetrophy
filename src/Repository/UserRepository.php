@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Team;
 use App\Entity\User;
 use App\Entity\UserEmail;
 use App\Exception\ResourceNotFoundException;
@@ -32,7 +33,7 @@ class UserRepository extends ServiceEntityRepository
      *
      * @return mixed
      */
-    public function findUsersForWave(int $waveId)
+    public function findUsersForWave(?int $waveId)
     {
         $query = $this->createQueryBuilder('u');
         $query->join('u.team', 't');

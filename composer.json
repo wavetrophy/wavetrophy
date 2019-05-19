@@ -73,7 +73,8 @@
     "database:drop": "bin/console doctrine:schema:drop --force",
     "database:migrate": "bin/console doctrine:migrations:migrate",
     "database:diff": "bin/console doctrine:migrations:diff",
-    "database:populate": "bin/console doctrine:fixtures:load",
+    "database:populate": "bin/console do:da:drop --force && bin/console do:da:cr && bin/console do:mi:mi -n && bin/console do:fi:lo -n --group=dev",
+    "database:populate:prod": "bin/console do:da:drop --force && bin/console do:da:cr && bin/console do:mi:mi -n && bin/console do:fi:lo -n --group=prod",
     "database:clear": [
       "@database:drop",
       "@database:create",

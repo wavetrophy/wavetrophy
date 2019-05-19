@@ -106,6 +106,24 @@ class Wave
     private $locations;
 
     /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="Hotel", mappedBy="wave")
+     * @ApiSubresource()
+     * @Groups({"wave:read"})
+     */
+    private $hotels;
+
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="Event", mappedBy="wave")
+     * @ApiSubresource()
+     * @Groups({"wave:read"})
+     */
+    private $events;
+
+    /**
      * Wave constructor.
      *
      * @param string|null $name
@@ -125,6 +143,8 @@ class Wave
         $this->end = $end;
         $this->groups = new ArrayCollection();
         $this->locations = new ArrayCollection();
+        $this->hotels = new ArrayCollection();
+        $this->events = new ArrayCollection();
     }
 
     /**
@@ -222,6 +242,44 @@ class Wave
     public function removeLocation(?Location $group): self
     {
         $this->locations->removeElement($group);
+
+        return $this;
+    }
+
+    public function getHotels(): ?Collection
+    {
+        return $this->hotels;
+    }
+
+    public function addHotel(?Hotel $group): self
+    {
+        $this->hotels->add($group);
+
+        return $this;
+    }
+
+    public function removeHotel(?Hotel $group): self
+    {
+        $this->hotels->removeElement($group);
+
+        return $this;
+    }
+
+    public function getEvents(): ?Collection
+    {
+        return $this->events;
+    }
+
+    public function addEvent(?Event $group): self
+    {
+        $this->events->add($group);
+
+        return $this;
+    }
+
+    public function removeEvent(?Event $group): self
+    {
+        $this->events->removeElement($group);
 
         return $this;
     }

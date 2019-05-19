@@ -3,18 +3,24 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Entity\Traits\MetaFieldTrait;
 use DateTime;
 use DateTimeInterface;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
+use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * Event
  *
- * @ORM\Table(name="event", indexes={@ORM\Index(name="fk_event_location1_idx", columns={"location_id"})})
- * @ORM\Entity
+ * @ORM\Table(name="event")
+ * @ORM\Entity(repositoryClass="App\Repository\EventRepository")
  * @ApiResource(
  *     normalizationContext={
  *         "groups"={"event:read"},
@@ -31,6 +37,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     collectionOperations={"get", "post"},
  * )
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
+ * @Vich\Uploadable()
  */
 class Event
 {
@@ -79,40 +86,95 @@ class Event
     private $end;
 
     /**
-     * @var Location
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
+     * @Groups({"editable", "location:edit", "readable", "location:read"})
+     */
+    private $thumbnail;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
+     * @Groups({"editable", "location:edit", "readable", "location:read"})
+     */
+    private $thumbnailUrl;
+
+    /**
+     * @var File
+     * @Vich\UploadableField(mapping="event_thumbnail", fileNameProperty="thumbnail")
+     * @Assert\File()
+     * @Groups({"editable", "location:edit", "readable", "location:read"})
+     */
+    private $thumbnailImage;
+
+    /**
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Location",inversedBy="events")
-     * @ORM\JoinColumn(name="location_id", referencedColumnName="id")
+     * @ORM\Column(name="lon", type="string", length=20, nullable=false)
      * @Groups({"event:read", "event:edit"})
      */
-    private $location;
+    private $lat;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="lat", type="string", length=20, nullable=false)
+     * @Groups({"event:read", "even:edit"})
+     */
+    private $lon;
+
+    /**
+     * @var Wave|null
+     *
+     * @ORM\ManyToOne(targetEntity="Wave", inversedBy="events")
+     * @ORM\JoinColumn(name="wave_id", referencedColumnName="id")
+     * @Groups({"event:read", "event:edit"})
+     */
+    private $wave;
+
+
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="EventParticipation", mappedBy="event", cascade={"all"})
+     * @ApiSubresource(maxDepth=1)
+     * @MaxDepth(1)
+     * @Groups({"event:read", "event:edit"})
+     */
+    private $participations;
 
     /**
      * Event constructor.
      *
      * @param string|null $name
      * @param string|null $description
+     * @param Wave|null $wave
      * @param DateTimeInterface|null $start
      * @param DateTimeInterface|null $end
-     * @param Location|null $location
+     * @param string|null $lat
+     * @param string|null $lon
      */
     public function __construct(
         ?string $name = null,
         ?string $description = null,
+        ?Wave $wave = null,
         ?DateTimeInterface $start = null,
         ?DateTimeInterface $end = null,
-        ?Location $location = null
+        ?string $lat = null,
+        ?string $lon = null
     ) {
         $this->name = $name;
         $this->description = $description;
+        $this->wave = $wave;
         $this->start = $start;
         $this->end = $end;
-        $this->location = $location;
+        $this->lat = $lat;
+        $this->lon = $lon;
     }
 
     public function __toString(): ?string
     {
-        return $this->name;
+        return (string)$this->name;
     }
 
     public function getId(): ?int
@@ -168,14 +230,105 @@ class Event
         return $this;
     }
 
-    public function getLocation(): ?Location
+    public function getThumbnail(): ?string
     {
-        return $this->location;
+        return $this->thumbnail;
     }
 
-    public function setLocation(?Location $location): self
+    public function setThumbnail(?string $thumbnail): self
     {
-        $this->location = $location;
+        $this->thumbnail = $thumbnail;
+
+        return $this;
+    }
+
+    public function getThumbnailUrl(): string
+    {
+        return $this->thumbnailUrl;
+    }
+
+    public function setThumbnailUrl(?string $thumbnailPath): self
+    {
+        $this->thumbnailUrl = $thumbnailPath;
+
+        return $this;
+    }
+
+    public function getThumbnailImage(): ?File
+    {
+        return $this->thumbnailImage;
+    }
+
+    public function setThumbnailImage(?File $thumbnailImage): self
+    {
+        $this->thumbnailImage = $thumbnailImage;
+
+        return $this;
+    }
+
+    public function setLocation(?string $location): self
+    {
+        $str = explode(',', $location);
+        $this->setLat($str[0]);
+        $this->setLon($str[1]);
+
+        return $this;
+    }
+
+    public function getLocation(): ?string
+    {
+        return $this->getLat() . "," . $this->getLon();
+    }
+
+    public function getLat(): string
+    {
+        return $this->lat;
+    }
+
+    public function setLat(string $lat): self
+    {
+        $this->lat = $lat;
+
+        return $this;
+    }
+
+    public function getLon(): string
+    {
+        return $this->lon;
+    }
+
+    public function setLon(string $lon): self
+    {
+        $this->lon = $lon;
+
+        return $this;
+    }
+
+    public function getWave(): ?Wave
+    {
+        return $this->wave;
+    }
+
+    public function setWave(?Wave $wave): void
+    {
+        $this->wave = $wave;
+    }
+
+    public function getParticipations(): Collection
+    {
+        return $this->participations;
+    }
+
+    public function addParticipation(?EventParticipation $participation): self
+    {
+        $this->participations->add($participation);
+
+        return $this;
+    }
+
+    public function removeParticipation(?EventParticipation $participation): self
+    {
+        $this->participations->removeElement($participation);
 
         return $this;
     }

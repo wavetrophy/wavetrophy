@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Entity\Answer;
+use App\Entity\Hotel;
 use App\Entity\Media;
 use App\Entity\User;
 use App\Entity\UserEmail;
@@ -23,11 +24,11 @@ class OnFlushListener
     /**
      * @var
      */
-    private $uriPrefix;
+    private $mediaUriPrefix;
     /**
      * @var
      */
-    private $uploadDir;
+    private $mediaUploadDir;
     /**
      * @var SVGProfilePicture
      */
@@ -36,6 +37,8 @@ class OnFlushListener
      * @var NotificationService
      */
     private $notifications;
+    private $hotelUriPrefix;
+    private $hotelUploadDir;
 
     /**
      * OnFlushListener constructor.
@@ -49,8 +52,10 @@ class OnFlushListener
         SVGProfilePicture $profilePictureGenerator,
         NotificationService $notifications
     ) {
-        $this->uriPrefix = $data['media']['uri_prefix'];
-        $this->uploadDir = $data['media']['upload_destination'];
+        $this->mediaUriPrefix = $data['media']['uri_prefix'];
+        $this->mediaUploadDir = $data['media']['upload_destination'];
+        $this->hotelUriPrefix = $data['hotel_thumbnail']['uri_prefix'];
+        $this->hotelUploadDir = $data['hotel_thumbnail']['upload_destination'];
         $this->profilePictureGenerator = $profilePictureGenerator;
         $this->notifications = $notifications;
     }
@@ -100,6 +105,9 @@ class OnFlushListener
             }
             if ($entity instanceof Answer) {
                 $this->handleAnswer($entity, $em, $method);
+            }
+            if ($entity instanceof Hotel) {
+                $this->handleHotel($entity, $em);
             }
         }
     }
@@ -180,6 +188,15 @@ class OnFlushListener
         }
     }
 
+    public function handleHotel(Hotel $entity, EntityManager $em)
+    {
+        $fileName = $entity->getThumbnailImage()->getRealPath();
+        $url = str_replace($this->hotelUploadDir, $this->hotelUriPrefix, $fileName);
+        $path = dirname($url);
+        $entity->setThumbnailUrl($path);
+        $this->persist($entity, $em);
+    }
+
     /**
      * Handle user entity.
      *
@@ -201,7 +218,7 @@ class OnFlushListener
     private function updateMedia(Media $entity): Media
     {
         $fileName = $entity->getFile()->getRealPath();
-        $url = str_replace($this->uploadDir, $this->uriPrefix, $fileName);
+        $url = str_replace($this->mediaUploadDir, $this->mediaUriPrefix, $fileName);
         $path = dirname($url);
         $entity->setPath($path);
         $entity->setUrl($url);

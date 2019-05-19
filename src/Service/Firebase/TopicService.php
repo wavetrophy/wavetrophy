@@ -17,7 +17,7 @@ class TopicService
      *
      * @return array
      */
-    public function getTopics(int $waveId, array $groups, array $questions)
+    public function getTopics(?int $waveId, ?array $groups, ?array $questions)
     {
         $topics = [
             'wave' => ['name' => 'current WAVE', 'key' => 'wave-' . $waveId],

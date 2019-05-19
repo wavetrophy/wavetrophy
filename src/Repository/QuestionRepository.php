@@ -26,7 +26,7 @@ class QuestionRepository extends ServiceEntityRepository
      *
      * @return Question[]
      */
-    public function getQuestionsForWave(int $waveId): array
+    public function getQuestionsForWave(?int $waveId): array
     {
         $query = $this->createQueryBuilder('q');
         $query->innerJoin('q.group', 'g')

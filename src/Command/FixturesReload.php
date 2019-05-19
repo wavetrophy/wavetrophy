@@ -17,7 +17,7 @@ class FixturesReload extends Command
     {
         $this
             // the name of the command (the part after "bin/console")
-            ->setName('doctrine:fixtures:reload')
+            ->setName('reload-fixtures')
             // the short description shown while running "php bin/console list"
             ->setDescription('Drop/Create Schema and load Fixtures ....')
             // the full command description shown when running the command with

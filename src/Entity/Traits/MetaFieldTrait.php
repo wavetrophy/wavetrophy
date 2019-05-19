@@ -160,6 +160,6 @@ trait MetaFieldTrait
 
     public function delete()
     {
-        $this->setDeletedAt(new DateTime());
+        $this->setDeletedAt(new DateTime('now', new \DateTimeZone('europe/zurich')));
     }
 }

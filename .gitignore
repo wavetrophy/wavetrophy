@@ -25,3 +25,4 @@ yarn-error.log
 bin/deploy.sh
 /public/media
 /public/img
+/site

@@ -2,7 +2,7 @@ easy_admin:
   site_name: 'WAVE Trophy App'
   design:
     form_theme:
-      - '@EasyAdmin/form/bootstrap_4.html.twig'
+      #      - '@EasyAdmin/form/bootstrap_4.html.twig'
       # the following Twig template can be located anywhere in the application.
       # it can also be added to the twig.form_themes option to use it in the
       # entire application, not only the backend
@@ -18,22 +18,19 @@ easy_admin:
       - label: 'Wave'
         children:
           - { label: 'Wave', entity: 'Wave' }
-          - { label: 'Location', entity: 'Location' }
-          - { label: ' - Event', entity: 'Event' }
+          # - { label: 'Location', entity: 'Location' }
           - { label: 'Group', entity: 'Group' }
           - { label: 'Team', entity: 'Team' }
-          - { label: ' - Team Participation', entity: 'TeamParticipation' }
+          - { label: 'Events', entity: 'Event' }
           - { label: 'Hotel', entity: 'Hotel' }
-          - { label: 'Lodging', entity: 'Lodging' }
+        # - { label: 'Lodging', entity: 'Lodging' }
 
   entities:
 
     Wave:
       class: App\Entity\Wave
       list:
-        dql_filter: 'entity.deletedAt is NULL'
         fields:
-          - 'id'
           - 'name'
           - 'country'
           - 'start'
@@ -45,34 +42,32 @@ easy_admin:
           - 'start'
           - 'end'
 
-    Location:
-      class: App\Entity\Location
-      list:
-        dql_filter: 'entity.deletedAt is NULL'
-        fields:
-          - 'id'
-          - 'name'
-          - 'wave'
-      form:
-        fields:
-          - { property: 'thumbnailImage', type: 'vich_image' }
-          - 'name'
-          - 'wave'
-          - { property: 'location' , type_options: { block_name: 'selection' } }
-
-      new:
-        fields:
-          - { property: 'thumbnailImage', type: 'vich_image', type_options: { required: false }}
-      edit:
-        fields:
-          - { property: 'thumbnailImage', type: 'vich_image', type_options: { required: false }}
+    # Location:
+    #   class: App\Entity\Location
+    #   list:
+    #     dql_filter: 'entity.deletedAt is NULL'
+    #     fields:
+    #       - 'name'
+    #       - 'wave'
+    #   form:
+    #     fields:
+    #       - { property: 'thumbnailImage', type: 'vich_image' }
+    #       - 'name'
+    #       - 'wave'
+    #       - { property: 'location' , type_options: { block_name: 'selection' } }
+    #
+    #    new:
+    #      fields:
+    #        - { property: 'thumbnailImage', type: 'vich_image', type_options: { required: false }}
+    #    edit:
+    #      fields:
+    #        - { property: 'thumbnailImage', type: 'vich_image', type_options: { required: false }}
 
     Event:
       class: App\Entity\Event
       list:
         dql_filter: 'entity.deletedAt is NULL'
         fields:
-          - 'id'
           - 'name'
           - 'description'
           - 'start'
@@ -91,7 +86,6 @@ easy_admin:
       list:
         dql_filter: 'entity.deletedAt is NULL'
         fields:
-          - 'id'
           - 'name'
           - 'wave'
       form:
@@ -104,40 +98,30 @@ easy_admin:
       list:
         dql_filter: 'entity.deletedAt is NULL'
         fields:
-          - 'id'
           - 'name'
-          - 'breakfastIncluded'
-          - 'lastCheckIn'
-          - 'comment'
-          - 'location'
-      form:
-        fields:
-          - 'name'
-          - 'breakfastIncluded'
-          - 'lastCheckIn'
-          - 'comment'
-          - 'location'
+          - 'checkIn'
+          - 'checkOut'
+        # Form is defined in AdminController
 
-    Lodging:
-      class: App\Entity\Lodging
-      list:
-        fields:
-          - 'id'
-          - 'hotel'
-          - 'comment'
-          - 'users'
-      form:
-        fields:
-          - 'comment'
-          - 'hotel'
-          - 'users'
+    # Hide this due to much information for louis :)
+    # Lodging:
+    #   class: App\Entity\Lodging
+    #   list:
+    #     fields:
+    #       - 'hotel'
+    #       - 'comment'
+    #       - 'users'
+    #   form:
+    #     fields:
+    #       - 'comment'
+    #       - 'hotel'
+    #       - 'users'
 
     Team:
       class: App\Entity\Team
       list:
         dql_filter: 'entity.deletedAt is NULL'
         fields:
-          - 'id'
           - 'name'
           - 'startNumber'
           - 'group'
@@ -149,12 +133,11 @@ easy_admin:
           - 'group'
           - 'users'
 
-    TeamParticipation:
-      class: App\Entity\TeamParticipation
+    eventparticipation:
+      class: App\Entity\EventParticipation
       list:
         dql_filter: 'entity.deletedAt is NULL'
         fields:
-          - 'id'
           - 'arrival'
           - 'departure'
           - 'location'
@@ -171,7 +154,6 @@ easy_admin:
       list:
         dql_filter: 'entity.deletedAt IS NULL'
         fields:
-          - 'id'
           - 'email'
           - 'firstName'
           - 'lastName'
@@ -182,6 +164,7 @@ easy_admin:
           - 'firstName'
           - 'lastName'
           - 'team'
+          - { property: 'plainPassword', type: 'password', type_options: { required: false } }
       edit:
         fields:
           - '-email'
@@ -192,7 +175,6 @@ easy_admin:
       list:
         dql_filter: 'entity.deletedAt is NULL'
         fields:
-          - 'id'
           - 'email'
           - 'isPublic'
           - 'user'
@@ -209,7 +191,6 @@ easy_admin:
       list:
         dql_filter: 'entity.deletedAt is NULL'
         fields:
-          - 'id'
           - 'countryCode'
           - 'phonenumber'
           - 'isPublic'
