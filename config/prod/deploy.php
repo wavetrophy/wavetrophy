@@ -57,6 +57,7 @@ return new class extends DefaultDeployer
         $this->runRemote('{{ console_bin }} cache:clear');
         $this->log('Migrating database');
         $this->runRemote('{{ console_bin }} doctrine:migrations:migrate --em=migrations');
+        $this->runRemote('ln -s {{ project_dir }}/site {{ deploy_dir }}/../wavetrophy_docs/site');
         $this->log("The deployment has finished.");
     }
 };
