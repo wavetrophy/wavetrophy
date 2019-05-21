@@ -382,8 +382,6 @@ trait AdminEventTrait
         if (isset($teamData['arrival']) && !empty($teamData['arrival'])) {
             list($hour, $minute) = explode(':', $teamData['arrival'], 2);
             $arrival->setTime($hour, $minute);
-        } else {
-            $arrival = null;
         }
         return $arrival;
     }
@@ -401,8 +399,6 @@ trait AdminEventTrait
         if (isset($teamData['departure']) && !empty($teamData['departure'])) {
             list($hour, $minute) = explode(':', $teamData['departure'], 2);
             $departure->setTime($hour, $minute);
-        } else {
-            $departure = null;
         }
         return $departure;
     }
