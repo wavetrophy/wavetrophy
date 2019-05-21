@@ -24,7 +24,7 @@ easy_admin:
           - { label: 'Events', entity: 'Event' }
           - { label: 'Hotel', entity: 'Hotel' }
         # - { label: 'Lodging', entity: 'Lodging' }
-      - { label: 'Docs', url: '/docs/index.html' }
+      - { label: 'Docs', url: 'https://docs.wavetrophy.com' }
 
 
   entities:
