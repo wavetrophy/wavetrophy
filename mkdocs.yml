@@ -1,0 +1,4 @@
+site_name: WAVETROPHY App Documentation
+theme: readthedocs
+site_dir: public/docs
+

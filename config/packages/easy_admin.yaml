@@ -24,6 +24,8 @@ easy_admin:
           - { label: 'Events', entity: 'Event' }
           - { label: 'Hotel', entity: 'Hotel' }
         # - { label: 'Lodging', entity: 'Lodging' }
+      - { label: 'Docs', url: '/docs/index.html' }
+
 
   entities:
 
@@ -164,11 +166,11 @@ easy_admin:
           - 'firstName'
           - 'lastName'
           - 'team'
-          - { property: 'plainPassword', type: 'password', type_options: { required: false } }
       edit:
         fields:
           - '-email'
           - 'emails'
+          - { property: 'plainPassword', type: 'password', type_options: { required: false } }
 
     UserEmail:
       class: App\Entity\UserEmail
