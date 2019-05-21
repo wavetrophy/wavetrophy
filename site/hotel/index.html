@@ -7,16 +7,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   
-  <link rel="shortcut icon" href="img/favicon.ico">
-  <title>WAVETROPHY App Documentation</title>
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Hotels - WAVETROPHY App Documentation</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
-  <link rel="stylesheet" href="css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
   
-  <script src="js/jquery-2.1.1.min.js" defer></script>
-  <script src="js/modernizr-2.8.3.min.js" defer></script>
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Hotels";
+    var mkdocs_page_input_path = "hotel/index.md";
+    var mkdocs_page_url = "/hotel/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script> 
   
@@ -29,9 +36,9 @@
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
       <div class="wy-side-nav-search">
-        <a href="." class="icon icon-home"> WAVETROPHY App Documentation</a>
+        <a href=".." class="icon icon-home"> WAVETROPHY App Documentation</a>
         <div role="search">
-  <form id ="rtd-search-form" class="wy-form" action="/search.html" method="get">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
   </form>
 </div>
@@ -43,7 +50,7 @@
           
             <li class="toctree-l1">
 		
-    <a class="" href=".">Welcome to the Docs</a>
+    <a class="" href="..">Welcome to the Docs</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -52,7 +59,7 @@
     <ul class="subnav">
                 <li class="">
                     
-    <a class="" href="authentification/">Authentification</a>
+    <a class="" href="../authentification/">Authentification</a>
                 </li>
     </ul>
 	    </li>
@@ -63,7 +70,7 @@
     <ul class="subnav">
                 <li class="">
                     
-    <a class="" href="event/">Events</a>
+    <a class="" href="../event/">Events</a>
                 </li>
     </ul>
 	    </li>
@@ -74,7 +81,7 @@
     <ul class="subnav">
                 <li class="">
                     
-    <a class="" href="group/">Groups</a>
+    <a class="" href="../group/">Groups</a>
                 </li>
     </ul>
 	    </li>
@@ -83,9 +90,25 @@
 		
     <span class="caption-text">Hotel</span>
     <ul class="subnav">
-                <li class="">
+                <li class=" current">
                     
-    <a class="" href="hotel/">Hotels</a>
+    <a class="current" href="./">Hotels</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#hotels">Hotels</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#create">Create</a></li>
+        
+            <li><a class="toctree-l4" href="#edit">Edit</a></li>
+        
+            <li><a class="toctree-l4" href="#delete">Delete</a></li>
+        
+        </ul>
+    
+
+    </ul>
                 </li>
     </ul>
 	    </li>
@@ -96,7 +119,7 @@
     <ul class="subnav">
                 <li class="">
                     
-    <a class="" href="team/">Teams</a>
+    <a class="" href="../team/">Teams</a>
                 </li>
     </ul>
 	    </li>
@@ -107,15 +130,15 @@
     <ul class="subnav">
                 <li class="">
                     
-    <a class="" href="user/">Users</a>
+    <a class="" href="../user/">Users</a>
                 </li>
                 <li class="">
                     
-    <a class="" href="user/email/">User Emails</a>
+    <a class="" href="../user/email/">User Emails</a>
                 </li>
                 <li class="">
                     
-    <a class="" href="user/phonenumber/">User Phonenumbers</a>
+    <a class="" href="../user/phonenumber/">User Phonenumbers</a>
                 </li>
     </ul>
 	    </li>
@@ -126,7 +149,7 @@
     <ul class="subnav">
                 <li class="">
                     
-    <a class="" href="wave/">WAVEs</a>
+    <a class="" href="../wave/">WAVEs</a>
                 </li>
     </ul>
 	    </li>
@@ -141,7 +164,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href=".">WAVETROPHY App Documentation</a>
+        <a href="..">WAVETROPHY App Documentation</a>
       </nav>
 
       
@@ -149,9 +172,15 @@
         <div class="rst-content">
           <div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
-    <li><a href=".">Docs</a> &raquo;</li>
+    <li><a href="..">Docs</a> &raquo;</li>
     
+      
+        
+          <li>Hotel &raquo;</li>
+        
+      
     
+    <li>Hotels</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -161,15 +190,27 @@
           <div role="main">
             <div class="section">
               
-
-  <h1 id="404-page-not-found">404</h1>
-
-  <p><strong>Page not found</strong></p>
-
-
+                <h1 id="hotels">Hotels</h1>
+<p>TODO</p>
+<h2 id="create">Create</h2>
+<p>TODO</p>
+<h2 id="edit">Edit</h2>
+<p>TODO</p>
+<h2 id="delete">Delete</h2>
+<p>TODO</p>
+              
             </div>
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../team/" class="btn btn-neutral float-right" title="Teams">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../group/" class="btn btn-neutral" title="Groups"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -193,12 +234,16 @@
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
+        <span><a href="../group/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../team/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
-    <script>var base_url = '';</script>
-    <script src="js/theme.js" defer></script>
-      <script src="search/main.js" defer></script>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
 
 </body>
 </html>

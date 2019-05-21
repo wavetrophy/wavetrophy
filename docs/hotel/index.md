@@ -1,4 +1,4 @@
-# User Emails
+# Hotels
 
 TODO
 

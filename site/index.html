@@ -57,6 +57,8 @@
     
         <ul>
         
+            <li><a class="toctree-l3" href="#usage">Usage</a></li>
+        
             <li><a class="toctree-l3" href="#contacts">Contacts</a></li>
         
         </ul>
@@ -78,6 +80,39 @@
           
             <li class="toctree-l1">
 		
+    <span class="caption-text">Event</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="event/">Events</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Group</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="group/">Groups</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Hotel</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="hotel/">Hotels</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
     <span class="caption-text">Team</span>
     <ul class="subnav">
                 <li class="">
@@ -93,11 +128,26 @@
     <ul class="subnav">
                 <li class="">
                     
-    <a class="" href="user/">User</a>
+    <a class="" href="user/">Users</a>
                 </li>
                 <li class="">
                     
-    <a class="" href="user/email/">User Email</a>
+    <a class="" href="user/email/">User Emails</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="user/phonenumber/">User Phonenumbers</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Wave</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="wave/">WAVEs</a>
                 </li>
     </ul>
 	    </li>
@@ -139,6 +189,36 @@
 The official website is <a href="https://wavetrophy.com">wavetrophy.com</a>.
 All source code is open source an can be found on <a href="https://github.com/wavetrophy">GitHub</a>. 
 The corresponding mobile application can also be found there.</p>
+<h2 id="usage">Usage</h2>
+<p>The WAVETROPHY App is developed to assist a tour manager with a WAVETROPHY and replace the 
+old PDF roadbook.</p>
+<p>The structure of the data is like shown below</p>
+<pre><code>| WAVETROPHY
+└──_ Groups
+   └──_ Teams
+      ├ ─ Users
+      ├ ─ Hotel
+      └ ─ Event
+</code></pre>
+
+<p>This structure in words:</p>
+<ul>
+<li>A WAVETROPHY is the root of everything.</li>
+<li>A Group is always connected to a WAVETROPHY</li>
+<li>A Team is always connected to a Group</li>
+<li>A User might be connected to a team</li>
+<li>A Hotel might be connected to a team (also possible to connect to a user, but only on request to <a href="#technical-contact">technical contact</a>)</li>
+<li>An Event might be connected to a team</li>
+</ul>
+<p>To insert the data properly, it is recommended to insert the records in the following order</p>
+<ol>
+<li>Create a <a href="wave/#create">WAVE</a></li>
+<li>Create all <a href="user/#create">Users</a></li>
+<li>Create all <a href="group/#create">Groups</a></li>
+<li>Create all <a href="team/#create">Teams</a></li>
+<li>Create all <a href="event/#create">Events</a></li>
+<li>Create all <a href="hotel/#create">Hotels</a></li>
+</ol>
 <h2 id="contacts">Contacts</h2>
 <h3 id="owner">Owner</h3>
 <p>Louis Palmer
@@ -194,5 +274,5 @@ The corresponding mobile application can also be found there.</p>
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2019-05-21 17:53:41
+Build Date UTC : 2019-05-21 20:19:20
 -->

@@ -11,6 +11,21 @@
      <changefreq>daily</changefreq>
     </url>
     <url>
+     <loc>https://docs.wavetrophy.com/event/</loc>
+     <lastmod>2019-05-21</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://docs.wavetrophy.com/group/</loc>
+     <lastmod>2019-05-21</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://docs.wavetrophy.com/hotel/</loc>
+     <lastmod>2019-05-21</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
      <loc>https://docs.wavetrophy.com/team/</loc>
      <lastmod>2019-05-21</lastmod>
      <changefreq>daily</changefreq>
@@ -22,6 +37,16 @@
     </url>
     <url>
      <loc>https://docs.wavetrophy.com/user/email/</loc>
+     <lastmod>2019-05-21</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://docs.wavetrophy.com/user/phonenumber/</loc>
+     <lastmod>2019-05-21</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://docs.wavetrophy.com/wave/</loc>
      <lastmod>2019-05-21</lastmod>
      <changefreq>daily</changefreq>
     </url>
