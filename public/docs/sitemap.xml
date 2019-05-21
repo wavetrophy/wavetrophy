@@ -1,17 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-     <loc>None</loc>
+     <loc>https://app.wavetrophy.com/docs/index.html</loc>
      <lastmod>2019-05-21</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>None</loc>
+     <loc>https://app.wavetrophy.com/docs/authentification/index.html</loc>
      <lastmod>2019-05-21</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>None</loc>
+     <loc>https://app.wavetrophy.com/docs/team/index.html</loc>
+     <lastmod>2019-05-21</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://app.wavetrophy.com/docs/user/index.html</loc>
+     <lastmod>2019-05-21</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://app.wavetrophy.com/docs/user/email.html</loc>
      <lastmod>2019-05-21</lastmod>
      <changefreq>daily</changefreq>
     </url>

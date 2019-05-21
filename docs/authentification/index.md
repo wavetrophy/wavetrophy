@@ -20,4 +20,4 @@ To change your password (or any password of any user), you have to go to the [ed
 enter a new password in the "Plain Password" field. Then click update. If you changed your password, it is recommended to 
 immediately [Logout](#logout) and [login](#login) again.
 
-[authentification.logout]: ./dashboard.logout.png "Dashboard"
+[authentification.logout]: dashboard.logout.png "Dashboard"

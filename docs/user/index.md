@@ -37,9 +37,9 @@ This means, that you have to create one first, before you can add a team here.
 ## Edit
 ## Delete
 
-[user.navigation]: ./user.navigation.png "Navigate to users"
-[user.dashboard]: ./user.dashboard.png "User dashboard"
-[user.add]: ./user.add.png "Add user"
-[user.add.new]: ./user.add.new.png "User form"
-[user.add.form]: ./user.add.form.png "User form"
-[user.add.finished]: ./user.add.finished.png "Added user"
+[user.navigation]: user.navigation.png "Navigate to users"
+[user.dashboard]: user.dashboard.png "User dashboard"
+[user.add]: user.add.png "Add user"
+[user.add.new]: user.add.new.png "User form"
+[user.add.form]: user.add.form.png "User form"
+[user.add.finished]: user.add.finished.png "Added user"
