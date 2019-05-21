@@ -49,7 +49,6 @@ return new class extends DefaultDeployer
         $this->runRemote('cp {{ deploy_dir }}/repo/.env {{ project_dir }} 2>/dev/null');
         $this->runRemote('cp {{ deploy_dir }}/shared/.env.local {{ project_dir }} 2>/dev/null');
         $this->runRemote('cp -r {{ deploy_dir }}/shared/config {{ project_dir }}/config 2>/dev/null');
-        $this->runRemote('cp -r {{ project_dir }}//site {{ deploy_dir }}/../wavetrophy_docs/ 2>/dev/null');
     }
 
     // run some local or remote commands after the deployment is finished
