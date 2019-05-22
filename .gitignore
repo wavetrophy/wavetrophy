@@ -25,3 +25,5 @@ yarn-error.log
 bin/deploy.sh
 /public/media
 /public/img
+# Maybe uncomment this.
+/src/Command/VersionTagCommand

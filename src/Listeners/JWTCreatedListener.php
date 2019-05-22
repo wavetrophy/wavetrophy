@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Repository\WaveRepository;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
 use Psr\Log\LoggerInterface;
+use Shivas\VersioningBundle\Service\VersionManager;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -26,20 +27,27 @@ class JWTCreatedListener
      * @var LoggerInterface
      */
     private $logger;
+    /**
+     * @var VersionManager
+     */
+    private $manager;
 
     /**
      * @param RequestStack $requestStack
      * @param WaveRepository $wave
      * @param LoggerInterface $logger
+     * @param VersionManager $manager
      */
     public function __construct(
         RequestStack $requestStack,
         WaveRepository $wave,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        VersionManager $manager
     ) {
         $this->requestStack = $requestStack;
         $this->wave = $wave;
         $this->logger = $logger;
+        $this->manager = $manager;
     }
 
     /**
@@ -67,6 +75,7 @@ class JWTCreatedListener
         $payload['user_id'] = $user->getId();
         $payload['profile_picture'] = $profilePicture;
         $payload['current_wave'] = $this->wave->getCurrentWave();
+        $payload['version'] = $this->manager->getVersion();
         $payload['locale'] = [
             'short' => mb_substr($locale, 0, 2),
             'long' => $locale,
