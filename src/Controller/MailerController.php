@@ -42,7 +42,7 @@ class MailerController extends AbstractController
             $data['users'][] = [
                 'first_name' => $user->getFirstName(),
                 'last_name' => $user->getLastName(),
-                'email' => $user->getEmail()->getEmail(),
+                'email' => $user->getEmail(),
             ];
         }
         $data['success'] = true;
