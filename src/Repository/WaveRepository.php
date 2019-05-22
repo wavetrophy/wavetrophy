@@ -31,15 +31,15 @@ class WaveRepository extends ServiceEntityRepository
      *
      * @return Wave|null
      */
-    public function getCurrentWave()
+    public function getCurrentWave(): ?Wave
     {
         $result = $this->createQueryBuilder('w')
-            ->select('w.id', 'w.start', 'w.end', 'w.name', 'w.country')
             ->orderBy('w.start')
             ->setMaxResults(1)
             ->getQuery()
-            ->getOneOrNullResult();
-        return $result;
+            ->getResult();
+
+        return !empty($result) ? $result[0] : null;
     }
 
     public function getContacts($waveId)

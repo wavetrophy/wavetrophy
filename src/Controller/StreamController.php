@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
-use App\Repository\LocationRepository;
+use App\Entity\User;
+use App\Repository\EventRepository;
+use App\Repository\HotelRepository;
+use App\Repository\WaveRepository;
 use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,38 +17,49 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class StreamController extends AbstractController
 {
-    private $locationRepository;
-
+    private $eventRepository;
     private $logger;
+    private $hotelRepository;
+    private $waveRepository;
 
     /**
      * StreamController constructor.
      *
-     * @param LocationRepository $locationRepository
+     * @param EventRepository $locationRepository
+     * @param HotelRepository $hotelRepository
+     * @param WaveRepository $waveRepository
      * @param LoggerInterface $logger
      */
-    public function __construct(LocationRepository $locationRepository, LoggerInterface $logger)
-    {
-        $this->locationRepository = $locationRepository;
+    public function __construct(
+        EventRepository $locationRepository,
+        HotelRepository $hotelRepository,
+        WaveRepository $waveRepository,
+        LoggerInterface $logger
+    ) {
+        $this->eventRepository = $locationRepository;
+        $this->hotelRepository = $hotelRepository;
+        $this->waveRepository = $waveRepository;
         $this->logger = $logger;
     }
 
     /**
      * @Route("/api/users/{user}/stream", methods={"GET"}, name="api_users_get_stream")
      *
-     * @param string $user
+     * @param User $user
      *
      * @return JsonResponse
      */
-    public function getStream(string $user): JsonResponse
+    public function getStream(User $user): JsonResponse
     {
+        $currentWave = $this->waveRepository->getCurrentWave();
         try {
-            $locations = $this->locationRepository->getLocationsForUser($user);
+            $events = $this->eventRepository->getEventsForUser($user, $currentWave);
+            $hotels = $this->hotelRepository->getHotelsForUser($user, $currentWave);
         } catch (Exception $exception) {
             $this->logger->alert($exception->getMessage() . "\n" . $exception->getTraceAsString());
             return $this->json(['success' => false, 'message' => $exception->getMessage()]);
         }
-        return $this->json(['locations' => $locations, 'success' => true]);
+        return $this->json(['events' => $events, 'hotels' => $hotels, 'success' => true]);
     }
 
     /**
@@ -58,7 +72,7 @@ class StreamController extends AbstractController
     public function getLocation(string $user, string $location): JsonResponse
     {
         try {
-            $location = $this->locationRepository->getLocation($location, $user);
+            $location = $this->eventRepository->getLocation($location, $user);
         } catch (Exception $exception) {
             $this->logger->alert($exception->getMessage() . "\n" . $exception->getTraceAsString());
             return $this->json(['success' => false, 'message' => $exception->getMessage()]);

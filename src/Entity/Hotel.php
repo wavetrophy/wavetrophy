@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Moment\Moment;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
@@ -74,7 +75,6 @@ class Hotel
      * @var \DateTime|null
      *
      * @ORM\Column(name="check_in", type="datetime", nullable=false)
-
      * @Groups({"hotel:read", "hotel:edit"})
      */
     private $checkIn;
@@ -216,6 +216,11 @@ class Hotel
         return $this->checkIn;
     }
 
+    public function getCheckInAsMoment(): ?Moment
+    {
+        return $this->checkIn ? new Moment($this->checkIn->format('Y-m-d H:i:s'), 'UTC') : null;
+    }
+
     public function setCheckIn(?DateTimeInterface $checkIn): self
     {
         $this->checkIn = $checkIn;
@@ -228,13 +233,18 @@ class Hotel
         return $this->checkOut;
     }
 
+    public function getCheckOutAsMoment(): ?Moment
+    {
+        return $this->checkOut ? new Moment($this->checkOut->format('Y-m-d H:i:s'), 'UTC') : null;
+    }
+
     public function setCheckOut(?DateTimeInterface $checkOut): self
     {
         $this->checkOut = $checkOut;
 
         return $this;
     }
-    
+
     public function getThumbnail(): ?string
     {
         return $this->thumbnail;

@@ -10,6 +10,7 @@ use DateTimeInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Moment\Moment;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
@@ -211,6 +212,11 @@ class Event
         return $this->start;
     }
 
+    public function getStartAsMoment(): ?Moment
+    {
+        return new Moment($this->start->format('Y-m-d H:i:s'), 'UTC');
+    }
+
     public function setStart(?DateTimeInterface $start): self
     {
         $this->start = $start;
@@ -222,6 +228,12 @@ class Event
     {
         return $this->end;
     }
+
+    public function getEndAsMoment(): ?Moment
+    {
+        return new Moment($this->end->format('Y-m-d H:i:s'), 'UTC');
+    }
+
 
     public function setEnd(?DateTimeInterface $end): self
     {
@@ -242,7 +254,7 @@ class Event
         return $this;
     }
 
-    public function getThumbnailUrl(): string
+    public function getThumbnailUrl(): ?string
     {
         return $this->thumbnailUrl;
     }

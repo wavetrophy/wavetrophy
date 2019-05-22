@@ -1,6 +1,6 @@
 {
   "name": "wavetrophy/wavetrophy",
-  "description": "",
+  "description": "The official WAVETROPHY Application",
   "type": "project",
   "license": "proprietary",
   "require": {

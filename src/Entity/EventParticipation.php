@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Moment\Moment;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -118,6 +119,11 @@ class EventParticipation
         return $this->arrival;
     }
 
+    public function getArrivalAsMoment(): ?Moment
+    {
+        return new Moment($this->arrival->format('Y-m-d H:i:s'), 'UTC');
+    }
+
     public function setArrival(?DateTimeInterface $arrival): self
     {
         $this->arrival = $arrival;
@@ -128,6 +134,11 @@ class EventParticipation
     public function getDeparture(): ?DateTimeInterface
     {
         return $this->departure;
+    }
+
+    public function getDepartureAsMoment(): ?Moment
+    {
+        return new Moment($this->departure->format('Y-m-d H:i:s'), 'UTC');
     }
 
     public function setDeparture(?DateTimeInterface $departure): self
