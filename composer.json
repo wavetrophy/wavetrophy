@@ -31,11 +31,13 @@
     "symfony/framework-bundle": "4.2.*",
     "symfony/maker-bundle": "^1.11",
     "symfony/monolog-bundle": "^3.3",
+    "symfony/options-resolver": "4.2.*",
     "symfony/orm-pack": "^1.0",
     "symfony/profiler-pack": "^1.0",
     "symfony/security-bundle": "4.2.*",
     "symfony/swiftmailer-bundle": "^3.2",
     "symfony/twig-bundle": "4.2.*",
+    "mailgun/mailgun-php": "^2.0",
     "symfony/webpack-encore-bundle": "^1.2",
     "symfony/yaml": "4.2.*",
     "vich/uploader-bundle": "^1.9"

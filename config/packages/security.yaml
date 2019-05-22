@@ -77,6 +77,7 @@ security:
     - { requires_channel: https, path: ^/api, role: IS_AUTHENTICATED_FULLY }
     - { requires_channel: https, path: ^/api/docs$, role: ROLE_DOCS }
     - { requires_channel: https, path: ^/admin, role: ROLE_ADMIN }
-    - { requires_channel: https, path: ^/mailer, role: ROLE_ADMIN }
+    - { requires_channel: https, path: ^/mailer, role: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { requires_channel: https, path: ^/signup, role: IS_AUTHENTICATED_ANONYMOUSLY }
     - { requires_channel: https, path: ^/$, role: IS_AUTHENTICATED_ANONYMOUSLY }
     - { requires_channel: https, path: ^/, role: IS_AUTHENTICATED_FULLY }

@@ -3,6 +3,7 @@
 namespace App\Service\User;
 
 use App\Entity\User;
+use App\Repository\UserEmailRepository;
 use App\Repository\UserRepository;
 use App\Service\Mailer\Mailer;
 
@@ -13,16 +14,22 @@ class UserService
 {
     private $userRepository;
     private $mailer;
+    private $userEmailRepository;
 
     /**
      * UserService constructor.
      *
      * @param UserRepository $userRepository
+     * @param UserEmailRepository $userEmailRepository
      * @param Mailer $mailer
      */
-    public function __construct(UserRepository $userRepository, Mailer $mailer)
-    {
+    public function __construct(
+        UserRepository $userRepository,
+        UserEmailRepository $userEmailRepository,
+        Mailer $mailer
+    ) {
         $this->userRepository = $userRepository;
+        $this->userEmailRepository = $userEmailRepository;
         $this->mailer = $mailer;
     }
 
@@ -46,7 +53,7 @@ class UserService
         $users = $this->userRepository->findAllUsersThatDidNotReceivedWelcomeEmail();
         foreach ($users as $user) {
             $this->userRepository->setHasRececeivedWelcomeEmail($user, true);
-            $email = $user->getEmail();
+            $email = $this->userEmailRepository->findEmailByString($user->getEmail());
             $token = $this->userRepository->generateTokenForUserEmail($email);
 
             $data = [
@@ -55,7 +62,7 @@ class UserService
             ];
             $this->mailer->sendMail(
                 '[WAVETROPHY] Willkommen',
-                'noreply@wavetrophy.com',
+                getenv('MAILGUN_FROM'),
                 $email->getEmail(),
                 'emails/registration.html.twig',
                 'emails/registration.txt.twig',
@@ -85,8 +92,8 @@ class UserService
 
         $this->mailer->sendMail(
             '[WAVETROPHY] Vorbereitung',
-            'noreply@wavetrophy.com',
-            $user->getEmail()->__toString(),
+            getenv('MAILGUN_FROM'),
+            $user->getEmail(),
             'emails/app-setup.html.twig',
             'emails/app-setup.txt.twig',
             $data

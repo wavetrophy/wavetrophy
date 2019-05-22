@@ -2,8 +2,8 @@
 
 namespace App\Service\Mailer;
 
-use Swift_Mailer;
-use Swift_Message;
+use Mailgun\Mailgun;
+use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 
 /**
@@ -17,9 +17,10 @@ class Mailer
     /**
      * Mailer constructor.
      *
-     * @param Swift_Mailer $mailer
+     * @param EngineInterface $twig
+     * @param Mailgun $mailer
      */
-    public function __construct(Swift_Mailer $mailer, EngineInterface $twig)
+    public function __construct(EngineInterface $twig, Mailgun $mailer)
     {
         $this->mailer = $mailer;
         $this->twig = $twig;
@@ -45,26 +46,20 @@ class Mailer
         string $txtTemplate,
         array $data
     ) {
-        $message = (new Swift_Message($subject))
-            ->setFrom($from)
-            ->setTo($receiver)
-            ->setBody(
-                $this->twig->render(
-                // templates/emails/registration.html.twig
-                    $htmlTemplate,
-                    $data
-                ),
-                'text/html'
-            )
-            ->addPart(
-                $this->twig->render(
-                    $txtTemplate,
-                    $data
-                ),
-                'text/plain'
-            );
-
-        $this->mailer->send($message);
+        $this->mailer->messages()->send(getenv('MAILGUN_DOMAIN'), [
+            'from' => $from,
+            'to' => $receiver,
+            'subject' => $subject,
+            'text' => $this->twig->render(
+                $txtTemplate,
+                $data
+            ),
+            'html' => $this->twig->render(
+            // templates/emails/registration.html.twig
+                $htmlTemplate,
+                $data
+            ),
+        ]);
 
         return true;
     }
