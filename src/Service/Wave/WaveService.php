@@ -30,8 +30,12 @@ class WaveService
      */
     public function getCurrentWaveId()
     {
-        return $this->em->getRepository(Wave::class)
-            ->getCurrentWave()->getId();
+        $wave = $this->em->getRepository(Wave::class)
+            ->getCurrentWave();
+        if (empty($wave)) {
+            return null;
+        }
+        return $wave->getId();
 
     }
 }

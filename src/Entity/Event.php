@@ -7,6 +7,7 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Entity\Traits\MetaFieldTrait;
 use DateTime;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -145,6 +146,11 @@ class Event
     private $participations;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\EventActivity", mappedBy="event", orphanRemoval=true)
+     */
+    private $eventActivities;
+
+    /**
      * Event constructor.
      *
      * @param string|null $name
@@ -171,6 +177,8 @@ class Event
         $this->end = $end;
         $this->lat = $lat;
         $this->lon = $lon;
+        $this->eventActivities = new ArrayCollection();
+        $this->participations = new ArrayCollection();
     }
 
     public function __toString(): ?string
@@ -289,10 +297,13 @@ class Event
 
     public function getLocation(): ?string
     {
+        if (empty($this->getLat()) || empty($this->getLon())) {
+            return null;
+        }
         return $this->getLat() . "," . $this->getLon();
     }
 
-    public function getLat(): string
+    public function getLat(): ?string
     {
         return $this->lat;
     }
@@ -304,7 +315,7 @@ class Event
         return $this;
     }
 
-    public function getLon(): string
+    public function getLon(): ?string
     {
         return $this->lon;
     }
@@ -321,12 +332,14 @@ class Event
         return $this->wave;
     }
 
-    public function setWave(?Wave $wave): void
+    public function setWave(?Wave $wave): self
     {
         $this->wave = $wave;
+
+        return $this;
     }
 
-    public function getParticipations(): Collection
+    public function getParticipations(): ?Collection
     {
         return $this->participations;
     }
@@ -341,6 +354,37 @@ class Event
     public function removeParticipation(?EventParticipation $participation): self
     {
         $this->participations->removeElement($participation);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|EventActivity[]
+     */
+    public function getEventActivities(): ?Collection
+    {
+        return $this->eventActivities;
+    }
+
+    public function addEventActivity(EventActivity $eventActivity): self
+    {
+        if (!$this->eventActivities->contains($eventActivity)) {
+            $this->eventActivities[] = $eventActivity;
+            $eventActivity->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEventActivity(EventActivity $eventActivity): self
+    {
+        if ($this->eventActivities->contains($eventActivity)) {
+            $this->eventActivities->removeElement($eventActivity);
+            // set the owning side to null (unless already changed)
+            if ($eventActivity->getEvent() === $this) {
+                $eventActivity->setEvent(null);
+            }
+        }
 
         return $this;
     }

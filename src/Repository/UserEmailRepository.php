@@ -31,6 +31,7 @@ class UserEmailRepository extends ServiceEntityRepository
         $result = $this->createQueryBuilder('ue')
             ->where('ue.email = :email')
             ->setParameter('email', $email)
+            ->andWhere('ue.deletedAt IS NULL')
             ->getQuery()
             ->getResult();
         return !empty($result) ? $result[0] : null;

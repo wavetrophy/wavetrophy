@@ -32,7 +32,8 @@ class QuestionRepository extends ServiceEntityRepository
         $query->innerJoin('q.group', 'g')
             ->innerJoin('g.wave', 'w')
             ->andWhere('w.id = :waveId')
-            ->setParameter('waveId', $waveId);
+            ->setParameter('waveId', $waveId)
+            ->andWhere('q.deletedAt IS NULL');
         $result = $query->getQuery()->getResult();
         return $result;
     }

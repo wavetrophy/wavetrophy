@@ -39,7 +39,8 @@ class UserRepository extends ServiceEntityRepository
         $query->join('u.team', 't');
         $query->join('t.group', 'g');
         $query->join('g.wave', 'w');
-        $query->where('w.id = :waveId');
+        $query->where('w.id = :waveId')
+            ->andWhere('u.deletedAt IS NULL');
         $query->setParameter('waveId', $waveId);
         $query = $query->getQuery();
         $result = $query->getResult();
@@ -55,7 +56,8 @@ class UserRepository extends ServiceEntityRepository
     public function findAllUsersThatDidNotReceivedWelcomeEmail(): array
     {
         $query = $this->createQueryBuilder('u');
-        $query->where('u.hasReceivedWelcomeEmail = 0');
+        $query->where('u.hasReceivedWelcomeEmail = 0')
+            ->andWhere('u.deletedAt IS NULL');
         $query = $query->getQuery();
         $result = $query->getResult();
 

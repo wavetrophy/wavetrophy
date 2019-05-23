@@ -30,7 +30,8 @@ class GroupRepository extends ServiceEntityRepository
         $query = $this->createQueryBuilder('g');
         $query->innerJoin('g.wave', 'w')
             ->where('w.id = :waveId')
-            ->setParameter('waveId', $waveId);
+            ->setParameter('waveId', $waveId)
+            ->andWhere('g.deletedAt IS NULL');
         $result = $query->getQuery()->getResult();
         return $result;
     }

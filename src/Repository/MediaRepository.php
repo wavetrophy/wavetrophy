@@ -30,7 +30,8 @@ class MediaRepository extends ServiceEntityRepository
     {
         $query = $this->createQueryBuilder('m');
         $query->where('m.url = :url')
-            ->setParameter('url', $url);
+            ->setParameter('url', $url)
+            ->andWhere('m.deletedAt IS NULL');
         $result = $query->getQuery()->getResult();
         return $result;
     }

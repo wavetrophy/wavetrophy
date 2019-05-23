@@ -33,7 +33,8 @@ class LodgingRepository extends ServiceEntityRepository
             ->where('h.id = :hotelId')
             ->andWhere('u.id = :userId')
             ->setParameter('hotelId', $hotel->getId())
-            ->setParameter('userId', $user->getId());
+            ->setParameter('userId', $user->getId())
+            ->andWhere('l.deletedAt IS NULL');
         $lodging = $query->getQuery()->getResult();
 
         return $lodging;

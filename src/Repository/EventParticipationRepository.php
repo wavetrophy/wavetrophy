@@ -32,6 +32,7 @@ class EventParticipationRepository extends ServiceEntityRepository
         $query->orderBy('ep.createdAt', 'DESC')
             ->where('e.id = :eventId')
             ->andWhere('t.id = :teamId')
+            ->andWhere('ep.deletedAt IS NULL')
             ->setParameter('eventId', $event->getId())
             ->setParameter('teamId', $team->getId());
         $lodging = $query->getQuery()->getResult();

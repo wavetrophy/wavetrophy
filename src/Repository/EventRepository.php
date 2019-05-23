@@ -39,7 +39,7 @@ class EventRepository extends ServiceEntityRepository
         $query->innerJoin('p.teams', 't');
         $query->innerJoin('t.users', 'u');
         $query->where('u.id = :id')->setParameter('id', $user->getId());
-        $query->andWhere('w.id = :wave')->setParameter('wave', $currentWave->getId());
+        $query->andWhere('w.id = :wave')->setParameter('wave', $currentWave ? $currentWave->getId() : null);
         $query->andWhere('e.deletedAt IS NULL');
         $query->andWhere('p.deletedAt IS NULL');
         $query->andWhere('u.deletedAt IS NULL');
@@ -97,6 +97,7 @@ class EventRepository extends ServiceEntityRepository
         $query->innerJoin('t.users', 'u');
         $query->where('u.id = :userId')->setParameter('userId', $user->getId());
         $query->andWhere('e.id = :eventId')->setParameter('eventId', $event->getId());
+        $query->andWhere('p.deletedAt IS NULL');
 
         $result = $query->getQuery()->getResult();
         return !empty($result) ? $result[0] : null;
@@ -110,7 +111,11 @@ class EventRepository extends ServiceEntityRepository
     public function getTeamsDataForEvent(Event $event)
     {
         $teams = [];
-        $teamEntites = $this->_em->getRepository(Team::class)->getWaveTeams($event->getWave()->getId());
+        $wave = $event->getWave();
+        if (empty($wave)) {
+            $wave = $this->getEntityManager()->getRepository(Wave::class)->getCurrentWave();
+        }
+        $teamEntites = $this->_em->getRepository(Team::class)->getWaveTeams($wave ? $wave->getId() : null);
         foreach ($teamEntites as $team) {
             $teams[$team->getId()] = [
                 'id' => $team->getId(),
@@ -121,17 +126,19 @@ class EventRepository extends ServiceEntityRepository
             ];
         }
 
-        /** @var EventParticipation[] $participations */
-        $participations = $event->getParticipations()->getValues();
-        foreach ($participations as $participation) {
-            foreach ($participation->getTeams()->getValues() as $team) {
-                $teams[$team->getId()] = [
-                    'id' => $team->getId(),
-                    'name' => $team->getName() . '(' . $team->getStartNumber() . ')',
-                    'enabled' => true,
-                    'arrival' => $participation->getArrival()->format('H:i'),
-                    'departure' => $participation->getDeparture()->format('H:i'),
-                ];
+        $participations = $event->getParticipations();
+        if ($participations) {
+            /** @var EventParticipation $participation */
+            foreach ($participations->getValues() as $participation) {
+                foreach ($participation->getTeams()->getValues() as $team) {
+                    $teams[$team->getId()] = [
+                        'id' => $team->getId(),
+                        'name' => $team->getName() . '(' . $team->getStartNumber() . ')',
+                        'enabled' => true,
+                        'arrival' => $participation->getArrival()->format('H:i'),
+                        'departure' => $participation->getDeparture()->format('H:i'),
+                    ];
+                }
             }
         }
 
@@ -194,5 +201,5 @@ class EventRepository extends ServiceEntityRepository
             ];
         }
         return $p;
-}
+    }
 }

@@ -106,6 +106,7 @@ class HotelRepository extends ServiceEntityRepository
         $query->where('w.id = :waveId')->setParameter('waveId', $currentWave->getId());
         $query->andWhere('u.id = :userId')->setParameter('userId', $user->getId());
         $query->andWhere('h.id = :hotel')->setParameter('hotel', $hotel->getId());
+        $query            ->andWhere('h.deletedAt IS NULL');
         $result = $query->getQuery()->getResult();
 
         if (empty($result)) {

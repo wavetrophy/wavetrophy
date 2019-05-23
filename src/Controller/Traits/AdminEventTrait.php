@@ -3,16 +3,20 @@
 namespace App\Controller\Traits;
 
 use App\Entity\Event;
+use App\Entity\EventActivity;
 use App\Entity\EventParticipation;
 use App\Entity\Lodging;
 use App\Entity\Team;
 use App\Entity\Wave;
 use App\Form\CoordinateType;
+use App\Form\EventActivity\EventActivityType;
 use App\Form\EventTeamType;
 use App\Form\EventThumbnailType;
 use App\Form\FormType;
 use DateTime;
+use DateTimeZone;
 use Doctrine\ORM\EntityManager;
+use InvalidArgumentException;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -36,9 +40,13 @@ trait AdminEventTrait
      */
     protected function createEventNewForm(Event $entity, $fields)
     {
+        $data = $this->request->request->all();
         $formOptions = $this->entity['new']['form_options'];
         $formOptions['entity'] = $this->entity['name'];
         $formOptions['view'] = 'new';
+
+        $eventActivities = $this->em->getRepository(EventActivity::class)->findAllForEvent($entity);
+        $activities = $this->getActivities($data, $eventActivities);
 
         /** @var FormBuilderInterface $formBuilder */
         $formBuilder = $this->get('form.factory')
@@ -61,7 +69,10 @@ trait AdminEventTrait
             ['required' => true, 'attr' => ['data-start' => ''], 'years' => $years]);
         $formBuilder->add('end', DateType::class,
             ['required' => true, 'attr' => ['data-end' => ''], 'years' => $years]);
-        $formBuilder->add('location', CoordinateType::class, ['required' => true]);
+        $formBuilder->add('event_activites', EventActivityType::class, ['event_activities' => $eventActivities]);
+
+        $formBuilder->add('location', CoordinateType::class,
+            ['required' => true, 'data' => $entity->getLocation() ?: null]);
         $formBuilder->add('teams', EventTeamType::class);
         $form = $formBuilder->getForm();
         return $form;
@@ -77,11 +88,14 @@ trait AdminEventTrait
      */
     protected function createEventEditForm(Event $entity, $fields)
     {
+        $data = $this->request->request->all();
         $formOptions = $this->entity['new']['form_options'];
         $formOptions['entity'] = $this->entity['name'];
         $formOptions['view'] = 'new';
 
         $teams = $this->em->getRepository(Event::class)->getTeamsDataForEvent($entity);
+        $eventActivities = $this->em->getRepository(EventActivity::class)->findAllForEvent($entity);
+        $activities = $this->getActivities($data, $eventActivities);
 
         /** @var FormBuilderInterface $formBuilder */
         $formBuilder = $this->get('form.factory')
@@ -110,7 +124,13 @@ trait AdminEventTrait
             DateType::class,
             ['required' => true, 'attr' => ['data-end' => ''], 'data' => $entity->getEnd(), 'years' => $years]
         );
-        $formBuilder->add('location', CoordinateType::class, ['required' => true, 'data' => $entity->getLocation()]);
+        $formBuilder->add(
+            'event_activities',
+            EventActivityType::class,
+            ['required' => true, 'event_activities' => $activities]
+        );
+        $formBuilder->add('location', CoordinateType::class,
+            ['required' => true, 'data' => $entity->getLocation() ?: null]);
         $formBuilder->add('teams', EventTeamType::class, ['teams' => $teams]);
         $form = $formBuilder->getForm();
 
@@ -133,6 +153,18 @@ trait AdminEventTrait
 
         $arrival = $this->getArrival($event, $sameForAll, $data);
         $departure = $this->getDeparture($event, $sameForAll, $data);
+
+        if (!array_key_exists('activities', $data)) {
+            throw new InvalidArgumentException('At least one Activity must be set.');
+        }
+
+        $activities = $data['activities'];
+
+        foreach ($activities as $key => $activity) {
+            // new ids will also contain "new" (see frontend JS code)
+            $eventActivity = new EventActivity();
+            $this->saveEventActivity($event, $eventActivity, $activity, $sameForAll, $data);
+        }
 
         if ($sameForAll) {
             $teams = $this->em->getRepository(Team::class)->getWaveTeams($wave->getId());
@@ -169,6 +201,23 @@ trait AdminEventTrait
 
         $arrival = $this->getArrival($event, $sameForAll, $data);
         $departure = $this->getDeparture($event, $sameForAll, $data);
+
+        if (!array_key_exists('activities', $data)) {
+            throw new InvalidArgumentException('At least one Activity must be set.');
+        }
+
+        $activities = $data['activities'];
+
+        foreach ($activities as $key => $activity) {
+            // new ids will also contain "new" (see frontend JS code)
+            $id = isset($activity['id']) ? $activity['id'] : 'new';
+            if (preg_match('/new/', $id)) {
+                $eventActivity = new EventActivity();
+            } else {
+                $eventActivity = $this->em->getRepository(EventActivity::class)->find($id);
+            }
+            $this->saveEventActivity($event, $eventActivity, $activity, $sameForAll, $data);
+        }
 
         if (array_key_exists('same-for-all', $data) && $data['same-for-all'] === 'on') {
             $teams = $this->em->getRepository(Team::class)->getWaveTeams($wave->getId());
@@ -311,7 +360,7 @@ trait AdminEventTrait
         $eventParticipations = $this->em->getRepository(EventParticipation::class)
             ->findEventParticipations($event, $team);
         foreach ($eventParticipations as $participation) {
-            $participation->setDeletedAt(new DateTime('now', new \DateTimeZone('europe/zurich')));
+            $participation->setDeletedAt(new DateTime('now', new DateTimeZone('europe/zurich')));
             $this->em->persist($participation);
         }
     }
@@ -331,8 +380,21 @@ trait AdminEventTrait
         if ($sameForAll && isset($data['arrival']) && !empty($data['arrival'])) {
             $arrivalDate = $event->getStart()->format('Y-m-d');
             $arrivalDateTime = $arrivalDate . ' ' . $data['arrival'] . ':00';
-            $arrival = new DateTime($arrivalDateTime, new \DateTimeZone('europe/zurich'));
-            $arrival->setTimezone(new \DateTimeZone('Europe/Zurich'));
+            $arrival = new DateTime($arrivalDateTime, new DateTimeZone('europe/zurich'));
+            $arrival->setTimezone(new DateTimeZone('Europe/Zurich'));
+        } else {
+            if (isset($data['activities'])) {
+                // sort by start date to get the first activity's start time
+                usort($data['activities'], function ($a, $b) {
+                    return $a['start'] <=> $b['start'];
+                });
+                $firstActivity = reset($data['activities']);
+
+                $arrivalDate = $event->getStart()->format('Y-m-d');
+                $arrivalDateTime = $arrivalDate . ' ' . $firstActivity['start'] . ':00';
+                $arrival = new DateTime($arrivalDateTime, new DateTimeZone('europe/zurich'));
+                $arrival->setTimezone(new DateTimeZone('Europe/Zurich'));
+            }
         }
         return $arrival;
     }
@@ -352,8 +414,20 @@ trait AdminEventTrait
         if ($sameForAll && isset($data['departure']) && !empty($data['departure'])) {
             $departureDate = $event->getStart()->format('Y-m-d');
             $departureDateTime = $departureDate . ' ' . $data['departure'] . ':00';
-            $departure = new DateTime($departureDateTime, new \DateTimeZone('europe/zurich'));
-            $departure->setTimezone(new \DateTimeZone('Europe/Zurich'));
+            $departure = new DateTime($departureDateTime, new DateTimeZone('Europe/Zurich'));
+            $departure->setTimezone(new DateTimeZone('Europe/Zurich'));
+        } else {
+            if (isset($data['activities'])) {
+                // sort by end date to get the last activity's end time
+                usort($data['activities'], function ($a, $b) {
+                    return $a['end'] <=> $b['end'];
+                });
+                $last = end($data['activities']);
+                $departureDate = $event->getStart()->format('Y-m-d');
+                $departureDateTime = $departureDate . ' ' . $last['end'] . ':00';
+                $departure = new DateTime($departureDateTime, new DateTimeZone('Europe/Zurich'));
+                $departure->setTimezone(new DateTimeZone('Europe/Zurich'));
+            }
         }
         return $departure;
     }
@@ -403,5 +477,66 @@ trait AdminEventTrait
             $departure->setTime($hour, $minute);
         }
         return $departure;
+    }
+
+    /**
+     * @param Event $event
+     * @param EventActivity $eventActivity
+     * @param $activity
+     * @param bool $sameForAll
+     * @param $data
+     */
+    protected function saveEventActivity(
+        Event $event,
+        EventActivity $eventActivity,
+        $activity,
+        bool $sameForAll,
+        $data
+    ): void {
+        $eventActivity->setEvent($event);
+        $eventActivity->setTitle($activity['title']);
+
+        list($hour, $minute) = explode(':', $activity['start'], 2);
+        $start = $this->getArrival($event, $sameForAll, $data)->setTime($hour, $minute);
+        $eventActivity->setStart($start);
+
+        list($hour, $minute) = explode(':', $activity['end'], 2);
+        $end = $this->getDeparture($event, $sameForAll, $data)->setTime($hour, $minute);
+        $eventActivity->setEnd($end);
+
+        if (!empty($activity['description'])) {
+            $eventActivity->setDescription($activity['description']);
+        }
+
+        $this->em->persist($eventActivity);
+    }
+
+    /**
+     * @param $data
+     * @param $eventActivities
+     *
+     * @return array|mixed
+     */
+    protected function getActivities($data, $eventActivities)
+    {
+        $activities = [];
+
+        if (isset($data['activities'])) {
+            $activities = $data['activities'];
+        }
+
+        foreach ($eventActivities as $activity) {
+            $activities[$activity->getId()] = [
+                'id' => $activity->getId(),
+                'title' => $activity->getTitle(),
+                'start' => $activity->getStart()->format('H:i'),
+                'end' => $activity->getEnd()->format('H:i'),
+                'description' => $activity->getDescription(),
+            ];
+        }
+        usort($activities, function ($a, $b) {
+            return $a['start'] <=> $b['start'];
+        });
+        return $activities;
     }
 }

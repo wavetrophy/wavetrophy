@@ -47,19 +47,34 @@ class WaveRepository extends ServiceEntityRepository
         $contacts = [];
         /** @var Wave $wave */
         $wave = $this->find($waveId);
+        if (!empty($wave->getDeletedAt())) {
+            return [];
+        }
         $groups = $wave->getGroups()->getValues();
 
         foreach ($groups as $group) {
             /** @var Group $group */
+            if (!empty($group->getDeletedAt())) {
+                continue;
+            }
             $teams = $group->getTeams()->getValues();
             foreach ($teams as $team) {
                 /** @var Team $team */
+                if (!empty($team->getDeletedAt())) {
+                    continue;
+                }
                 $users = $team->getUsers()->getValues();
                 foreach ($users as $user) {
                     $emails = [];
                     /** @var User $user */
+                    if (!empty($user->getDeletedAt())) {
+                        continue;
+                    }
                     $e = $user->getEmails()->filter(function ($email) use (&$contacts) {
                         /** @var UserEmail $email */
+                        if (!empty($email->getDeletedAt())) {
+                            return false;
+                        }
                         return $email->getIsPublic();
                     })->toArray();
                     /** @var UserEmail $email */
@@ -75,6 +90,9 @@ class WaveRepository extends ServiceEntityRepository
                     $phonenumbers = [];
                     $p = $user->getPhonenumbers()->filter(function ($phonenumber) {
                         /** @var UserPhonenumber $phonenumber */
+                        if (!empty($phonenumber->getDeletedAt())) {
+                            return false;
+                        }
                         return $phonenumber->getIsPublic();
                     })->toArray();
 

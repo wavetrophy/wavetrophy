@@ -17,16 +17,17 @@ class TeamRespository extends ServiceEntityRepository
     }
 
     /**
-     * @param int $waveId
+     * @param int | null $waveId
      *
      * @return Team[] | null
      */
-    public function getWaveTeams(int $waveId)
+    public function getWaveTeams(?int $waveId)
     {
         $query = $this->createQueryBuilder('t');
         $query->innerJoin('t.group', 'g');
         $query->innerJoin('g.wave', 'w');
-        $query->where('w.id = :id')->setParameter('id', $waveId);
+        $query->where('w.id = :id')->setParameter('id', $waveId)
+            ->andWhere('t.deletedAt IS NULL');
         $result = $query->getQuery()->getResult();
         return $result;
     }

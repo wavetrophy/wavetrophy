@@ -38,7 +38,8 @@ class UserPhonenumberRepository extends ServiceEntityRepository
         $query->where('up.phonenumber = :phonenumber')
             ->andWhere('up.countryCode = :countryCode')
             ->setParameter('phonenumber', $phonenumber)
-            ->setParameter('countryCode', $countryCode);
+            ->setParameter('countryCode', $countryCode)
+            ->andWhere('up.deletedAt IS NULL');
         $result = $query->getQuery()->getResult();
         return $result;
     }
