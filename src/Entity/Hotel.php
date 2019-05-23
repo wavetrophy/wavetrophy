@@ -218,7 +218,7 @@ class Hotel
 
     public function getCheckInAsMoment(): ?Moment
     {
-        return $this->checkIn ? new Moment($this->checkIn->format('Y-m-d H:i:s'), 'UTC') : null;
+        return $this->checkIn ? new Moment($this->checkIn->format('Y-m-d H:i:s'), 'Europe/Zurich') : null;
     }
 
     public function setCheckIn(?DateTimeInterface $checkIn): self
@@ -235,7 +235,7 @@ class Hotel
 
     public function getCheckOutAsMoment(): ?Moment
     {
-        return $this->checkOut ? new Moment($this->checkOut->format('Y-m-d H:i:s'), 'UTC') : null;
+        return $this->checkOut ? new Moment($this->checkOut->format('Y-m-d H:i:s'), 'Europe/Zurich') : null;
     }
 
     public function setCheckOut(?DateTimeInterface $checkOut): self

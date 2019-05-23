@@ -207,14 +207,14 @@ class Event
         return $this;
     }
 
-    public function getStart(): ?DateTimeInterface
+    public function getStart(): ?DateTime
     {
         return $this->start;
     }
 
     public function getStartAsMoment(): ?Moment
     {
-        return new Moment($this->start->format('Y-m-d H:i:s'), 'UTC');
+        return new Moment($this->start->format('Y-m-d H:i:s'), 'Europe/Zurich');
     }
 
     public function setStart(?DateTimeInterface $start): self
@@ -224,14 +224,14 @@ class Event
         return $this;
     }
 
-    public function getEnd(): ?DateTimeInterface
+    public function getEnd(): ?DateTime
     {
         return $this->end;
     }
 
     public function getEndAsMoment(): ?Moment
     {
-        return new Moment($this->end->format('Y-m-d H:i:s'), 'UTC');
+        return new Moment($this->end->format('Y-m-d H:i:s'), 'Europe/Zurich');
     }
 
 

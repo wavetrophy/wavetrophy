@@ -67,8 +67,10 @@ class HotelRepository extends ServiceEntityRepository
     /**
      * @param User $user
      * @param Wave $currentWave
+     *
+     * @return array
      */
-    public function getHotelsForUser(User $user, Wave $currentWave)
+    public function getHotelsForUser(User $user, Wave $currentWave): ?array
     {
         $query = $this->createQueryBuilder('h');
         $query->innerJoin('h.lodgings', 'l');
@@ -81,26 +83,36 @@ class HotelRepository extends ServiceEntityRepository
         $hotels = [];
         /** @var Hotel $hotel */
         foreach ($result as $hotel) {
-            $h = [
-                'id' => $hotel->getId(),
-                'name' => $hotel->getName(),
-                'thumbnail' => $hotel->getThumbnail(),
-                'lat' => $hotel->getLat(),
-                'lon' => $hotel->getLon(),
-                'location' => $hotel->getLocation(),
-                'check_in' => $hotel->getCheckInAsMoment()->format('Y-m-d[T]H:i:s.0000[Z]'),
-                'check_out' => $hotel->getCheckOutAsMoment()->format('Y-m-d[T]H:i:s.0000[Z]'),
-                'personal_lodging' => $this->formatLodging($this->getLodgingForUserByHotel($hotel, $user)),
-            ];
-            $h['lodgings'] = [];
-            /** @var Lodging $lodging */
-            foreach ($hotel->getLodgings()->getValues() as $lodging) {
-                $h['lodgings'][] = $this->formatLodging($lodging);
-            }
+            $h = $this->formatHotel($user, $hotel);
             $hotels[$hotel->getCheckIn()->format('ymd_his')] = $h;
         }
 
         return $hotels;
+    }
+
+    /**
+     * @param Hotel $hotel
+     * @param User $user
+     * @param Wave $currentWave
+     *
+     * @return array|null
+     */
+    public function getHotelForUser(Hotel $hotel, User $user, Wave $currentWave)
+    {
+        $query = $this->createQueryBuilder('h');
+        $query->innerJoin('h.lodgings', 'l');
+        $query->innerJoin('l.users', 'u');
+        $query->innerJoin('h.wave', 'w');
+        $query->where('w.id = :waveId')->setParameter('waveId', $currentWave->getId());
+        $query->andWhere('u.id = :userId')->setParameter('userId', $user->getId());
+        $query->andWhere('h.id = :hotel')->setParameter('hotel', $hotel->getId());
+        $result = $query->getQuery()->getResult();
+
+        if (empty($result)) {
+            return null;
+        }
+        return $this->formatHotel($user, $result[0]);
+
     }
 
     /**
@@ -149,5 +161,32 @@ class HotelRepository extends ServiceEntityRepository
             ];
         }
         return $l;
+    }
+
+    /**
+     * @param User $user
+     * @param Hotel $hotel
+     *
+     * @return array
+     */
+    protected function formatHotel(User $user, Hotel $hotel): array
+    {
+        $h = [
+            'id' => $hotel->getId(),
+            'name' => $hotel->getName(),
+            'thumbnail' => $hotel->getThumbnail(),
+            'lat' => $hotel->getLat(),
+            'lon' => $hotel->getLon(),
+            'location' => $hotel->getLocation(),
+            'check_in' => $hotel->getCheckInAsMoment()->format('Y-m-d[T]H:i:s.0000[Z]'),
+            'check_out' => $hotel->getCheckOutAsMoment()->format('Y-m-d[T]H:i:s.0000[Z]'),
+            'personal_lodging' => $this->formatLodging($this->getLodgingForUserByHotel($hotel, $user)),
+        ];
+        $h['lodgings'] = [];
+        /** @var Lodging $lodging */
+        foreach ($hotel->getLodgings()->getValues() as $lodging) {
+            $h['lodgings'][] = $this->formatLodging($lodging);
+        }
+        return $h;
     }
 }

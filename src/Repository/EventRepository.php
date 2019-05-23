@@ -47,46 +47,38 @@ class EventRepository extends ServiceEntityRepository
         $events = [];
         /** @var Event $event */
         foreach ($result as $event) {
-            $personalParticipation = $this->getParticipationForUserByEvent($user, $event);
-            $start = $event->getStartAsMoment()->format('Y-m-d[T]H:i:s.0000[Z]');
-            $end = $event->getEndAsMoment()->format('Y-m-d[T]H:i:s.0000[Z]');
-            $e = [
-                'id' => $event->getId(),
-                'name' => $event->getName(),
-                'start' => $start,
-                'end' => $end,
-                'lat' => $event->getLat(),
-                'lon' => $event->getLon(),
-                'location' => $event->getLocation(),
-                'thumbnail' => $event->getThumbnailUrl(),
-                'personal_participation' => $personalParticipation,
-                'participations' => [],
-            ];
-
-            /** @var EventParticipation $participation */
-            foreach ($event->getParticipations()->getValues() as $participation) {
-                $p = [
-                    'id' => $participation->getId(),
-                    'arrival' => $participation->getArrivalAsMoment()->format('Y-m-d[T]H:i:s.0000[Z]'),
-                    'departure' => $participation->getDepartureAsMoment()->format('Y-m-d[T]H:i:s.0000[Z]'),
-                    'teams' => [],
-                ];
-
-                /** @var Team $team */
-                foreach ($participation->getTeams()->getValues() as $team) {
-                    $p['teams'][] = [
-                        'id' => $team->getId(),
-                        'name' => $team->getName(),
-                        'start_number' => $team->getStartNumber(),
-                    ];
-                }
-
-                $e['participations'][] = $p;
-            }
+            $e = $this->formatEvent($user, $event);
 
             $events[$event->getStart()->format('Ymd_His')] = $e;
         }
         return $events;
+    }
+
+    /**
+     * @param Event|null $event
+     * @param User|null $user
+     * @param Wave|null $currentWave
+     *
+     * @return array|null
+     */
+    public function getEventForUser(?Event $event, ?User $user, ?Wave $currentWave)
+    {
+        $query = $this->createQueryBuilder('e');
+        $query->innerJoin('e.participations', 'p');
+        $query->innerJoin('e.wave', 'w');
+        $query->innerJoin('p.teams', 't');
+        $query->innerJoin('t.users', 'u');
+        $query->where('u.id = :id')->setParameter('id', $user->getId());
+        $query->andWhere('w.id = :wave')->setParameter('wave', $currentWave->getId());
+        $query->andWhere('e.id = :event')->setParameter('event', $event->getId());
+        $query->andWhere('e.deletedAt IS NULL');
+        $query->andWhere('p.deletedAt IS NULL');
+        $query->andWhere('u.deletedAt IS NULL');
+        $result = $query->getQuery()->getResult();
+        if (empty($result)) {
+            return null;
+        }
+        return $this->formatEvent($user, $result[0]);
     }
 
     /**
@@ -145,4 +137,62 @@ class EventRepository extends ServiceEntityRepository
 
         return $teams;
     }
+
+    /**
+     * @param User|null $user
+     * @param Event $event
+     *
+     * @return array
+     */
+    protected function formatEvent(?User $user, ?Event $event): array
+    {
+        $personalParticipation = $this->getParticipationForUserByEvent($user, $event);
+        $start = $event->getStartAsMoment()->format('Y-m-d[T]H:i:s.0000[Z]');
+        $end = $event->getEndAsMoment()->format('Y-m-d[T]H:i:s.0000[Z]');
+        $e = [
+            'id' => $event->getId(),
+            'name' => $event->getName(),
+            'start' => $start,
+            'end' => $end,
+            'lat' => $event->getLat(),
+            'lon' => $event->getLon(),
+            'location' => $event->getLocation(),
+            'thumbnail' => $event->getThumbnailUrl(),
+            'personal_participation' => $this->formatParticipation($personalParticipation),
+            'participations' => [],
+        ];
+
+        /** @var EventParticipation $participation */
+        foreach ($event->getParticipations()->getValues() as $participation) {
+            $p = $this->formatParticipation($participation);
+
+            $e['participations'][] = $p;
+        }
+        return $e;
+    }
+
+    /**
+     * @param EventParticipation $participation
+     *
+     * @return array
+     */
+    protected function formatParticipation(EventParticipation $participation): array
+    {
+        $p = [
+            'id' => $participation->getId(),
+            'arrival' => $participation->getArrivalAsMoment()->format('Y-m-d[T]H:i:s.0000[Z]'),
+            'departure' => $participation->getDepartureAsMoment()->format('Y-m-d[T]H:i:s.0000[Z]'),
+            'teams' => [],
+        ];
+
+        /** @var Team $team */
+        foreach ($participation->getTeams()->getValues() as $team) {
+            $p['teams'][] = [
+                'id' => $team->getId(),
+                'name' => $team->getName(),
+                'start_number' => $team->getStartNumber(),
+            ];
+        }
+        return $p;
+}
 }

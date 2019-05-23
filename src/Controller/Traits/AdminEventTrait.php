@@ -59,7 +59,8 @@ trait AdminEventTrait
         $formBuilder->add('name', TextType::class, ['required' => true]);
         $formBuilder->add('start', DateType::class,
             ['required' => true, 'attr' => ['data-start' => ''], 'years' => $years]);
-        $formBuilder->add('end', DateType::class, ['required' => true, 'attr' => ['data-end' => ''], 'years' => $years]);
+        $formBuilder->add('end', DateType::class,
+            ['required' => true, 'attr' => ['data-end' => ''], 'years' => $years]);
         $formBuilder->add('location', CoordinateType::class, ['required' => true]);
         $formBuilder->add('teams', EventTeamType::class);
         $form = $formBuilder->getForm();
@@ -203,8 +204,9 @@ trait AdminEventTrait
     {
         $eventData = $form->getData();
         $event->setName($eventData->getName());
-        $event->setStart($eventData->getStart());
-        $event->setEnd($eventData->getEnd());
+        // Set the arrival and departure to the value that all have (or 00:00)
+        $event->setStart($this->getArrival($eventData, $this->getSameForAll($data), $data));
+        $event->setEnd($this->getDeparture($eventData, $this->getSameForAll($data), $data));
         $event->setThumbnailImage($eventData->getThumbnailImage());
         $event->setLocation($data['location']);
         $event->setWave($wave);

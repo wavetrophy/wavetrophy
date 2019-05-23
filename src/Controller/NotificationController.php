@@ -72,7 +72,7 @@ class NotificationController extends AbstractController
 
         $date = null;
         if ($data['scheduled']) {
-            $now = new Moment();
+            $now = new Moment('now', 'Europe/Zurich');
             list($hours, $minutes) = explode(':', $data['time'], 2);
             $now->setHour((int)$hours);
             $now->setMinute((int)$minutes);

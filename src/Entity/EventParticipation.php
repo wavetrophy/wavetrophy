@@ -121,7 +121,7 @@ class EventParticipation
 
     public function getArrivalAsMoment(): ?Moment
     {
-        return new Moment($this->arrival->format('Y-m-d H:i:s'), 'UTC');
+        return new Moment($this->arrival->format('Y-m-d H:i:s'), 'Europe/Zurich');
     }
 
     public function setArrival(?DateTimeInterface $arrival): self
@@ -138,7 +138,7 @@ class EventParticipation
 
     public function getDepartureAsMoment(): ?Moment
     {
-        return new Moment($this->departure->format('Y-m-d H:i:s'), 'UTC');
+        return new Moment($this->departure->format('Y-m-d H:i:s'), 'Europe/Zurich');
     }
 
     public function setDeparture(?DateTimeInterface $departure): self

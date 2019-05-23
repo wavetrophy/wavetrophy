@@ -193,7 +193,7 @@ class Wave
 
     public function getStartAsMoment(): ?Moment
     {
-        return new Moment($this->start->format('Y-m-d H:i:s'), 'UTC');
+        return new Moment($this->start->format('Y-m-d H:i:s'), 'Europe/Zurich');
     }
 
     public function setStart(?DateTimeInterface $start): self
@@ -210,7 +210,7 @@ class Wave
 
     public function getEndAsMoment(): ?Moment
     {
-        return new Moment($this->end->format('Y-m-d H:i:s'), 'UTC');
+        return new Moment($this->end->format('Y-m-d H:i:s'), 'Europe/Zurich');
     }
 
     public function setEnd(?DateTimeInterface $end): self

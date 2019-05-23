@@ -25,6 +25,12 @@ use Vich\UploaderBundle\Form\Type\VichImageType;
  */
 trait AdminHotelTrait
 {
+    /**
+     * @param Hotel $entity
+     * @param $fields
+     *
+     * @return FormInterface
+     */
     protected function createHotelNewForm(Hotel $entity, $fields)
     {
         $formOptions = $this->entity['new']['form_options'];
@@ -49,6 +55,12 @@ trait AdminHotelTrait
         return $form;
     }
 
+    /**
+     * @param Hotel $entity
+     * @param $fields
+     *
+     * @return FormInterface
+     */
     protected function createHotelEditForm(Hotel $entity, $fields)
     {
         $formOptions = $this->entity['new']['form_options'];
@@ -77,6 +89,10 @@ trait AdminHotelTrait
         return $form;
     }
 
+    /**
+     * @param Hotel $hotel
+     * @param FormInterface $form
+     */
     protected function persistHotelEntity(Hotel $hotel, FormInterface $form)
     {
         $data = $this->request->request->all();
@@ -101,6 +117,10 @@ trait AdminHotelTrait
         $this->em->flush();
     }
 
+    /**
+     * @param Hotel $hotel
+     * @param FormInterface $form
+     */
     protected function updateHotelEntity(Hotel $hotel, FormInterface $form)
     {
         $data = $this->request->request->all();

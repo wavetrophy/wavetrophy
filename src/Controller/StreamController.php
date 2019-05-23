@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Event;
+use App\Entity\Hotel;
 use App\Entity\User;
 use App\Repository\EventRepository;
 use App\Repository\HotelRepository;
@@ -63,20 +65,45 @@ class StreamController extends AbstractController
     }
 
     /**
-     * @Route("/api/users/{user}/stream/{location}", methods={"GET"}, name="api_users_get_stream_location")
+     * @Route("/api/users/{user}/events/{event}", methods={"GET"}, name="api_users_get_stream_event")
      *
-     * @param string $user
+     * @param User $user
+     *
+     * @param Event $event
      *
      * @return JsonResponse
      */
-    public function getLocation(string $user, string $location): JsonResponse
+    public function getEvent(User $user, Event $event): JsonResponse
     {
+        $currentWave = $this->waveRepository->getCurrentWave();
         try {
-            $location = $this->eventRepository->getLocation($location, $user);
+            $e = $this->eventRepository->getEventForUser($event, $user, $currentWave);
         } catch (Exception $exception) {
             $this->logger->alert($exception->getMessage() . "\n" . $exception->getTraceAsString());
             return $this->json(['success' => false, 'message' => $exception->getMessage()]);
         }
-        return $this->json(['location' => $location, 'success' => true]);
+        return $this->json(['event' => $e, 'success' => true]);
+    }
+
+
+    /**
+     * @Route("/api/users/{user}/hotels/{hotel}", methods={"GET"}, name="api_users_get_stream_hotel")
+     *
+     * @param User $user
+     *
+     * @param Hotel $hotel
+     *
+     * @return JsonResponse
+     */
+    public function getHotel(User $user, Hotel $hotel): JsonResponse
+    {
+        $currentWave = $this->waveRepository->getCurrentWave();
+        try {
+            $h = $this->hotelRepository->getHotelForUser($hotel, $user, $currentWave);
+        } catch (Exception $exception) {
+            $this->logger->alert($exception->getMessage() . "\n" . $exception->getTraceAsString());
+            return $this->json(['success' => false, 'message' => $exception->getMessage()]);
+        }
+        return $this->json(['hotel' => $h, 'success' => true]);
     }
 }
