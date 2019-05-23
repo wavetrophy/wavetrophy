@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Moment\Moment;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -145,6 +146,17 @@ class Wave
         return $this->getName();
     }
 
+    public function toArray()
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'country' => $this->getCountry(),
+            'start' => $this->getStartAsMoment()->format('Y-m-d[T]H:i:s.0000[Z]'),
+            'end' => $this->getEndAsMoment()->format('Y-m-d[T]H:i:s.0000[Z]'),
+        ];
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -179,6 +191,11 @@ class Wave
         return $this->start;
     }
 
+    public function getStartAsMoment(): ?Moment
+    {
+        return new Moment($this->start->format('Y-m-d H:i:s'), 'UTC');
+    }
+
     public function setStart(?DateTimeInterface $start): self
     {
         $this->start = $start;
@@ -189,6 +206,11 @@ class Wave
     public function getEnd(): ?DateTimeInterface
     {
         return $this->end;
+    }
+
+    public function getEndAsMoment(): ?Moment
+    {
+        return new Moment($this->end->format('Y-m-d H:i:s'), 'UTC');
     }
 
     public function setEnd(?DateTimeInterface $end): self

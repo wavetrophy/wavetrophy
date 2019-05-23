@@ -110,6 +110,16 @@ class Media
         return $this->getUrl() ?: '';
     }
 
+    public function asArray()
+    {
+        return [
+            'id' => $this->getUrl(),
+            'path' => $this->getPath(),
+            'url' => $this->getUrl(),
+            'name' => $this->getName(),
+        ];
+    }
+
     public function getId(): int
     {
         return $this->id;
@@ -161,17 +171,5 @@ class Media
         $this->path = $path;
 
         return $this;
-    }
-
-    public function asArray()
-    {
-        return [
-            'id' => $this->id,
-            // Excluded to not let out security relevant data
-            //            'file' => $this->file,
-            'name' => $this->name,
-            'path' => $this->path,
-            'url' => $this->url,
-        ];
     }
 }

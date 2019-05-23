@@ -56,15 +56,37 @@ class WaveRepository extends ServiceEntityRepository
                 /** @var Team $team */
                 $users = $team->getUsers()->getValues();
                 foreach ($users as $user) {
+                    $emails = [];
                     /** @var User $user */
-                    $emails = $user->getEmails()->filter(function ($email) use (&$contacts) {
+                    $e = $user->getEmails()->filter(function ($email) use (&$contacts) {
                         /** @var UserEmail $email */
                         return $email->getIsPublic();
-                    });
-                    $phonenumbers = $user->getPhonenumbers()->filter(function ($phonenumber) {
+                    })->toArray();
+                    /** @var UserEmail $email */
+                    foreach ($e as $email) {
+                        $emails[] = [
+                            'id' => $email->getId(),
+                            'email' => $email->getEmail(),
+                            'is_public' => $email->getIsPublic(),
+                            'is_primary' => $email->getIsPrimary(),
+                        ];
+                    }
+
+                    $phonenumbers = [];
+                    $p = $user->getPhonenumbers()->filter(function ($phonenumber) {
                         /** @var UserPhonenumber $phonenumber */
                         return $phonenumber->getIsPublic();
-                    });
+                    })->toArray();
+
+                    /** @var UserPhonenumber $phonenumber */
+                    foreach ($p as $phonenumber) {
+                        $phonenumbers[] = [
+                            'id' => $phonenumber->getId(),
+                            'phonenumber' => $phonenumber->getPhonenumber(),
+                            'country_code' => $phonenumber->getCountryCode(),
+                            'is_public' => $phonenumber->getIsPublic(),
+                        ];
+                    }
 
                     $team = $user->getTeam();
                     $group = $team->getGroup();
@@ -73,7 +95,7 @@ class WaveRepository extends ServiceEntityRepository
                         'username' => $user->getUsername(),
                         'first_name' => $user->getFirstName(),
                         'last_name' => $user->getLastName(),
-                        'profile_picture' => $user->getProfilePicture(),
+                        'profile_picture' => $user->getProfilePicture()->asArray(),
                         'team' => [
                             'id' => $team->getId(),
                             'name' => $team->getName(),

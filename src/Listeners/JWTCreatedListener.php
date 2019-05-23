@@ -67,6 +67,12 @@ class JWTCreatedListener
             $profilePicture = $profilePicture->asArray();
         }
 
+        $wave = null;
+        $w = $this->wave->getCurrentWave();
+        if (!empty($w)) {
+            $wave = $w->toArray();
+        }
+
         $payload = $event->getData();
 
         $locale = $user->getLocale();
@@ -74,7 +80,7 @@ class JWTCreatedListener
         $payload['ip'] = $request->getClientIp();
         $payload['user_id'] = $user->getId();
         $payload['profile_picture'] = $profilePicture;
-        $payload['current_wave'] = $this->wave->getCurrentWave();
+        $payload['current_wave'] = $wave;
         $payload['version'] = $this->manager->getVersion();
         $payload['locale'] = [
             'short' => mb_substr($locale, 0, 2),

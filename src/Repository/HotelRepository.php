@@ -138,13 +138,14 @@ class HotelRepository extends ServiceEntityRepository
             'users' => [],
         ];
 
+        /** @var User $user */
         foreach ($lodging->getUsers()->getValues() as $user) {
             $l['users'][] = [
                 'id' => $user->getId(),
                 'first_name' => $user->getFirstName(),
                 'last_name' => $user->getLastName(),
                 'username' => $user->getUsername(),
-                'profile_picture' => $user->getProfilePicture(),
+                'profile_picture' => $user->getProfilePicture()->asArray(),
             ];
         }
         return $l;
