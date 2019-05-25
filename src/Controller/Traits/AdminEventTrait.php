@@ -69,7 +69,7 @@ trait AdminEventTrait
             ['required' => true, 'attr' => ['data-start' => ''], 'years' => $years]);
         $formBuilder->add('end', DateType::class,
             ['required' => true, 'attr' => ['data-end' => ''], 'years' => $years]);
-        $formBuilder->add('event_activites', EventActivityType::class, ['event_activities' => $eventActivities]);
+        $formBuilder->add('event_activites', EventActivityType::class, ['event_activities' => $activities]);
 
         $formBuilder->add('location', CoordinateType::class,
             ['required' => true, 'data' => $entity->getLocation() ?: null]);
