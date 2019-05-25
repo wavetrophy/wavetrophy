@@ -7,6 +7,7 @@ use App\Entity\Traits\MetaFieldTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Moment\Moment;
 
 /**
  * @ApiResource()
@@ -81,6 +82,11 @@ class EventActivity
         return $this->start;
     }
 
+    public function getStartAsMoment(): ?Moment
+    {
+        return new Moment($this->start->format('Y-m-d H:i:s'),  'Europe/Zurich');
+    }
+
     public function setStart(\DateTimeInterface $start): self
     {
         $this->start = $start;
@@ -91,6 +97,11 @@ class EventActivity
     public function getEnd(): ?\DateTimeInterface
     {
         return $this->end;
+    }
+
+    public function getEndAsMoment(): ?Moment
+    {
+        return new Moment($this->end->format('Y-m-d H:i:s'),  'Europe/Zurich');
     }
 
     public function setEnd(\DateTimeInterface $end): self

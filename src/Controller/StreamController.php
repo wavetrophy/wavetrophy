@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Event;
 use App\Entity\Hotel;
 use App\Entity\User;
+use App\Entity\Wave;
 use App\Repository\EventRepository;
 use App\Repository\HotelRepository;
 use App\Repository\WaveRepository;
@@ -51,17 +52,54 @@ class StreamController extends AbstractController
      *
      * @return JsonResponse
      */
-    public function getStream(User $user): JsonResponse
+    public function getPersonalStream(User $user): JsonResponse
     {
         $currentWave = $this->waveRepository->getCurrentWave();
         try {
             $events = $this->eventRepository->getEventsForUser($user, $currentWave);
+        } catch (Exception $exception) {
+            $this->logger->alert($exception->getMessage() . "\n" . $exception->getTraceAsString());
+            return $this->json(['success' => false, 'message' => $exception->getMessage()]);
+        }
+        return $this->json(['events' => $events, 'success' => true]);
+    }
+
+    /**
+     * @Route("/api/users/{user}/hotels", methods={"GET"}, name="api_users_get_hotels")
+     *
+     * @param User $user
+     *
+     * @return JsonResponse
+     */
+    public function getPersonalHotels(User $user): JsonResponse
+    {
+        $currentWave = $this->waveRepository->getCurrentWave();
+        try {
             $hotels = $this->hotelRepository->getHotelsForUser($user, $currentWave);
         } catch (Exception $exception) {
             $this->logger->alert($exception->getMessage() . "\n" . $exception->getTraceAsString());
             return $this->json(['success' => false, 'message' => $exception->getMessage()]);
         }
-        return $this->json(['events' => $events, 'hotels' => $hotels, 'success' => true]);
+        return $this->json(['hotels' => $hotels, 'success' => true]);
+    }
+
+
+    /**
+     * @Route("/api/waves/{wave}/stream", methods={"GET"}, name="api_waves_get_stream")
+     *
+     * @param Wave $wave
+     *
+     * @return JsonResponse
+     */
+    public function getStream(Wave $wave): JsonResponse
+    {
+        try {
+            $events = $this->eventRepository->getEventsForWave($wave);
+        } catch (Exception $exception) {
+            $this->logger->alert($exception->getMessage() . "\n" . $exception->getTraceAsString());
+            return $this->json(['success' => false, 'message' => $exception->getMessage()]);
+        }
+        return $this->json(['events' => $events, 'success' => true]);
     }
 
     /**

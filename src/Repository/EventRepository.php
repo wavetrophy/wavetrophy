@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Event;
+use App\Entity\EventActivity;
 use App\Entity\EventParticipation;
 use App\Entity\Team;
 use App\Entity\User;
@@ -47,7 +48,34 @@ class EventRepository extends ServiceEntityRepository
         $events = [];
         /** @var Event $event */
         foreach ($result as $event) {
-            $e = $this->formatEvent($user, $event);
+            $e = $this->formatEvent($event, $user);
+
+            $events[$event->getStart()->format('Ymd_His')] = $e;
+        }
+        return $events;
+    }
+
+    /**
+     * @param Wave $currentWave
+     *
+     * @return array
+     */
+    public function getEventsForWave(Wave $currentWave)
+    {
+        $query = $this->createQueryBuilder('e');
+        $query->innerJoin('e.participations', 'p');
+        $query->innerJoin('e.wave', 'w');
+        $query->innerJoin('p.teams', 't');
+        $query->innerJoin('t.users', 'u');
+        $query->andWhere('w.id = :wave')->setParameter('wave', $currentWave ? $currentWave->getId() : null);
+        $query->andWhere('e.deletedAt IS NULL');
+        $query->andWhere('p.deletedAt IS NULL');
+        $query->andWhere('u.deletedAt IS NULL');
+        $result = $query->getQuery()->getResult();
+        $events = [];
+        /** @var Event $event */
+        foreach ($result as $event) {
+            $e = $this->formatEvent($event);
 
             $events[$event->getStart()->format('Ymd_His')] = $e;
         }
@@ -76,9 +104,9 @@ class EventRepository extends ServiceEntityRepository
         $query->andWhere('u.deletedAt IS NULL');
         $result = $query->getQuery()->getResult();
         if (empty($result)) {
-            return null;
+            return $this->formatEvent($event);
         }
-        return $this->formatEvent($user, $result[0]);
+        return $this->formatEvent($result[0], $user);
     }
 
     /**
@@ -151,11 +179,32 @@ class EventRepository extends ServiceEntityRepository
      *
      * @return array
      */
-    protected function formatEvent(?User $user, ?Event $event): array
+    protected function formatEvent(?Event $event, ?User $user = null): array
     {
-        $personalParticipation = $this->getParticipationForUserByEvent($user, $event);
+        if ($user) {
+            $personalParticipation = $this->getParticipationForUserByEvent($user, $event);
+        } else {
+            $personalParticipation = new EventParticipation($event->getStart(), $event->getEnd(), $event);
+        }
+
         $start = $event->getStartAsMoment()->format('Y-m-d[T]H:i:s.0000[Z]');
         $end = $event->getEndAsMoment()->format('Y-m-d[T]H:i:s.0000[Z]');
+        $activities = [];
+
+        /** @var EventActivity $eventActivity */
+        foreach ($event->getEventActivities()->getValues() as $eventActivity) {
+            if ($eventActivity->isDeleted()) {
+                continue;
+            }
+            $activities[] = [
+                'id' => $eventActivity->getId(),
+                'title' => $eventActivity->getTitle(),
+                'description' => $eventActivity->getDescription(),
+                'start' => $eventActivity->getStartAsMoment()->format('Y-m-d[T]H:i:s.0000[Z]'),
+                'end' => $eventActivity->getEndAsMoment()->format('Y-m-d[T]H:i:s.0000[Z]'),
+            ];
+        }
+
         $e = [
             'id' => $event->getId(),
             'name' => $event->getName(),
@@ -167,6 +216,7 @@ class EventRepository extends ServiceEntityRepository
             'thumbnail' => $event->getThumbnailUrl(),
             'personal_participation' => $this->formatParticipation($personalParticipation),
             'participations' => [],
+            'activities' => $activities,
         ];
 
         /** @var EventParticipation $participation */
@@ -183,8 +233,11 @@ class EventRepository extends ServiceEntityRepository
      *
      * @return array
      */
-    protected function formatParticipation(EventParticipation $participation): array
+    protected function formatParticipation(?EventParticipation $participation): ?array
     {
+        if (empty($participation)) {
+            return null;
+        }
         $p = [
             'id' => $participation->getId(),
             'arrival' => $participation->getArrivalAsMoment()->format('Y-m-d[T]H:i:s.0000[Z]'),
