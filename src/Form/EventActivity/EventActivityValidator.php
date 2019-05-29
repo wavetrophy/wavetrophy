@@ -47,6 +47,7 @@ class EventActivityValidator extends ConstraintValidator
 
         if (empty($data) || empty($data[$key])) {
             $this->context->buildViolation('There needs to be at least one activity')->addViolation();
+            return;
         }
 
         foreach ($data[$key]as $record) {

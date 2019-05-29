@@ -2,11 +2,9 @@
 
 namespace App\Form\EventActivity;
 
-use App\Entity\EventActivity;
 use App\Form\EventActivity\EventActivity as EventActivityAliasConstraint;
 use App\Repository\EventActivityRepository;
 use Psr\Container\ContainerInterface;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;

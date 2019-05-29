@@ -63,7 +63,7 @@ trait AdminEventTrait
             $years[] = $currentYear + $i;
         }
 
-        $formBuilder->add('thumbnailImage', VichImageType::class, ['required' => true]);
+        $formBuilder->add('thumbnailImage', VichImageType::class, ['required' => false]);
         $formBuilder->add('name', TextType::class, ['required' => true]);
         $formBuilder->add('start', DateType::class,
             ['required' => true, 'attr' => ['data-start' => ''], 'years' => $years]);
@@ -105,7 +105,8 @@ trait AdminEventTrait
                 null,
                 $formOptions
             );
-        $formBuilder->add('thumbnailImage', EventThumbnailType::class, ['event' => $entity]);
+        $formBuilder->add('thumbnailImage', EventThumbnailType::class,
+            ['event' => $entity, 'required' => false, 'allow_delete' => true]);
         $formBuilder->add('name', TextType::class, ['required' => true, 'data' => $entity->getName()]);
 
         $years = [];
@@ -206,7 +207,19 @@ trait AdminEventTrait
             throw new InvalidArgumentException('At least one Activity must be set.');
         }
 
+        $activityEntities = $this->em->getRepository(EventActivity::class)->findAllForEvent($event);
         $activities = $data['activities'];
+        foreach ($activityEntities as $key => $activity) {
+            // filter out all activities
+            if (isset($activities[$activity->getId()])) {
+                unset($activityEntities[$key]);
+            }
+        }
+
+        foreach ($activityEntities as $activity) {
+            $activity->setDeletedAt(new DateTime());
+            $this->em->persist($activity);
+        }
 
         foreach ($activities as $key => $activity) {
             // new ids will also contain "new" (see frontend JS code)
