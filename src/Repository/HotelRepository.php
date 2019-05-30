@@ -172,6 +172,8 @@ class HotelRepository extends ServiceEntityRepository
      */
     protected function formatHotel(User $user, Hotel $hotel): array
     {
+        $checkIn = $hotel->getCheckInAsMoment() ? $hotel->getCheckInAsMoment()->format('Y-m-d[T]H:i:s.0000[Z]') : null;
+        $checkOut = $hotel->getCheckOutAsMoment() ? $hotel->getCheckOutAsMoment()->format('Y-m-d[T]H:i:s.0000[Z]') : null;
         $h = [
             'id' => $hotel->getId(),
             'name' => $hotel->getName(),
@@ -179,8 +181,8 @@ class HotelRepository extends ServiceEntityRepository
             'lat' => $hotel->getLat(),
             'lon' => $hotel->getLon(),
             'location' => $hotel->getLocation(),
-            'check_in' => $hotel->getCheckInAsMoment()->format('Y-m-d[T]H:i:s.0000[Z]'),
-            'check_out' => $hotel->getCheckOutAsMoment()->format('Y-m-d[T]H:i:s.0000[Z]'),
+            'check_in' => $checkIn,
+            'check_out' => $checkOut,
             'personal_lodging' => $this->formatLodging($this->getLodgingForUserByHotel($hotel, $user)),
         ];
         $h['lodgings'] = [];
