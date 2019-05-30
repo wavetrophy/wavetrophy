@@ -95,14 +95,15 @@
             var latLon = $('#location').val().split(',');
             var lat = parseFloat(latLon[0]);
             var lng = parseFloat(latLon[1]);
-            if (lat && lng) {
-                placeMarker(lat, lng, 15);
-            }
 
             map = new google.maps.Map(document.getElementById('map'), {
                 center: {lat: lat || 47.039624, lng: lng || 8.3188383},
                 zoom: 8
             });
+
+            if (lat && lng) {
+                placeMarker(lat, lng, 15);
+            }
 
             // Create the search box and link it to the UI element.
             var input = document.getElementById('pac-input');

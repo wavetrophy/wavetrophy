@@ -45,7 +45,7 @@ trait AdminHotelTrait
                 null,
                 $formOptions
             );
-        $formBuilder->add('thumbnailImage', VichImageType::class, ['required' => true]);
+        $formBuilder->add('thumbnailImage', VichImageType::class, ['required' => false]);
         $formBuilder->add('name', TextType::class, ['required' => true]);
         $formBuilder->add('checkIn', DateTimeType::class, ['required' => true]);
         $formBuilder->add('checkOut', DateTimeType::class, ['required' => true,]);

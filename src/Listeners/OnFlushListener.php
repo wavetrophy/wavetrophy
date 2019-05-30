@@ -190,11 +190,13 @@ class OnFlushListener
 
     public function handleHotel(Hotel $entity, EntityManager $em)
     {
-        $fileName = $entity->getThumbnailImage()->getRealPath();
-        $url = str_replace($this->hotelUploadDir, $this->hotelUriPrefix, $fileName);
-        $path = dirname($url);
-        $entity->setThumbnailUrl($path);
-        $this->persist($entity, $em);
+        if ($entity->getThumbnailImage()) {
+            $fileName = $entity->getThumbnailImage()->getRealPath();
+            $url = str_replace($this->hotelUploadDir, $this->hotelUriPrefix, $fileName);
+            $path = dirname($url);
+            $entity->setThumbnailUrl($path);
+            $this->persist($entity, $em);
+        }
     }
 
     /**
