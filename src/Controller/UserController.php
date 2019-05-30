@@ -45,6 +45,9 @@ class UserController extends AbstractController
         $user = $this->userRepository->find($user);
 
         $body = json_decode($request->getContent(), true);
+        if (!array_key_exists('password', $body)) {
+            return $this->json(['errors' => ['title' => 'password key must be set']]);
+        }
         $password = $body['password'];
 
         $user->setPlainPassword($password, false);

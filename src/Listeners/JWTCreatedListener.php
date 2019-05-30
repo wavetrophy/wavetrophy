@@ -79,6 +79,7 @@ class JWTCreatedListener
 
         $payload['ip'] = $request->getClientIp();
         $payload['user_id'] = $user->getId();
+        $payload['must_reset_password'] = $user->getMustResetPassword();
         $payload['profile_picture'] = $profilePicture;
         $payload['current_wave'] = $wave;
         $payload['version'] = $this->manager->getVersion();
