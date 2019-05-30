@@ -146,7 +146,7 @@
 
                 // Create a marker for each place.
                 var loc = place.geometry.location;
-                placeMarker(loc.lat, loc.lng);
+                placeMarker(loc.lat(), loc.lng());
             });
 
             map.addListener("click", function (event) {
