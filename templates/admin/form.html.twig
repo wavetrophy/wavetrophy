@@ -80,7 +80,6 @@
         </div>
     </div>
 
-
     <div class="row">
         <div class="col-8 offset-2" style="margin-top: 1rem">
             <input id="pac-input" class="form-control" type="text" placeholder="Search place">
@@ -94,12 +93,15 @@
 
         function initMap() {
             var latLon = $('#location').val().split(',');
-            var lat = parseFloat(latLon[0]) || 47.039624;
-            var lng = parseFloat(latLon[1]) || 8.3188383;
-            var initLatLng = {lat: lat, lng: lng};
+            var lat = parseFloat(latLon[0]);
+            var lng = parseFloat(latLon[1]);
+            if (lat && lng) {
+                placeMarker(lat, lng, 15);
+            }
+
             map = new google.maps.Map(document.getElementById('map'), {
-                center: initLatLng,
-                zoom: 12
+                center: {lat: lat || 47.039624, lng: lng || 8.3188383},
+                zoom: 8
             });
 
             // Create the search box and link it to the UI element.
@@ -114,7 +116,7 @@
 
             var markers = [];
 
-            $('form').on('keypress',function (e) {
+            $('form').on('keypress', function (e) {
                 //Enter key
                 if (e.which == 13) {
                     return false;
@@ -125,7 +127,7 @@
             searchBox.addListener('places_changed', function () {
                 var places = searchBox.getPlaces();
 
-                if (places.length == 0) {
+                if (places.length === 0) {
                     return;
                 }
 
@@ -136,58 +138,35 @@
                 markers = [];
 
                 // For each place, get the icon, name and location.
-                var bounds = new google.maps.LatLngBounds();
-                places.forEach(function (place) {
-                    if (!place.geometry) {
-                        console.log("Returned place contains no geometry");
-                        return;
-                    }
-                    var icon = {
-                        url: place.icon,
-                        size: new google.maps.Size(71, 71),
-                        origin: new google.maps.Point(0, 0),
-                        anchor: new google.maps.Point(17, 34),
-                        scaledSize: new google.maps.Size(25, 25)
-                    };
+                var place = places[places.length - 1];
+                if (!place.geometry) {
+                    console.log("Returned place contains no geometry");
+                    return;
+                }
 
-                    // Create a marker for each place.
-                    markers.push(new google.maps.Marker({
-                        map: map,
-                        icon: icon,
-                        title: place.name,
-                        position: place.geometry.location
-                    }));
-
-                    if (place.geometry.viewport) {
-                        // Only geocodes have viewport.
-                        bounds.union(place.geometry.viewport);
-                    } else {
-                        bounds.extend(place.geometry.location);
-                    }
-                });
-                map.fitBounds(bounds);
+                // Create a marker for each place.
+                var loc = place.geometry.location;
+                placeMarker(loc.lat, loc.lng);
             });
-
-            placeMarker(initLatLng, 12);
 
             map.addListener("click", function (event) {
-                var latLng = event.latLng;
+                var loc = event.latLng;
                 // display the lat/lng in your form's lat/lng fields
-                placeMarker(latLng);
-                document.getElementById("location").value = latLng.lat() + ',' + latLng.lng();
+                placeMarker(loc.lat(), loc.lng());
             });
 
-            function placeMarker(location, zoom) {
+            function placeMarker(lat, lng, zoom) {
                 zoom = zoom || 16;
                 if (marker) {
                     marker.setMap(null);
                 }
                 marker = new google.maps.Marker({
-                    position: location,
+                    position: {lat: lat, lng: lng},
                     map: map
                 });
                 map.setZoom(zoom);
                 map.setCenter(marker.getPosition());
+                document.getElementById("location").value = lat + ',' + lng;
             }
         }
 
