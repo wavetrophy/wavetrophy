@@ -2027,16 +2027,16 @@
         },
         {
             "name": "giggsey/libphonenumber-for-php",
-            "version": "8.10.12",
+            "version": "8.10.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/giggsey/libphonenumber-for-php.git",
-                "reference": "6187402b4949ca7edc439ed4a0396922eeb13dfa"
+                "reference": "660a6153fd1e5c25613e57115db27be87052c452"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/6187402b4949ca7edc439ed4a0396922eeb13dfa",
-                "reference": "6187402b4949ca7edc439ed4a0396922eeb13dfa",
+                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/660a6153fd1e5c25613e57115db27be87052c452",
+                "reference": "660a6153fd1e5c25613e57115db27be87052c452",
                 "shasum": ""
             },
             "require": {
@@ -2091,7 +2091,7 @@
                 "phonenumber",
                 "validation"
             ],
-            "time": "2019-05-14T11:30:38+00:00"
+            "time": "2019-05-30T07:28:51+00:00"
         },
         {
             "name": "giggsey/locale",
@@ -2856,16 +2856,16 @@
         },
         {
             "name": "kreait/firebase-php",
-            "version": "4.21.1",
+            "version": "4.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kreait/firebase-php.git",
-                "reference": "e9b33a4893c721b22fe34bef2993c6e8a8b99bc3"
+                "reference": "bdda9fbedc16eef118f8a18798a69c88d7cb9ab1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kreait/firebase-php/zipball/e9b33a4893c721b22fe34bef2993c6e8a8b99bc3",
-                "reference": "e9b33a4893c721b22fe34bef2993c6e8a8b99bc3",
+                "url": "https://api.github.com/repos/kreait/firebase-php/zipball/bdda9fbedc16eef118f8a18798a69c88d7cb9ab1",
+                "reference": "bdda9fbedc16eef118f8a18798a69c88d7cb9ab1",
                 "shasum": ""
             },
             "require": {
@@ -2923,7 +2923,7 @@
                 "google",
                 "sdk"
             ],
-            "time": "2019-05-14T10:15:17+00:00"
+            "time": "2019-05-26T00:00:05+00:00"
         },
         {
             "name": "kreait/firebase-tokens",
@@ -3029,32 +3029,29 @@
         },
         {
             "name": "lcobucci/jwt",
-            "version": "3.2.5",
+            "version": "3.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lcobucci/jwt.git",
-                "reference": "82be04b4753f8b7693b62852b7eab30f97524f9b"
+                "reference": "a11ec5f4b4d75d1fcd04e133dede4c317aac9e18"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/82be04b4753f8b7693b62852b7eab30f97524f9b",
-                "reference": "82be04b4753f8b7693b62852b7eab30f97524f9b",
+                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/a11ec5f4b4d75d1fcd04e133dede4c317aac9e18",
+                "reference": "a11ec5f4b4d75d1fcd04e133dede4c317aac9e18",
                 "shasum": ""
             },
             "require": {
+                "ext-mbstring": "*",
                 "ext-openssl": "*",
-                "php": ">=5.5"
+                "php": "^5.6 || ^7.0"
             },
             "require-dev": {
-                "mdanter/ecc": "~0.3.1",
                 "mikey179/vfsstream": "~1.5",
                 "phpmd/phpmd": "~2.2",
                 "phpunit/php-invoker": "~1.1",
-                "phpunit/phpunit": "~4.5",
+                "phpunit/phpunit": "^5.7 || ^7.3",
                 "squizlabs/php_codesniffer": "~2.3"
-            },
-            "suggest": {
-                "mdanter/ecc": "Required to use Elliptic Curves based algorithms."
             },
             "type": "library",
             "extra": {
@@ -3083,7 +3080,7 @@
                 "JWS",
                 "jwt"
             ],
-            "time": "2018-11-11T12:22:26+00:00"
+            "time": "2019-05-24T18:30:49+00:00"
         },
         {
             "name": "league/flysystem",
