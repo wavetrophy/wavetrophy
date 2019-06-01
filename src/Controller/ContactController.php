@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\Wave;
 use App\Repository\WaveRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -40,5 +41,20 @@ class ContactController extends AbstractController
         $contacts = $this->repository->getContacts($wave->getId());
 
         return $this->json(['contacts' => $contacts, 'success' => true]);
+    }
+
+    /**
+     * @Route("/api/waves/{wave}/contacts/{user}", methods={"GET"}, name="api_wave_get_contact")
+     *
+     * @param Wave $wave
+     * @param User $user
+     *
+     * @return JsonResponse
+     */
+    public function getContact(Wave $wave, User $user): JsonResponse
+    {
+        $contact = $this->repository->getContacts($wave->getId(), $user->getId());
+
+        return $this->json(['contact' => $contact, 'success' => true]);
     }
 }
