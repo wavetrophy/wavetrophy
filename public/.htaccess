@@ -18,6 +18,7 @@ DirectoryIndex index.php
 </IfModule>
 
 <IfModule mod_rewrite.c>
+    Header set Access-Control-Allow-Origin  "*"
     RewriteEngine On
 
     # Automatically redirect to HTTPS
