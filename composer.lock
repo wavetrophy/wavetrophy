@@ -2195,16 +2195,16 @@
         },
         {
             "name": "google/cloud-core",
-            "version": "v1.28.0",
+            "version": "v1.28.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-cloud-php-core.git",
-                "reference": "d32db261499d28268f9ed97834e7aca829df5b53"
+                "reference": "1663b311f93f7b0421c3426e6f6bab68dd7738f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-cloud-php-core/zipball/d32db261499d28268f9ed97834e7aca829df5b53",
-                "reference": "d32db261499d28268f9ed97834e7aca829df5b53",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-core/zipball/1663b311f93f7b0421c3426e6f6bab68dd7738f9",
+                "reference": "1663b311f93f7b0421c3426e6f6bab68dd7738f9",
                 "shasum": ""
             },
             "require": {
@@ -2219,6 +2219,7 @@
             },
             "require-dev": {
                 "erusev/parsedown": "^1.6",
+                "google/common-protos": "^1.0",
                 "google/gax": "^1.0",
                 "opis/closure": "^3",
                 "phpdocumentor/reflection": "^3.0",
@@ -2251,20 +2252,20 @@
                 "Apache-2.0"
             ],
             "description": "Google Cloud PHP shared dependency, providing functionality useful to all components.",
-            "time": "2019-04-16T20:44:33+00:00"
+            "time": "2019-06-03T20:07:05+00:00"
         },
         {
             "name": "google/cloud-firestore",
-            "version": "v1.5.2",
+            "version": "v1.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-cloud-php-firestore.git",
-                "reference": "aef07b9c4b3dc015545ff323d2174e64446bdca2"
+                "reference": "7b5c93034e20a4670f965a39a02aa6cb6ab5b1c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-cloud-php-firestore/zipball/aef07b9c4b3dc015545ff323d2174e64446bdca2",
-                "reference": "aef07b9c4b3dc015545ff323d2174e64446bdca2",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-firestore/zipball/7b5c93034e20a4670f965a39a02aa6cb6ab5b1c1",
+                "reference": "7b5c93034e20a4670f965a39a02aa6cb6ab5b1c1",
                 "shasum": ""
             },
             "require": {
@@ -2302,7 +2303,7 @@
                 "Apache-2.0"
             ],
             "description": "Cloud Firestore client for PHP",
-            "time": "2019-05-15T17:30:22+00:00"
+            "time": "2019-06-03T20:07:05+00:00"
         },
         {
             "name": "google/cloud-storage",
