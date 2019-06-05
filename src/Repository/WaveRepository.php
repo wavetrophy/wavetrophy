@@ -149,7 +149,7 @@ class WaveRepository extends ServiceEntityRepository
 
         $team = $user->getTeam();
         $group = $team->getGroup();
-        $contacts[] = [
+        return [
             'id' => $user->getId(),
             'username' => $user->getUsername(),
             'first_name' => $user->getFirstName(),
