@@ -27,3 +27,4 @@ bin/deploy.sh
 /public/img
 # Maybe uncomment this.
 /src/Command/VersionTagCommand.php
+*.csv

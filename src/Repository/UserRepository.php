@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-use App\Entity\Team;
 use App\Entity\User;
 use App\Entity\UserEmail;
 use App\Exception\ResourceNotFoundException;
@@ -180,5 +179,26 @@ class UserRepository extends ServiceEntityRepository
         $user->setHasReceivedSetupAppEmail($received);
         $this->_em->persist($user);
         $this->_em->flush();
+    }
+
+    /**
+     * Find a user by his first AND last name.
+     *
+     * @param string $firstName
+     * @param string $lastName
+     *
+     * @return User|null
+     */
+    public function findUserByName(string $firstName, string $lastName): ?User
+    {
+        $query = $this->createQueryBuilder('u');
+        $query->where('u.firstName LIKE :firstName')
+            ->andWhere('u.lastName LIKE :lastName')
+            ->setParameters([
+                'firstName' => '%' . $firstName . '%',
+                'lastName' => '%' . $lastName . '%',
+            ]);
+        $result = $query->getQuery()->getResult();
+        return $result ? $result[0] : null;
     }
 }

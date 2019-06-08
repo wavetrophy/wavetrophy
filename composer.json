@@ -12,6 +12,7 @@
     "api-platform/api-pack": "^1.2",
     "doctrine/annotations": "^1.6",
     "doctrine/doctrine-migrations-bundle": "^2.0",
+    "dompdf/dompdf": "^0.8.3",
     "easycorp/easyadmin-bundle": "^2.1",
     "fightbulc/moment": "^1.30",
     "friendsofsymfony/user-bundle": "^2.1",

@@ -20,6 +20,7 @@ class GroupRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Group::class);
     }
+
     /**
      * @param int $waveId
      *
@@ -34,5 +35,27 @@ class GroupRepository extends ServiceEntityRepository
             ->andWhere('g.deletedAt IS NULL');
         $result = $query->getQuery()->getResult();
         return $result;
+    }
+
+    /**
+     * Find group by name for a specific wave (can also be used with group numbers if the groups are named like "Gruppe
+     * 1")
+     *
+     * @param int $waveId
+     * @param string $name
+     *
+     * @return Group|null
+     */
+    public function findByNameForWave(int $waveId, string $name): ?Group
+    {
+        $query = $this->createQueryBuilder('g');
+        $query->innerJoin('g.wave', 'w')
+            ->where('w.id = :waveId')
+            ->andWhere('g.name LIKE :group')
+            ->setParameter('waveId', $waveId)
+            ->setParameter('group', '%' . $name . '%')
+            ->andWhere('g.deletedAt IS NULL');
+        $result = $query->getQuery()->getResult();
+        return $result ? $result[0] : null;
     }
 }

@@ -198,7 +198,8 @@ class User extends BaseUser implements UserInterface
             $this->setLastName($lastName);
         }
         if (!empty($firstName) && !empty($lastName)) {
-            $this->setUsername(mb_strtolower($firstName) . "." . mb_strtolower($lastName));
+            $name = str_replace(' ', '_' , mb_strtolower($firstName) . "." . mb_strtolower($lastName));
+            $this->setUsername($name);
         } else {
             $this->setUsername(uniqid("User "));
         }

@@ -101,7 +101,9 @@ class OnFlushListener
             }
             if ($entity instanceof UserEmail || $entity instanceof UserPhonenumber) {
                 $user = $entity->getUser();
-                $this->handleUser($user, $em);
+                if (!empty($user)) {
+                    $this->handleUser($user, $em);
+                }
             }
             if ($entity instanceof Answer) {
                 $this->handleAnswer($entity, $em, $method);

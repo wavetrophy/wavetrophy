@@ -31,4 +31,26 @@ class TeamRespository extends ServiceEntityRepository
         $result = $query->getQuery()->getResult();
         return $result;
     }
+
+    /**
+     * Get a team by its start number for a wave
+     *
+     * @param int $waveId
+     * @param int $teamNr
+     *
+     * @return Team|null
+     */
+    public function getTeamForWaveByStartNumber(int $waveId, int $teamNr): ?Team
+    {
+        $query = $this->createQueryBuilder('t');
+        $query->innerJoin('t.group', 'g');
+        $query->innerJoin('g.wave', 'w');
+        $query->where('w.id = :id')->setParameter('id', $waveId)
+            ->andWhere('t.startNumber = :startNr')->setParameter('startNr', $teamNr)
+            ->andWhere('t.deletedAt IS NULL')
+            ->orderBy('t.createdAt', 'DESC');
+
+        $result = $query->getQuery()->getResult();
+        return $result ? $result[0] : null;
+    }
 }

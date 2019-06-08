@@ -217,6 +217,7 @@ trait AdminEventTrait
         }
 
         foreach ($activityEntities as $activity) {
+            // delete all activities that are not set in the array from the form
             $activity->setDeletedAt(new DateTime());
             $this->em->persist($activity);
         }
