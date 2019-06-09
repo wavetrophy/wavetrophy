@@ -291,23 +291,26 @@ trait AdminEventTrait
         ?DateTime $arrival,
         ?DateTime $departure
     ): void {
-        $eventParticipation = new EventParticipation();
-
         foreach ($teams as $team) {
+            // To prevent the bug:
+            // if you create just one participation per event for all teams and then change one time for one team, the
+            // changes wont get applied.
+            // See email from louis at Fri, 7 Jun 2019, 23:47 "Abfahrzeiten in Glarus - kannst du mal probieren die enizugeben?"
+            $eventParticipation = new EventParticipation();
             $eventParticipation->addTeam($team);
-        }
+            $eventParticipation->setEvent($event);
 
-        $eventParticipation->setEvent($event);
-        if (isset($arrival)) {
-            $eventParticipation->setArrival($arrival);
-        }
+            if (isset($arrival)) {
+                $eventParticipation->setArrival($arrival);
+            }
 
-        if (isset($departure)) {
-            $eventParticipation->setDeparture($departure);
-        }
+            if (isset($departure)) {
+                $eventParticipation->setDeparture($departure);
+            }
 
-        $this->em->persist($eventParticipation);
-        $this->em->flush($eventParticipation);
+            $this->em->persist($eventParticipation);
+            $this->em->flush($eventParticipation);
+        }
     }
 
     /**
