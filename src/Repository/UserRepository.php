@@ -146,7 +146,6 @@ class UserRepository extends ServiceEntityRepository
         }
         $email = array_shift($email);
 
-        $email->setConfirmationToken(null);
         $email->setConfirmed(true);
 
         $user = $email->getUser();
