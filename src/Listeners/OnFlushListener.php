@@ -135,10 +135,12 @@ class OnFlushListener
     private function handleUser(User $user, EntityManager $em)
     {
         $emails = $user->getEmails();
-        $email = $emails->first();
-        if (!empty($email) && $user->getEmail() !== $email->getEmail()) {
-            $user->setEmail($email->getEmail());
-            $this->persist($user, $em);
+        if (!empty($emails)) {
+            $email = $emails->first();
+            if (!empty($email) && $user->getEmail() !== $email->getEmail()) {
+                $user->setEmail($email->getEmail());
+                $this->persist($user, $em);
+            }
         }
         if (empty($user->getProfilePicture())) {
             $path = $this->profilePictureGenerator->generate();

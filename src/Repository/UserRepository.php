@@ -141,7 +141,7 @@ class UserRepository extends ServiceEntityRepository
     {
         /** @var UserEmail[]|null $email */
         $email = $this->_em->getRepository(UserEmail::class)->findBy(['confirmationToken' => $token]);
-        if (!$email) {
+        if (empty($email)) {
             throw new ResourceNotFoundException('Confirmation token not found');
         }
         $email = array_shift($email);
