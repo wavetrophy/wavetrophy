@@ -197,12 +197,7 @@ class User extends BaseUser implements UserInterface
         if (!empty($lastName)) {
             $this->setLastName($lastName);
         }
-        if (!empty($firstName) && !empty($lastName)) {
-            $name = str_replace(' ', '_' , mb_strtolower($firstName) . "." . mb_strtolower($lastName));
-            $this->setUsername($name);
-        } else {
-            $this->setUsername(uniqid("User "));
-        }
+        $this->generateUsername($firstName, $lastName);
         if (!empty($team)) {
             $this->setTeam($team);
         }
@@ -225,6 +220,9 @@ class User extends BaseUser implements UserInterface
 
     public function setFirstName(string $firstName): self
     {
+        if (($firstName && $this->lastName) && empty($this->username)) {
+            $this->generateUsername($firstName, $this->lastName);
+        }
         $this->firstName = $firstName;
 
         return $this;
@@ -237,6 +235,9 @@ class User extends BaseUser implements UserInterface
 
     public function setLastName(string $lastName): self
     {
+        if (($this->firstName && $lastName) && empty($this->username)) {
+            $this->generateUsername($this->firstName, $lastName);
+        }
         $this->lastName = $lastName;
 
         return $this;
@@ -398,5 +399,19 @@ class User extends BaseUser implements UserInterface
         $this->phonenumbers->removeElement($phonenumber);
 
         return $this;
+    }
+
+    /**
+     * @param string $firstName
+     * @param $lastName
+     */
+    protected function generateUsername(string $firstName, $lastName): void
+    {
+        if (!empty($firstName) && !empty($lastName)) {
+            $name = str_replace(' ', '_', mb_strtolower($firstName) . "." . mb_strtolower($lastName));
+            $this->setUsername($name);
+        } else {
+            $this->setUsername(uniqid("user."));
+        }
     }
 }
