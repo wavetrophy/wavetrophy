@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Event;
 use App\Entity\Group;
 use App\Entity\Team;
 use App\Entity\User;
@@ -42,6 +43,13 @@ class WaveRepository extends ServiceEntityRepository
         return !empty($result) ? $result[0] : null;
     }
 
+    /**
+     * Get all contacts for a wave.
+     *
+     * @param $waveId
+     *
+     * @return array
+     */
     public function getContacts($waveId)
     {
         $contacts = [];
@@ -102,6 +110,8 @@ class WaveRepository extends ServiceEntityRepository
      * Format a contact
      *
      * @param User $user
+     *
+     * @return array|void
      */
     public function formatContact(User $user)
     {
