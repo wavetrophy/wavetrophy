@@ -405,7 +405,7 @@ class User extends BaseUser implements UserInterface
      * @param string $firstName
      * @param $lastName
      */
-    protected function generateUsername(string $firstName, $lastName): void
+    protected function generateUsername($firstName, $lastName): void
     {
         if (!empty($firstName) && !empty($lastName)) {
             $name = str_replace(' ', '_', mb_strtolower($firstName) . "." . mb_strtolower($lastName));
