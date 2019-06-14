@@ -84,7 +84,7 @@ class HotelRepository extends ServiceEntityRepository
         /** @var Hotel $hotel */
         foreach ($result as $hotel) {
             $h = $this->formatHotel($user, $hotel);
-            $hotels[$hotel->getCheckIn()->format('ymd_his')] = $h;
+            $hotels[$hotel->getCheckIn()->format('Ymd_His')] = $h;
         }
 
         return $hotels;
