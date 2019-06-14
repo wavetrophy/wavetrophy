@@ -92,8 +92,8 @@ class HotelRepository extends ServiceEntityRepository
 
     /**
      * @param Hotel $hotel
-     * @param User $user
-     * @param Wave $currentWave
+     * @param User  $user
+     * @param Wave  $currentWave
      *
      * @return array|null
      */
@@ -106,19 +106,20 @@ class HotelRepository extends ServiceEntityRepository
         $query->where('w.id = :waveId')->setParameter('waveId', $currentWave->getId());
         $query->andWhere('u.id = :userId')->setParameter('userId', $user->getId());
         $query->andWhere('h.id = :hotel')->setParameter('hotel', $hotel->getId());
-        $query            ->andWhere('h.deletedAt IS NULL');
+        $query->andWhere('h.deletedAt IS NULL');
         $result = $query->getQuery()->getResult();
 
         if (empty($result)) {
             return null;
         }
+
         return $this->formatHotel($user, $result[0]);
 
     }
 
     /**
      * @param Hotel $hotel
-     * @param User $user
+     * @param User  $user
      *
      * @return Lodging|null
      */
@@ -131,6 +132,7 @@ class HotelRepository extends ServiceEntityRepository
         $query->andWhere('h.id = :hotelId')->setParameter('hotelId', $hotel->getId());
 
         $result = $query->getQuery()->getResult();
+
         return !empty($result) ? $result[0] : null;
     }
 
@@ -161,11 +163,12 @@ class HotelRepository extends ServiceEntityRepository
                 'profile_picture' => $user->getProfilePicture()->asArray(),
             ];
         }
+
         return $l;
     }
 
     /**
-     * @param User $user
+     * @param User  $user
      * @param Hotel $hotel
      *
      * @return array
@@ -177,7 +180,7 @@ class HotelRepository extends ServiceEntityRepository
         $h = [
             'id' => $hotel->getId(),
             'name' => $hotel->getName(),
-            'thumbnail' => $hotel->getThumbnail(),
+            'thumbnail' => '/media/thumbnails/hotels/' . $hotel->getThumbnail(),
             'lat' => $hotel->getLat(),
             'lon' => $hotel->getLon(),
             'location' => $hotel->getLocation(),
@@ -190,6 +193,7 @@ class HotelRepository extends ServiceEntityRepository
         foreach ($hotel->getLodgings()->getValues() as $lodging) {
             $h['lodgings'][] = $this->formatLodging($lodging);
         }
+
         return $h;
     }
 }

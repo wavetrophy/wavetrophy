@@ -52,6 +52,7 @@ class EventRepository extends ServiceEntityRepository
 
             $events[$event->getStart()->format('Ymd_His')] = $e;
         }
+
         return $events;
     }
 
@@ -79,13 +80,14 @@ class EventRepository extends ServiceEntityRepository
 
             $events[$event->getStart()->format('Ymd_His')] = $e;
         }
+
         return $events;
     }
 
     /**
      * @param Event|null $event
-     * @param User|null $user
-     * @param Wave|null $currentWave
+     * @param User|null  $user
+     * @param Wave|null  $currentWave
      *
      * @return array|null
      */
@@ -106,11 +108,12 @@ class EventRepository extends ServiceEntityRepository
         if (empty($result)) {
             return $this->formatEvent($event);
         }
+
         return $this->formatEvent($result[0], $user);
     }
 
     /**
-     * @param User $user
+     * @param User  $user
      * @param Event $event
      *
      * @return EventParticipation|null
@@ -128,6 +131,7 @@ class EventRepository extends ServiceEntityRepository
         $query->andWhere('p.deletedAt IS NULL');
 
         $result = $query->getQuery()->getResult();
+
         return !empty($result) ? $result[0] : null;
     }
 
@@ -175,7 +179,7 @@ class EventRepository extends ServiceEntityRepository
 
     /**
      * @param User|null $user
-     * @param Event $event
+     * @param Event     $event
      *
      * @return array
      */
@@ -213,7 +217,7 @@ class EventRepository extends ServiceEntityRepository
             'lat' => $event->getLat(),
             'lon' => $event->getLon(),
             'location' => $event->getLocation(),
-            'thumbnail' => $event->getThumbnailUrl(),
+            'thumbnail' => '/media/thumbnails/events/' . $event->getThumbnail(),
             'personal_participation' => $this->formatParticipation($personalParticipation),
             'participations' => [],
             'activities' => $activities,
@@ -225,6 +229,7 @@ class EventRepository extends ServiceEntityRepository
 
             $e['participations'][] = $p;
         }
+
         return $e;
     }
 
@@ -253,6 +258,7 @@ class EventRepository extends ServiceEntityRepository
                 'start_number' => $team->getStartNumber(),
             ];
         }
+
         return $p;
     }
 }
