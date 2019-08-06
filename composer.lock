@@ -1868,13 +1868,13 @@
             "authors": [
                 {
                     "name": "Neuman Vong",
-                    "email": "neuman+pear@twilio.com",
-                    "role": "Developer"
+                    "role": "Developer",
+                    "email": "neuman+pear@twilio.com"
                 },
                 {
                     "name": "Anant Narayanan",
-                    "email": "anant@php.net",
-                    "role": "Developer"
+                    "role": "Developer",
+                    "email": "anant@php.net"
                 }
             ],
             "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",
@@ -2550,16 +2550,16 @@
         },
         {
             "name": "google/protobuf",
-            "version": "v3.7.1",
+            "version": "v3.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/protocolbuffers/protobuf-php.git",
-                "reference": "0657d28864692480c3d8506ba4fc90e8813deae5"
+                "reference": "4bb1a332b47f618a0a21ad3cc9a43f1c4aaa5b62"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/0657d28864692480c3d8506ba4fc90e8813deae5",
-                "reference": "0657d28864692480c3d8506ba4fc90e8813deae5",
+                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/4bb1a332b47f618a0a21ad3cc9a43f1c4aaa5b62",
+                "reference": "4bb1a332b47f618a0a21ad3cc9a43f1c4aaa5b62",
                 "shasum": ""
             },
             "require": {
@@ -2587,7 +2587,7 @@
             "keywords": [
                 "proto"
             ],
-            "time": "2019-03-26T18:06:41+00:00"
+            "time": "2019-08-06T17:47:34+00:00"
         },
         {
             "name": "grpc/grpc",
@@ -5490,8 +5490,8 @@
             "authors": [
                 {
                     "name": "Audrius Karabanovas",
-                    "email": "audrius@karabanovas.net",
-                    "role": "Developer"
+                    "role": "Developer",
+                    "email": "audrius@karabanovas.net"
                 }
             ],
             "description": "Symfony3|4 application versioning, simple console command to manage version (with providers e.g. git tag) of your application using Semantic Versioning 2.0.0 recommendations",
@@ -9260,19 +9260,19 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
+                    "role": "Lead Developer",
                     "email": "fabien@symfony.com",
-                    "homepage": "http://fabien.potencier.org",
-                    "role": "Lead Developer"
+                    "homepage": "http://fabien.potencier.org"
                 },
                 {
                     "name": "Armin Ronacher",
-                    "email": "armin.ronacher@active-4.com",
-                    "role": "Project Founder"
+                    "role": "Project Founder",
+                    "email": "armin.ronacher@active-4.com"
                 },
                 {
                     "name": "Twig Team",
-                    "homepage": "https://twig.symfony.com/contributors",
-                    "role": "Contributors"
+                    "role": "Contributors",
+                    "homepage": "https://twig.symfony.com/contributors"
                 }
             ],
             "description": "Twig, the flexible, fast, and secure template language for PHP",
