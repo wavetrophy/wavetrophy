@@ -180,6 +180,9 @@
     "google/common-protos": {
         "version": "1.0"
     },
+    "google/crc32": {
+        "version": "v0.1.0"
+    },
     "google/gax": {
         "version": "1.0.2"
     },
@@ -206,6 +209,9 @@
     },
     "jms/metadata": {
         "version": "2.0.0"
+    },
+    "kreait/clock": {
+        "version": "1.0.1"
     },
     "kreait/firebase-php": {
         "version": "4.20.1"
@@ -383,6 +389,9 @@
     },
     "ramsey/uuid": {
         "version": "3.8.0"
+    },
+    "riverline/multipart-parser": {
+        "version": "2.0.5"
     },
     "rize/uri-template": {
         "version": "0.3.2"
