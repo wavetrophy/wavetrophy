@@ -1,10 +1,24 @@
 {{ 'Willkommen an Bord,'|trans}} {{ first_name }}
 
-{{ 'Schön, dass Du dabei bist. Als erstes musst Du deinen Account bestätigen. Dazu musst Du nur auf den Button unterhalb klicken'|trans }}
+{{ 'Es freut micht, dass Du bei der WAVETROPHY mitmachst. Alle WAVETROPHY Teilnehmer werden durch eine Mobile Applikation informiert, welche Du im AppStore oder Playstore herunterladen kannst'|trans }}
 
-{{ url('mailer_confirm_email', {'token': token})}}
+AppStore:
+https://itunes.apple.com/us/app/wavetrophy/id1436640280
 
-{{ 'Nachdem du deinen Account bestätigt hast, werde ich dir die Zugangsdaten für die WAVETROPHY Applikation schicken.'|trans }}
+PlayStore:
+https://play.google.com/store/apps/details?id=com.wavetrophy.app
+
+{{ 'Deine Zugangsdaten sind wie folgt. Diese benötigst Du, um dich erstmals in der Applikation einzuloggen.'|trans }}
+
+{{ username }}
+{{ password }}
+
+{{ 'Dies ist ein temporäres Passwort, dementsprechend musst Du es nicht speichern.'|trans }}
+
+{{ 'Bitte stelle sicher, dass Du genug Datenroaming während der WAVETROPHY zur Verfügung hast'|trans }}
+
+{{ 'Wenn Du noch Fragen hast, bin ich gerne für dich da.'|trans }}
+
 
 {{ 'Wenn Du noch Fragen hast, bin ich gerne für dich da.'|trans }}
 
