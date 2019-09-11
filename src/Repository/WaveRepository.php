@@ -35,7 +35,7 @@ class WaveRepository extends ServiceEntityRepository
     public function getCurrentWave(): ?Wave
     {
         $result = $this->createQueryBuilder('w')
-            ->orderBy('w.start')
+            ->orderBy('w.start', 'DESC')
             ->setMaxResults(1)
             ->getQuery()
             ->getResult();
