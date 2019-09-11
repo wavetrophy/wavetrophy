@@ -16,7 +16,7 @@
     "easycorp/easyadmin-bundle": "^2.1",
     "fightbulc/moment": "^1.30",
     "friendsofsymfony/user-bundle": "^2.1",
-    "gesdinet/jwt-refresh-token-bundle": "^0.5.4",
+    "gesdinet/jwt-refresh-token-bundle": "^0.7.1",
     "google/cloud-firestore": "^1.5",
     "google/protobuf": "^v3.3.0",
     "grpc/grpc": "^v1.1.0",
