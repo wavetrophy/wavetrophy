@@ -43,7 +43,6 @@ class HotelTeamType extends AbstractType
             'teams' => null,
             'data_class' => null,
             'inherit_data' => true,
-            'required' => true,
             'compound' => true,
         ])->setRequired(['teams']);
     }

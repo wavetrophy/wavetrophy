@@ -170,7 +170,7 @@ easy_admin:
         fields:
           - '-email'
           - 'emails'
-          - { property: 'plainPassword', type: 'password', type_options: { required: false } }
+          - { property: 'plainPassword', type: 'password' }
 
     UserEmail:
       class: App\Entity\UserEmail
