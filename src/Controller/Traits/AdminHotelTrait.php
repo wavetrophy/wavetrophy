@@ -84,7 +84,7 @@ trait AdminHotelTrait
         $formBuilder->add('checkIn', DateTimeType::class, ['required' => true]);
         $formBuilder->add('checkOut', DateTimeType::class, ['required' => true]);
         $formBuilder->add('location', CoordinateType::class, ['required' => true, 'data' => $entity->getLocation()]);
-        $formBuilder->add('teams', HotelTeamType::class, ['data' => $teams]);
+        $formBuilder->add('teams', HotelTeamType::class, ['teams' => $teams, 'wave' => $entity->getWave()]);
         $form = $formBuilder->getForm();
         return $form;
     }
