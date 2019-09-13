@@ -168,6 +168,7 @@ easy_admin:
           - 'team'
       edit:
         fields:
+          - 'username'
           - '-email'
           - 'emails'
           - { property: 'plainPassword', type: 'password' }
