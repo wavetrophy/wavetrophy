@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "60ae4680de871866b3a4c307744ef84f",
+    "content-hash": "ac90c667cff8379c54ab997fe3fb8fba",
     "packages": [
         {
             "name": "api-platform/api-pack",
@@ -9344,16 +9344,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v4.2.11",
+            "version": "v4.3.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "9468fef6f1c740b96935e9578560a9e9189ca154"
+                "reference": "41e16350a2a1c7383c4735aa2f9fce74cf3d1178"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/9468fef6f1c740b96935e9578560a9e9189ca154",
-                "reference": "9468fef6f1c740b96935e9578560a9e9189ca154",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/41e16350a2a1c7383c4735aa2f9fce74cf3d1178",
+                "reference": "41e16350a2a1c7383c4735aa2f9fce74cf3d1178",
                 "shasum": ""
             },
             "require": {
@@ -9372,7 +9372,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.2-dev"
+                    "dev-master": "4.3-dev"
                 }
             },
             "autoload": {
@@ -9399,7 +9399,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2019-07-24T14:47:26+00:00"
+            "time": "2019-09-11T15:41:19+00:00"
         },
         {
             "name": "twig/extensions",
