@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "60ae4680de871866b3a4c307744ef84f",
+    "content-hash": "02abb56269cf65280b307a6d9d509640",
     "packages": [
         {
             "name": "api-platform/api-pack",
@@ -2055,27 +2055,27 @@
         },
         {
             "name": "gesdinet/jwt-refresh-token-bundle",
-            "version": "v0.5.4",
+            "version": "v0.8.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/gesdinet/JWTRefreshTokenBundle.git",
-                "reference": "604b70c86e557c70105b8850eb44426ab2056a9d"
+                "url": "https://github.com/markitosgv/JWTRefreshTokenBundle.git",
+                "reference": "b1940f55aec75c24679d91c952449c7c60fefddd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gesdinet/JWTRefreshTokenBundle/zipball/604b70c86e557c70105b8850eb44426ab2056a9d",
-                "reference": "604b70c86e557c70105b8850eb44426ab2056a9d",
+                "url": "https://api.github.com/repos/markitosgv/JWTRefreshTokenBundle/zipball/b1940f55aec75c24679d91c952449c7c60fefddd",
+                "reference": "b1940f55aec75c24679d91c952449c7c60fefddd",
                 "shasum": ""
             },
             "require": {
                 "lexik/jwt-authentication-bundle": "^1.1|^2.0@dev",
-                "php": ">=5.3.3",
-                "symfony/framework-bundle": "~3.3|~4.0",
-                "symfony/validator": "~3.3|~4.0"
+                "php": "^5.5.9|>=7.0.8",
+                "symfony/framework-bundle": "~3.4|~4.0",
+                "symfony/validator": "~3.4|~4.0"
             },
             "require-dev": {
                 "doctrine/doctrine-bundle": "~1.4",
-                "doctrine/mongodb-odm-bundle": "^3.4",
+                "doctrine/mongodb-odm-bundle": "^3.4|^4.0",
                 "doctrine/orm": "^2.4.8",
                 "phpspec/phpspec": "^3.0|^4.0"
             },
@@ -2104,7 +2104,7 @@
             "keywords": [
                 "jwt refresh token bundle symfony json web"
             ],
-            "time": "2018-12-06T11:02:57+00:00"
+            "time": "2019-10-10T11:53:15+00:00"
         },
         {
             "name": "giggsey/libphonenumber-for-php",
@@ -6196,16 +6196,16 @@
         },
         {
             "name": "symfony/contracts",
-            "version": "v1.1.6",
+            "version": "v1.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/contracts.git",
-                "reference": "3692662d26cd9d204a69748792ae021c35313610"
+                "reference": "9cb52490dd60e0f50dbcdbdb3a6dbcb31f3a363e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/contracts/zipball/3692662d26cd9d204a69748792ae021c35313610",
-                "reference": "3692662d26cd9d204a69748792ae021c35313610",
+                "url": "https://api.github.com/repos/symfony/contracts/zipball/9cb52490dd60e0f50dbcdbdb3a6dbcb31f3a363e",
+                "reference": "9cb52490dd60e0f50dbcdbdb3a6dbcb31f3a363e",
                 "shasum": ""
             },
             "require": {
@@ -6269,7 +6269,7 @@
                 "interoperability",
                 "standards"
             ],
-            "time": "2019-08-21T15:14:41+00:00"
+            "time": "2019-10-04T21:43:27+00:00"
         },
         {
             "name": "symfony/debug",
