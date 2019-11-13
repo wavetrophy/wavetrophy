@@ -2058,12 +2058,12 @@
             "version": "v0.5.4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/gesdinet/JWTRefreshTokenBundle.git",
+                "url": "https://github.com/markitosgv/JWTRefreshTokenBundle.git",
                 "reference": "604b70c86e557c70105b8850eb44426ab2056a9d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gesdinet/JWTRefreshTokenBundle/zipball/604b70c86e557c70105b8850eb44426ab2056a9d",
+                "url": "https://api.github.com/repos/markitosgv/JWTRefreshTokenBundle/zipball/604b70c86e557c70105b8850eb44426ab2056a9d",
                 "reference": "604b70c86e557c70105b8850eb44426ab2056a9d",
                 "shasum": ""
             },
@@ -9091,16 +9091,16 @@
         },
         {
             "name": "symfony/var-exporter",
-            "version": "v4.2.11",
+            "version": "v4.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-exporter.git",
-                "reference": "8539c2cec7202d244058075351c61aa852ffa344"
+                "reference": "097aa4c02954dabe9d508229be86213723973ac0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/8539c2cec7202d244058075351c61aa852ffa344",
-                "reference": "8539c2cec7202d244058075351c61aa852ffa344",
+                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/097aa4c02954dabe9d508229be86213723973ac0",
+                "reference": "097aa4c02954dabe9d508229be86213723973ac0",
                 "shasum": ""
             },
             "require": {
@@ -9112,7 +9112,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.2-dev"
+                    "dev-master": "4.3-dev"
                 }
             },
             "autoload": {
@@ -9147,7 +9147,7 @@
                 "instantiate",
                 "serialize"
             ],
-            "time": "2019-06-22T08:17:17+00:00"
+            "time": "2019-11-11T12:48:54+00:00"
         },
         {
             "name": "symfony/web-link",
