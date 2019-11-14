@@ -2058,12 +2058,12 @@
             "version": "v0.5.4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/gesdinet/JWTRefreshTokenBundle.git",
+                "url": "https://github.com/markitosgv/JWTRefreshTokenBundle.git",
                 "reference": "604b70c86e557c70105b8850eb44426ab2056a9d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gesdinet/JWTRefreshTokenBundle/zipball/604b70c86e557c70105b8850eb44426ab2056a9d",
+                "url": "https://api.github.com/repos/markitosgv/JWTRefreshTokenBundle/zipball/604b70c86e557c70105b8850eb44426ab2056a9d",
                 "reference": "604b70c86e557c70105b8850eb44426ab2056a9d",
                 "shasum": ""
             },
@@ -6761,16 +6761,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.4.5",
+            "version": "v1.4.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "4467ab35c82edebac58fe58c22cea166a805eb1f"
+                "reference": "d1b68b9953513408cf89baf9bf4d21feb5e12706"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/4467ab35c82edebac58fe58c22cea166a805eb1f",
-                "reference": "4467ab35c82edebac58fe58c22cea166a805eb1f",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/d1b68b9953513408cf89baf9bf4d21feb5e12706",
+                "reference": "d1b68b9953513408cf89baf9bf4d21feb5e12706",
                 "shasum": ""
             },
             "require": {
@@ -6806,7 +6806,7 @@
                 }
             ],
             "description": "Composer plugin for Symfony",
-            "time": "2019-07-19T08:59:18+00:00"
+            "time": "2019-11-14T03:42:24+00:00"
         },
         {
             "name": "symfony/form",
