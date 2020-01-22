@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "60ae4680de871866b3a4c307744ef84f",
+    "content-hash": "d3a63187abbeb2b18497cc4b215b4c96",
     "packages": [
         {
             "name": "api-platform/api-pack",
@@ -2058,12 +2058,12 @@
             "version": "v0.5.4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/gesdinet/JWTRefreshTokenBundle.git",
+                "url": "https://github.com/markitosgv/JWTRefreshTokenBundle.git",
                 "reference": "604b70c86e557c70105b8850eb44426ab2056a9d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gesdinet/JWTRefreshTokenBundle/zipball/604b70c86e557c70105b8850eb44426ab2056a9d",
+                "url": "https://api.github.com/repos/markitosgv/JWTRefreshTokenBundle/zipball/604b70c86e557c70105b8850eb44426ab2056a9d",
                 "reference": "604b70c86e557c70105b8850eb44426ab2056a9d",
                 "shasum": ""
             },
@@ -7487,16 +7487,16 @@
         },
         {
             "name": "symfony/options-resolver",
-            "version": "v4.2.11",
+            "version": "v4.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/options-resolver.git",
-                "reference": "eda69aac1ea1f97a594dd9a5c64b7ff73a37ade2"
+                "reference": "9a02d6662660fe7bfadad63b5f0b0718d4c8b6b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/options-resolver/zipball/eda69aac1ea1f97a594dd9a5c64b7ff73a37ade2",
-                "reference": "eda69aac1ea1f97a594dd9a5c64b7ff73a37ade2",
+                "url": "https://api.github.com/repos/symfony/options-resolver/zipball/9a02d6662660fe7bfadad63b5f0b0718d4c8b6b0",
+                "reference": "9a02d6662660fe7bfadad63b5f0b0718d4c8b6b0",
                 "shasum": ""
             },
             "require": {
@@ -7505,7 +7505,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.2-dev"
+                    "dev-master": "4.4-dev"
                 }
             },
             "autoload": {
@@ -7537,7 +7537,7 @@
                 "configuration",
                 "options"
             ],
-            "time": "2019-06-13T10:57:15+00:00"
+            "time": "2020-01-04T13:00:46+00:00"
         },
         {
             "name": "symfony/orm-pack",
@@ -9770,6 +9770,7 @@
                 "code",
                 "zf"
             ],
+            "abandoned": "laminas/laminas-code",
             "time": "2019-08-31T14:14:34+00:00"
         },
         {
@@ -9824,6 +9825,7 @@
                 "events",
                 "zf2"
             ],
+            "abandoned": "laminas/laminas-eventmanager",
             "time": "2018-04-25T15:33:34+00:00"
         }
     ],
