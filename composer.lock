@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "60ae4680de871866b3a4c307744ef84f",
+    "content-hash": "5e6eb49bfc59425931019bcf431c78bd",
     "packages": [
         {
             "name": "api-platform/api-pack",
@@ -2055,29 +2055,29 @@
         },
         {
             "name": "gesdinet/jwt-refresh-token-bundle",
-            "version": "v0.5.4",
+            "version": "v0.9.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/gesdinet/JWTRefreshTokenBundle.git",
-                "reference": "604b70c86e557c70105b8850eb44426ab2056a9d"
+                "url": "https://github.com/markitosgv/JWTRefreshTokenBundle.git",
+                "reference": "1f2729e45b5eb28d6461d94dadeb0211a96754e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gesdinet/JWTRefreshTokenBundle/zipball/604b70c86e557c70105b8850eb44426ab2056a9d",
-                "reference": "604b70c86e557c70105b8850eb44426ab2056a9d",
+                "url": "https://api.github.com/repos/markitosgv/JWTRefreshTokenBundle/zipball/1f2729e45b5eb28d6461d94dadeb0211a96754e8",
+                "reference": "1f2729e45b5eb28d6461d94dadeb0211a96754e8",
                 "shasum": ""
             },
             "require": {
                 "lexik/jwt-authentication-bundle": "^1.1|^2.0@dev",
-                "php": ">=5.3.3",
-                "symfony/framework-bundle": "~3.3|~4.0",
-                "symfony/validator": "~3.3|~4.0"
+                "php": "^5.5.9|>=7.0.8",
+                "symfony/framework-bundle": "~3.4|~4.0|~5.0",
+                "symfony/validator": "~3.4|~4.0|~5.0"
             },
             "require-dev": {
-                "doctrine/doctrine-bundle": "~1.4",
-                "doctrine/mongodb-odm-bundle": "^3.4",
+                "doctrine/doctrine-bundle": "~1.4|~2.0",
+                "doctrine/mongodb-odm-bundle": "^3.4|^4.0",
                 "doctrine/orm": "^2.4.8",
-                "phpspec/phpspec": "^3.0|^4.0"
+                "phpspec/phpspec": "^3.0|^4.0|^5.0|^6.0"
             },
             "type": "symfony-bundle",
             "extra": {
@@ -2104,7 +2104,7 @@
             "keywords": [
                 "jwt refresh token bundle symfony json web"
             ],
-            "time": "2018-12-06T11:02:57+00:00"
+            "time": "2020-02-04T16:08:46+00:00"
         },
         {
             "name": "giggsey/libphonenumber-for-php",
@@ -5441,17 +5441,17 @@
             ],
             "authors": [
                 {
+                    "name": "Ben Ramsey",
+                    "email": "ben@benramsey.com",
+                    "homepage": "https://benramsey.com"
+                },
+                {
                     "name": "Marijn Huizendveld",
                     "email": "marijn.huizendveld@gmail.com"
                 },
                 {
                     "name": "Thibaud Fabre",
                     "email": "thibaud@aztech.io"
-                },
-                {
-                    "name": "Ben Ramsey",
-                    "email": "ben@benramsey.com",
-                    "homepage": "https://benramsey.com"
                 }
             ],
             "description": "Formerly rhumsaa/uuid. A PHP 5.4+ library for generating RFC 4122 version 1, 3, 4, and 5 universally unique identifiers (UUID).",
@@ -6196,16 +6196,16 @@
         },
         {
             "name": "symfony/contracts",
-            "version": "v1.1.6",
+            "version": "v1.1.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/contracts.git",
-                "reference": "3692662d26cd9d204a69748792ae021c35313610"
+                "reference": "f51bca9de06b7a25b19a4155da7bebad099a5def"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/contracts/zipball/3692662d26cd9d204a69748792ae021c35313610",
-                "reference": "3692662d26cd9d204a69748792ae021c35313610",
+                "url": "https://api.github.com/repos/symfony/contracts/zipball/f51bca9de06b7a25b19a4155da7bebad099a5def",
+                "reference": "f51bca9de06b7a25b19a4155da7bebad099a5def",
                 "shasum": ""
             },
             "require": {
@@ -6269,7 +6269,7 @@
                 "interoperability",
                 "standards"
             ],
-            "time": "2019-08-21T15:14:41+00:00"
+            "time": "2019-11-07T12:44:51+00:00"
         },
         {
             "name": "symfony/debug",
@@ -7689,16 +7689,16 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.12.0",
+            "version": "v1.13.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "b42a2f66e8f1b15ccf25652c3424265923eb4f17"
+                "reference": "7b4aab9743c30be783b73de055d24a39cf4b954f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/b42a2f66e8f1b15ccf25652c3424265923eb4f17",
-                "reference": "b42a2f66e8f1b15ccf25652c3424265923eb4f17",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/7b4aab9743c30be783b73de055d24a39cf4b954f",
+                "reference": "7b4aab9743c30be783b73de055d24a39cf4b954f",
                 "shasum": ""
             },
             "require": {
@@ -7710,7 +7710,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.12-dev"
+                    "dev-master": "1.13-dev"
                 }
             },
             "autoload": {
@@ -7744,7 +7744,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2019-08-06T08:03:45+00:00"
+            "time": "2019-11-27T14:18:11+00:00"
         },
         {
             "name": "symfony/polyfill-php72",
@@ -8926,7 +8926,7 @@
         },
         {
             "name": "symfony/validator",
-            "version": "v4.2.11",
+            "version": "v4.2.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/validator.git",
@@ -9770,6 +9770,7 @@
                 "code",
                 "zf"
             ],
+            "abandoned": "laminas/laminas-code",
             "time": "2019-08-31T14:14:34+00:00"
         },
         {
@@ -9824,6 +9825,7 @@
                 "events",
                 "zf2"
             ],
+            "abandoned": "laminas/laminas-eventmanager",
             "time": "2018-04-25T15:33:34+00:00"
         }
     ],
