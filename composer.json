@@ -20,7 +20,7 @@
     "google/cloud-firestore": "^1.5",
     "google/protobuf": "^v3.3.0",
     "grpc/grpc": "^v1.1.0",
-    "kreait/firebase-php": "^4.20",
+    "kreait/firebase-php": "^5.2",
     "lexik/jwt-authentication-bundle": "^2.6",
     "mailgun/mailgun-php": "^2.0",
     "php-http/httplug-pack": "^1.1",
