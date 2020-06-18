@@ -15,7 +15,7 @@ class EventThumbnailType extends VichImageType
     public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
-        $resolver->setDefaults(['required' => false]);
+        // $resolver->setDefaults(['required' => false]);
         $resolver->setRequired('event');
     }
 

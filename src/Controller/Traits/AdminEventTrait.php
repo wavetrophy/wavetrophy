@@ -34,7 +34,7 @@ trait AdminEventTrait
      * EasyAdmin create event new form hook.
      *
      * @param Event $entity
-     * @param $fields
+     * @param       $fields
      *
      * @return FormInterface
      */
@@ -75,6 +75,7 @@ trait AdminEventTrait
             ['required' => true, 'data' => $entity->getLocation() ?: null]);
         $formBuilder->add('teams', EventTeamType::class);
         $form = $formBuilder->getForm();
+
         return $form;
     }
 
@@ -82,7 +83,7 @@ trait AdminEventTrait
      * EasyAdmin create event edit form hook
      *
      * @param Event $entity
-     * @param $fields
+     * @param       $fields
      *
      * @return FormInterface
      */
@@ -132,7 +133,7 @@ trait AdminEventTrait
         );
         $formBuilder->add('location', CoordinateType::class,
             ['required' => true, 'data' => $entity->getLocation() ?: null]);
-        $formBuilder->add('teams', EventTeamType::class, ['teams' => $teams]);
+        $formBuilder->add('teams', EventTeamType::class, ['teams' => $teams, 'wave' => $entity->getWave()]);
         $form = $formBuilder->getForm();
 
         return $form;
@@ -141,7 +142,7 @@ trait AdminEventTrait
     /**
      * EasyAdmin persist event entity hook
      *
-     * @param Event $event
+     * @param Event         $event
      * @param FormInterface $form
      */
     protected function persistEventEntity(Event $event, FormInterface $form)
@@ -189,7 +190,7 @@ trait AdminEventTrait
     /**
      * EasyAdmin update event entity hook
      *
-     * @param Event $event
+     * @param Event         $event
      * @param FormInterface $form
      */
     protected function updateEventEntity(Event $event, FormInterface $form)
@@ -258,10 +259,10 @@ trait AdminEventTrait
     /**
      * Save an event.
      *
-     * @param Event $event
+     * @param Event         $event
      * @param FormInterface $form
-     * @param Wave $wave
-     * @param array $data
+     * @param Wave          $wave
+     * @param array         $data
      */
     protected function saveEvent(Event $event, FormInterface $form, Wave $wave, array $data)
     {
@@ -280,8 +281,8 @@ trait AdminEventTrait
     /**
      * Create a new event participation
      *
-     * @param Event $event
-     * @param Team[]|null $teams
+     * @param Event         $event
+     * @param Team[]|null   $teams
      * @param DateTime|null $arrival
      * @param DateTime|null $departure
      */
@@ -316,8 +317,8 @@ trait AdminEventTrait
     /**
      * Save an event participation
      *
-     * @param Event $event
-     * @param Team $team
+     * @param Event         $event
+     * @param Team          $team
      * @param DateTime|null $arrival
      * @param DateTime|null $departure
      */
@@ -334,7 +335,7 @@ trait AdminEventTrait
             $eventParticipation->addTeam($team);
         } else {
             /**
-             * @var int $key
+             * @var int                $key
              * @var EventParticipation $eventParticipation
              */
             foreach ($eventParticipations as $key => $eventParticipation) {
@@ -370,7 +371,7 @@ trait AdminEventTrait
      * Delete a participation
      *
      * @param Event $event
-     * @param Team $team
+     * @param Team  $team
      */
     public function deleteEventParticipation(Event $event, Team $team)
     {
@@ -386,8 +387,8 @@ trait AdminEventTrait
      * Get the arrival as datetime
      *
      * @param Event $event
-     * @param bool $sameForAll
-     * @param $data
+     * @param bool  $sameForAll
+     * @param       $data
      *
      * @return DateTime|null
      */
@@ -413,6 +414,7 @@ trait AdminEventTrait
                 $arrival->setTimezone(new DateTimeZone('Europe/Zurich'));
             }
         }
+
         return $arrival;
     }
 
@@ -420,8 +422,8 @@ trait AdminEventTrait
      * Get the departure as datetime
      *
      * @param Event $event
-     * @param bool $sameForAll
-     * @param $data
+     * @param bool  $sameForAll
+     * @param       $data
      *
      * @return DateTime|null
      */
@@ -446,6 +448,7 @@ trait AdminEventTrait
                 $departure->setTimezone(new DateTimeZone('Europe/Zurich'));
             }
         }
+
         return $departure;
     }
 
@@ -459,13 +462,14 @@ trait AdminEventTrait
     protected function getSameForAll($data): bool
     {
         $sameForAll = array_key_exists('same-for-all', $data) && $data['same-for-all'] === 'on';
+
         return $sameForAll;
     }
 
     /**
      * Get the team arrival as datetime based on the event arrival
      *
-     * @param $teamData
+     * @param               $teamData
      * @param DateTime|null $arrival
      *
      * @return DateTime|null
@@ -476,13 +480,14 @@ trait AdminEventTrait
             list($hour, $minute) = explode(':', $teamData['arrival'], 2);
             $arrival->setTime($hour, $minute);
         }
+
         return $arrival;
     }
 
     /**
      * Get the team departure datetime based on the event departure
      *
-     * @param $teamData
+     * @param               $teamData
      * @param DateTime|null $departure
      *
      * @return DateTime|null
@@ -493,15 +498,16 @@ trait AdminEventTrait
             list($hour, $minute) = explode(':', $teamData['departure'], 2);
             $departure->setTime($hour, $minute);
         }
+
         return $departure;
     }
 
     /**
-     * @param Event $event
+     * @param Event         $event
      * @param EventActivity $eventActivity
-     * @param $activity
-     * @param bool $sameForAll
-     * @param $data
+     * @param               $activity
+     * @param bool          $sameForAll
+     * @param               $data
      */
     protected function saveEventActivity(
         Event $event,
@@ -554,6 +560,7 @@ trait AdminEventTrait
         usort($activities, function ($a, $b) {
             return $a['start'] <=> $b['start'];
         });
+
         return $activities;
     }
 }

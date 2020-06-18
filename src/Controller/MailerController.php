@@ -39,6 +39,7 @@ class MailerController extends AbstractController
 
         $data = [];
         foreach ($users as $user) {
+
             $data['users'][] = [
                 'first_name' => $user->getFirstName(),
                 'last_name' => $user->getLastName(),

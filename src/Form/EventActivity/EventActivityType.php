@@ -52,7 +52,6 @@ class EventActivityType extends AbstractType
             'event_activities' => null,
             'data_class' => null,
             'inherit_data' => true,
-            'required' => true,
             'compound' => true,
             'constraints' => [new EventActivityAliasConstraint(['name' => 'activities'])]
         ])->setRequired(['event_activities']);

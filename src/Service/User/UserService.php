@@ -54,18 +54,23 @@ class UserService
         foreach ($users as $user) {
             $this->userRepository->setHasRececeivedWelcomeEmail($user, true);
             $email = $this->userEmailRepository->findEmailByString($user->getEmail());
-            $token = $this->userRepository->generateTokenForUserEmail($email);
+            $email->setConfirmed(true);
+
+            $password = $this->generatePassword();
+            $this->userRepository->setPassword($user, $password);
 
             $data = [
                 'first_name' => $user->getFirstName(),
-                'token' => $token,
+                'username' => $user->getUsername(),
+                'password' => $password,
             ];
+
             $this->mailer->sendMail(
-                '[WAVETROPHY] Willkommen',
+                '[WAVETROPHY] Vorbereitung',
                 getenv('MAILGUN_FROM'),
-                $email->getEmail(),
-                'emails/registration.html.twig',
-                'emails/registration.txt.twig',
+                $user->getEmail(),
+                'emails/app-setup.html.twig',
+                'emails/app-setup.txt.twig',
                 $data
             );
         }

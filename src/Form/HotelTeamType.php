@@ -41,11 +41,11 @@ class HotelTeamType extends AbstractType
 
         $resolver->setDefaults([
             'teams' => null,
+            'wave' => null,
             'data_class' => null,
             'inherit_data' => true,
-            'required' => true,
             'compound' => true,
-        ])->setRequired(['teams']);
+        ])->setRequired(['teams', 'wave']);
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options)
@@ -63,14 +63,10 @@ class HotelTeamType extends AbstractType
             'wave',
             EntityType::class,
             [
-                'data_class' => Wave::class,
                 'class' => Wave::class,
                 'attr' => [''],
                 'csrf_protection' => true,
-                'inherit_data' => true,
-                'empty_data' => function (FormInterface $form) {
-                    return $this->waveRepository->getCurrentWave();
-                },
+                'data' => $options['wave'],
             ]
         );
     }
